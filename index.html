@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
 <title>Dayoff</title>
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
@@ -76,12 +76,276 @@ textarea{width:100%;min-height:80px;border:1px solid #ddd;border-radius:10px;pad
 .count-box div{flex:1;background:#f0f2f5;padding:8px;border-radius:8px;text-align:center;font-size:12px}
 .bottom-nav{display:none}
 
+/* MESSAGING */
+.messages-layout{
+display:grid;
+grid-template-columns:230px 1fr;
+height:600px;
+background:#fff;
+border-radius:12px;
+overflow:hidden;
+box-shadow:0 1px 4px rgba(0,0,0,.08);
+}
+
+.conversations{
+border-right:1px solid #ddd;
+overflow-y:auto;
+}
+
+.conversations-header{
+padding:15px;
+border-bottom:1px solid #eee;
+}
+
+.conversations-header h2{
+font-size:20px;
+margin-bottom:10px;
+}
+
+.chat-search{
+width:100%;
+padding:10px;
+border:1px solid #ddd;
+border-radius:8px;
+}
+
+.conversation{
+padding:13px;
+display:flex;
+gap:10px;
+align-items:center;
+cursor:pointer;
+border-bottom:1px solid #eee;
+}
+
+.conversation:hover{
+background:#f5f6f7;
+}
+
+.conversation.active{
+background:#eef5ff;
+}
+
+.avatar{
+width:42px;
+height:42px;
+border-radius:50%;
+background:#1877f2;
+color:#fff;
+display:flex;
+align-items:center;
+justify-content:center;
+font-weight:bold;
+flex-shrink:0;
+}
+
+.conversation-info{
+flex:1;
+min-width:0;
+}
+
+.conversation-name{
+font-weight:bold;
+white-space:nowrap;
+overflow:hidden;
+text-overflow:ellipsis;
+}
+
+.conversation-preview{
+font-size:12px;
+color:#777;
+white-space:nowrap;
+overflow:hidden;
+text-overflow:ellipsis;
+}
+
+.unread-count{
+background:#1877f2;
+color:#fff;
+font-size:11px;
+min-width:20px;
+height:20px;
+border-radius:10px;
+display:flex;
+align-items:center;
+justify-content:center;
+}
+
+.chat-area{
+display:flex;
+flex-direction:column;
+min-width:0;
+}
+
+.chat-header{
+padding:14px 16px;
+border-bottom:1px solid #ddd;
+display:flex;
+align-items:center;
+gap:10px;
+min-height:70px;
+}
+
+.chat-user-name{
+font-weight:bold;
+}
+
+.chat-status{
+font-size:12px;
+color:#777;
+margin-top:3px;
+}
+
+.online{
+color:#16a34a;
+}
+
+.messages-list{
+flex:1;
+padding:18px;
+overflow-y:auto;
+background:#f5f7fa;
+display:flex;
+flex-direction:column;
+gap:8px;
+}
+
+.message-row{
+display:flex;
+}
+
+.message-row.mine{
+justify-content:flex-end;
+}
+
+.message-bubble{
+max-width:75%;
+padding:10px 13px;
+border-radius:16px;
+background:#e4e6eb;
+word-wrap:break-word;
+}
+
+.message-row.mine .message-bubble{
+background:#1877f2;
+color:#fff;
+border-bottom-right-radius:4px;
+}
+
+.message-row:not(.mine) .message-bubble{
+border-bottom-left-radius:4px;
+}
+
+.message-time{
+font-size:10px;
+opacity:.7;
+margin-top:4px;
+text-align:right;
+}
+
+.chat-input-area{
+display:flex;
+gap:8px;
+padding:12px;
+border-top:1px solid #ddd;
+background:#fff;
+}
+
+.chat-input{
+flex:1;
+padding:12px;
+border:1px solid #ddd;
+border-radius:20px;
+outline:none;
+}
+
+.send-message{
+border-radius:20px;
+}
+
+.start-chat{
+padding:15px;
+border-bottom:1px solid #eee;
+}
+
+.start-chat button{
+margin-top:8px;
+width:100%;
+}
+
+.message-user-search{
+width:100%;
+padding:10px;
+border:1px solid #ddd;
+border-radius:8px;
+margin-top:8px;
+}
+
+.chat-search-results{
+padding:0 15px;
+}
+
+.chat-search-result{
+padding:10px 0;
+border-bottom:1px solid #eee;
+display:flex;
+align-items:center;
+justify-content:space-between;
+gap:8px;
+}
+
+.chat-search-result span{
+font-weight:bold;
+font-size:13px;
+}
+
 @media(max-width:850px){
 .container{grid-template-columns:1fr}
 .sidebar,.rightbar{display:none}
-.bottom-nav{position:fixed;bottom:0;left:0;right:0;height:60px;background:#fff;display:flex;justify-content:space-around;align-items:center;border-top:1px solid #ddd;z-index:100}
-.bottom-nav button{background:transparent;color:#333;font-size:12px}
+
+.messages-layout{
+grid-template-columns:1fr;
+height:calc(100vh - 145px);
+}
+
+.conversations{
+display:none;
+}
+
+.messages-layout.chat-open .conversations{
+display:none;
+}
+
+.chat-area{
+display:flex;
+}
+
+.bottom-nav{
+position:fixed;
+bottom:0;
+left:0;
+right:0;
+height:60px;
+background:#fff;
+display:flex;
+justify-content:space-around;
+align-items:center;
+border-top:1px solid #ddd;
+z-index:100
+}
+
+.bottom-nav button{
+background:transparent;
+color:#333;
+font-size:12px;
+padding:5px;
+}
+
 body{padding-bottom:60px}
+}
+
+@media(min-width:851px){
+.mobile-chat-back{display:none}
 }
 </style>
 </head>
@@ -105,7 +369,6 @@ body{padding-bottom:60px}
 </div>
 </section>
 
-
 <!-- APP -->
 <div id="app" class="hidden">
 
@@ -117,7 +380,6 @@ body{padding-bottom:60px}
 <button onclick="logout()">Logout</button>
 </div>
 </header>
-
 
 <div class="container">
 
@@ -143,16 +405,17 @@ Following
 
 <button onclick="showHome()">🏠 Home</button>
 <button onclick="showSearch()">🔎 Search</button>
+<button onclick="showMessages()">💬 Messages</button>
 <button onclick="showNotifications()">🔔 Notifications</button>
 <button onclick="showRequests()">🤝 Requests</button>
 <button onclick="openLiveModal()">🔴 Live</button>
 
 </aside>
 
-
 <!-- MAIN -->
 <main>
 
+<!-- HOME -->
 <div id="homeSection">
 
 <div class="stories">
@@ -167,8 +430,6 @@ Following
 <button onclick="openLiveModal()">Start Live</button>
 </div>
 
-
-<!-- CREATE POST -->
 <div class="create-post">
 
 <textarea id="postContent" placeholder="What's happening?"></textarea>
@@ -176,25 +437,20 @@ Following
 <div id="selectedFile" class="selected-file"></div>
 
 <div class="post-tools">
-
 <button onclick="choosePhoto()">📷 Photo</button>
 <button onclick="chooseVideo()">🎥 Video</button>
 <button class="publish" onclick="createPost()">Post</button>
-
 </div>
 
 <input id="photoInput" type="file" accept="image/*" hidden onchange="showSelectedFile(this)">
 <input id="videoInput" type="file" accept="video/*" hidden onchange="showSelectedFile(this)">
-
 </div>
-
 
 <div id="postsContainer">
 <div class="empty">Loading posts...</div>
 </div>
 
 </div>
-
 
 <!-- SEARCH -->
 <div id="searchSection" class="hidden">
@@ -207,11 +463,9 @@ Following
 Search for Dayoff users.
 </p>
 
-<input
-id="userSearch"
+<input id="userSearch"
 placeholder="Search username or name..."
-oninput="searchUsers()"
->
+oninput="searchUsers">
 
 </div>
 
@@ -219,6 +473,92 @@ oninput="searchUsers()"
 
 </div>
 
+<!-- MESSAGES -->
+<div id="messagesSection" class="hidden">
+
+<div class="messages-layout">
+
+<!-- CONVERSATIONS -->
+<div class="conversations">
+
+<div class="conversations-header">
+
+<h2>💬 Messages</h2>
+
+<input
+id="conversationSearch"
+class="chat-search"
+placeholder="Search conversations..."
+oninput="filterConversations()">
+
+</div>
+
+<div class="start-chat">
+
+<strong>Start a new chat</strong>
+
+<input
+id="messageUserSearch"
+class="message-user-search"
+placeholder="Search people..."
+oninput="searchChatUsers()">
+
+<div id="chatSearchResults" class="chat-search-results"></div>
+
+</div>
+
+<div id="conversationList">
+<div class="empty">No conversations yet.</div>
+</div>
+
+</div>
+
+<!-- CHAT -->
+<div class="chat-area">
+
+<div id="chatHeader" class="chat-header">
+
+<div class="avatar">D</div>
+
+<div>
+<div class="chat-user-name">Select a conversation</div>
+<div class="chat-status">Choose a user to start chatting</div>
+</div>
+
+</div>
+
+<div id="messagesList" class="messages-list">
+
+<div class="empty">
+💬 Select someone to start a conversation.
+</div>
+
+</div>
+
+<div class="chat-input-area">
+
+<input
+id="messageInput"
+class="chat-input"
+placeholder="Write a message..."
+disabled
+onkeydown="handleMessageKey(event)">
+
+<button
+id="sendMessageButton"
+class="send-message"
+onclick="sendMessage()"
+disabled>
+Send
+</button>
+
+</div>
+
+</div>
+
+</div>
+
+</div>
 
 <!-- NOTIFICATIONS -->
 <div id="notificationsSection" class="hidden">
@@ -234,7 +574,6 @@ Loading...
 </div>
 
 </div>
-
 
 <!-- REQUESTS -->
 <div id="requestsSection" class="hidden">
@@ -253,7 +592,6 @@ Loading...
 
 </main>
 
-
 <!-- RIGHT -->
 <aside class="rightbar">
 
@@ -265,28 +603,29 @@ Your social space.
 
 <hr style="margin:15px 0">
 
-<strong>Coming next</strong>
+<strong>Dayoff Features</strong>
 
 <p style="margin-top:8px;color:#777">
-Private messaging, online status and real live streaming.
+💬 Private messaging<br><br>
+👥 Friends & followers<br><br>
+🔔 Notifications<br><br>
+🔴 Live broadcasting
 </p>
 
 </aside>
 
 </div>
 
-
 <!-- MOBILE NAV -->
 <div class="bottom-nav">
 <button onclick="showHome()">🏠<br>Home</button>
 <button onclick="showSearch()">🔎<br>Search</button>
-<button onclick="openLiveModal()">🔴<br>Live</button>
+<button onclick="showMessages()">💬<br>Chat</button>
 <button onclick="showNotifications()">🔔<br>Alerts</button>
 <button onclick="showRequests()">🤝<br>Requests</button>
 </div>
 
 </div>
-
 
 <!-- LIVE MODAL -->
 <div id="liveModal" class="hidden"
@@ -306,62 +645,57 @@ Real camera broadcasting will be connected in the Live Streaming stage.
 </div>
 </div>
 
-
 <script>
 
 /* =========================================
-   SUPABASE
+SUPABASE
 ========================================= */
 
-const SUPABASE_URL = "https://bdqjpwyalsuxyiczyeui.supabase.co";
+const SUPABASE_URL =
+"const SUPABASE_URL = "https://bdqjpwyalsuxyiczyeui.supabase.co";
 
 const SUPABASE_KEY =
   sb_publishable_SoowSke5se9LiXf1oAJBxg_Tkfw82E8";
-
+   
 const supabaseClient =
 supabase.createClient(
 SUPABASE_URL,
 SUPABASE_KEY
 );
 
-let currentUser = null;
-let selectedFile = null;
-let selectedFileType = null;
+let currentUser=null;
+let selectedFile=null;
+let selectedFileType=null;
+
+let activeChatUser=null;
+let realtimeChannel=null;
+let lastSeenTimer=null;
 
 
 /* =========================================
-   AUTH
+AUTH
 ========================================= */
 
 async function signUp(){
 
-const email =
-document.getElementById("email").value.trim();
+const email=document.getElementById("email").value.trim();
+const password=document.getElementById("password").value;
+const username=document.getElementById("username").value.trim();
 
-const password =
-document.getElementById("password").value;
-
-const username =
-document.getElementById("username").value.trim();
-
-if(!email || !password || !username){
+if(!email||!password||!username){
 showAuthMessage("Please enter email, password and username.");
 return;
 }
 
-const {error} =
-await supabaseClient.auth.signUp({
-
+const {error}=await supabaseClient.auth.signUp({
 email,
 password,
-
 options:{
 data:{
 username,
 full_name:username
 }
 }
-
 });
 
 if(error){
@@ -378,19 +712,15 @@ showAuthMessage(
 
 async function signIn(){
 
-const email =
-document.getElementById("email").value.trim();
+const email=document.getElementById("email").value.trim();
+const password=document.getElementById("password").value;
 
-const password =
-document.getElementById("password").value;
-
-if(!email || !password){
+if(!email||!password){
 showAuthMessage("Enter your email and password.");
 return;
 }
 
-const {data,error} =
-await supabaseClient.auth.signInWithPassword({
+const {data,error}=await supabaseClient.auth.signInWithPassword({
 email,
 password
 });
@@ -409,9 +739,20 @@ await showApp();
 
 async function logout(){
 
+if(realtimeChannel){
+await supabaseClient.removeChannel(realtimeChannel);
+realtimeChannel=null;
+}
+
+if(lastSeenTimer){
+clearInterval(lastSeenTimer);
+lastSeenTimer=null;
+}
+
 await supabaseClient.auth.signOut();
 
 currentUser=null;
+activeChatUser=null;
 
 document.getElementById("app").classList.add("hidden");
 document.getElementById("authScreen").classList.remove("hidden");
@@ -425,20 +766,16 @@ document.getElementById("authMessage").textContent=message;
 
 
 /* =========================================
-   SESSION
+SESSION
 ========================================= */
 
 async function checkSession(){
 
-const {data} =
-await supabaseClient.auth.getSession();
+const {data}=await supabaseClient.auth.getSession();
 
 if(data.session){
-
 currentUser=data.session.user;
-
 await showApp();
-
 }
 
 }
@@ -449,26 +786,26 @@ async function showApp(){
 document.getElementById("authScreen").classList.add("hidden");
 document.getElementById("app").classList.remove("hidden");
 
-document.getElementById("profileEmail").textContent =
-currentUser.email || "";
+document.getElementById("profileEmail").textContent=
+currentUser.email||"";
 
 await loadProfile();
 await loadPosts();
 await loadFollowCounts();
+await startMessaging();
 
 }
 
 
 /* =========================================
-   PROFILE
+PROFILE
 ========================================= */
 
 async function loadProfile(){
 
-const {data,error} =
-await supabaseClient
+const {data,error}=await supabaseClient
 .from("profiles")
-.select("username,full_name")
+.select("username,full_name,last_seen")
 .eq("id",currentUser.id)
 .maybeSingle();
 
@@ -479,8 +816,8 @@ return;
 
 if(data){
 
-document.getElementById("profileName").textContent =
-data.full_name || data.username || "User";
+document.getElementById("profileName").textContent=
+data.full_name||data.username||"User";
 
 }
 
@@ -488,44 +825,81 @@ data.full_name || data.username || "User";
 
 
 /* =========================================
-   FOLLOW COUNTS
+LAST SEEN
+========================================= */
+
+async function updateLastSeen(){
+
+if(!currentUser)return;
+
+const {error}=await supabaseClient
+.from("profiles")
+.update({last_seen:new Date().toISOString()})
+.eq("id",currentUser.id);
+
+if(error){
+console.error("Last seen:",error);
+}
+
+}
+
+
+function startLastSeen(){
+
+updateLastSeen();
+
+if(lastSeenTimer)clearInterval(lastSeenTimer);
+
+lastSeenTimer=setInterval(
+updateLastSeen,
+60000
+);
+
+}
+
+
+/* =========================================
+FOLLOW COUNTS
 ========================================= */
 
 async function loadFollowCounts(){
 
-const {count:followers} =
-await supabaseClient
+const {count:followers}=await supabaseClient
 .from("follows")
 .select("*",{count:"exact",head:true})
 .eq("following_id",currentUser.id)
 .eq("status","accepted");
 
-const {count:following} =
-await supabaseClient
+const {count:following}=await supabaseClient
 .from("follows")
 .select("*",{count:"exact",head:true})
 .eq("follower_id",currentUser.id)
 .eq("status","accepted");
 
-document.getElementById("followersCount").textContent =
-followers || 0;
+document.getElementById("followersCount").textContent=
+followers||0;
 
-document.getElementById("followingCount").textContent =
-following || 0;
+document.getElementById("followingCount").textContent=
+following||0;
 
 }
 
 
 /* =========================================
-   NAVIGATION
+NAVIGATION
 ========================================= */
 
 function hideSections(){
 
-document.getElementById("homeSection").classList.add("hidden");
-document.getElementById("searchSection").classList.add("hidden");
-document.getElementById("notificationsSection").classList.add("hidden");
-document.getElementById("requestsSection").classList.add("hidden");
+[
+"homeSection",
+"searchSection",
+"messagesSection",
+"notificationsSection",
+"requestsSection"
+].forEach(id=>{
+document.getElementById(id).classList.add("hidden");
+});
 
 }
 
@@ -547,7 +921,20 @@ hideSections();
 
 document.getElementById("searchSection").classList.remove("hidden");
 
+setTimeout(()=>{
 document.getElementById("userSearch").focus();
+},100);
+
+}
+
+
+function showMessages(){
+
+hideSections();
+
+document.getElementById("messagesSection").classList.remove("hidden");
+
+loadConversations();
 
 }
 
@@ -575,7 +962,7 @@ loadRequests();
 
 
 /* =========================================
-   USER SEARCH
+USER SEARCH
 ========================================= */
 
 let searchTimer=null;
@@ -594,74 +981,51 @@ performUserSearch,
 
 async function performUserSearch(){
 
-const input =
-document.getElementById("userSearch");
+const input=document.getElementById("userSearch");
+const term=input.value.trim();
+const results=document.getElementById("searchResults");
 
-const term =
-input.value.trim();
+if(term.length<2){
 
-const results =
-document.getElementById("searchResults");
-
-if(term.length < 2){
-
-results.innerHTML =
-`<div class="empty">
-Type at least 2 characters.
-</div>`;
+results.innerHTML=
+`<div class="empty">Type at least 2 characters.</div>`;
 
 return;
-
 }
 
-
-const {data,error} =
-await supabaseClient
+const {data,error}=await supabaseClient
 .from("profiles")
 .select("id,username,full_name")
-.or(
-`username.ilike.%${term}%,full_name.ilike.%${term}%`
-)
+.or(`username.ilike.%${term}%,full_name.ilike.%${term}%`)
 .limit(20);
 
 if(error){
 
 console.error(error);
 
-results.innerHTML =
-`<div class="empty">
-Search failed.
-</div>`;
+results.innerHTML=
+`<div class="empty">Search failed.</div>`;
 
 return;
-
 }
 
-
-const users =
-(data || []).filter(
-user => user.id !== currentUser.id
+const users=(data||[]).filter(
+user=>user.id!==currentUser.id
 );
-
 
 if(!users.length){
 
-results.innerHTML =
-`<div class="empty">
-No users found.
-</div>`;
+results.innerHTML=
+`<div class="empty">No users found.</div>`;
 
 return;
-
 }
-
 
 results.innerHTML="";
 
 for(const user of users){
 
-const div =
-document.createElement("div");
+const div=document.createElement("div");
 
 div.className="user-result";
 
@@ -670,21 +1034,24 @@ div.innerHTML=`
 <div class="user-info">
 
 <div class="user-name">
-${escapeHTML(user.full_name || user.username)}
+${escapeHTML(user.full_name||user.username)}
 </div>
 
 <div class="user-username">
-@${escapeHTML(user.username || "")}
+@${escapeHTML(user.username||"")}
 </div>
 
 </div>
 
-<div id="follow-box-${user.id}">
-<button onclick="followUser('${user.id}')">
-Follow
+<div style="display:flex;gap:5px">
+
+<button onclick="openChat('${user.id}')">
+💬 Chat
 </button>
-</div>
 
+<div id="follow-box-${user.id}"></div>
+
+</div>
 `;
 
 results.appendChild(div);
@@ -697,13 +1064,12 @@ await updateFollowButton(user.id);
 
 
 /* =========================================
-   FOLLOW STATUS
+FOLLOW STATUS
 ========================================= */
 
 async function getFollowStatus(userId){
 
-const {data} =
-await supabaseClient
+const {data}=await supabaseClient
 .from("follows")
 .select("status,follower_id,following_id")
 .eq("follower_id",currentUser.id)
@@ -711,31 +1077,23 @@ await supabaseClient
 .maybeSingle();
 
 return data;
-
 }
 
 
 async function updateFollowButton(userId){
 
-const box =
-document.getElementById(
-"follow-box-"+userId
-);
+const box=document.getElementById("follow-box-"+userId);
 
 if(!box)return;
 
-const relation =
-await getFollowStatus(userId);
+const relation=await getFollowStatus(userId);
 
 if(!relation){
 
 box.innerHTML=
-`<button onclick="followUser('${userId}')">
-Follow
-</button>`;
+`<button onclick="followUser('${userId}')">Follow</button>`;
 
 return;
-
 }
 
 if(relation.status==="accepted"){
@@ -747,7 +1105,6 @@ Following
 </button>`;
 
 return;
-
 }
 
 if(relation.status==="pending"){
@@ -764,25 +1121,20 @@ Requested
 
 
 /* =========================================
-   FOLLOW USER
+FOLLOW USER
 ========================================= */
 
 async function followUser(userId){
 
 if(userId===currentUser.id)return;
 
-const {data,error} =
-await supabaseClient
+const {error}=await supabaseClient
 .from("follows")
 .insert({
-
 follower_id:currentUser.id,
 following_id:userId,
 status:"pending"
-
-})
-.select()
-.maybeSingle();
+});
 
 if(error){
 
@@ -793,16 +1145,9 @@ alert(error.message);
 }
 
 return;
-
 }
 
-
-/* notification */
-
-await createNotification(
-userId,
-"follow_request"
-);
+await createNotification(userId,"follow_request");
 
 await searchUsers();
 
@@ -810,47 +1155,39 @@ await searchUsers();
 
 
 /* =========================================
-   UNFOLLOW / CANCEL
+UNFOLLOW
 ========================================= */
 
 async function unfollowUser(userId){
 
-const {error} =
-await supabaseClient
+const {error}=await supabaseClient
 .from("follows")
 .delete()
 .eq("follower_id",currentUser.id)
 .eq("following_id",userId);
 
 if(error){
-
 alert(error.message);
-
 return;
-
 }
 
 await searchUsers();
-
 await loadFollowCounts();
 
 }
 
 
 /* =========================================
-   FOLLOW REQUESTS
+FOLLOW REQUESTS
 ========================================= */
 
 async function loadRequests(){
 
-const list =
-document.getElementById("requestsList");
+const list=document.getElementById("requestsList");
 
 list.innerHTML="Loading...";
 
-
-const {data,error} =
-await supabaseClient
+const {data,error}=await supabaseClient
 .from("follows")
 .select(`
 follower_id,
@@ -865,58 +1202,42 @@ full_name
 .eq("status","pending")
 .order("created_at",{ascending:false});
 
-
 if(error){
 
 console.error(error);
 
-list.innerHTML =
-`<div class="empty">
-Unable to load requests.
-</div>`;
+list.innerHTML=
+`<div class="empty">Unable to load requests.</div>`;
 
 return;
-
 }
-
 
 if(!data.length){
 
-list.innerHTML =
-`<div class="empty">
-No pending follow requests.
-</div>`;
+list.innerHTML=
+`<div class="empty">No pending follow requests.</div>`;
 
 return;
-
 }
-
 
 list.innerHTML="";
 
-
 data.forEach(request=>{
 
-const profile =
-request.profiles || {};
+const profile=request.profiles||{};
 
-const name =
-profile.full_name ||
-profile.username ||
+const name=
+profile.full_name||
+profile.username||
 "User";
 
-
-const div =
-document.createElement("div");
+const div=document.createElement("div");
 
 div.className="notification";
 
 div.innerHTML=`
 
-<strong>
-${escapeHTML(name)}
-</strong>
-
+<strong>${escapeHTML(name)}</strong>
 wants to follow you.
 
 <div class="request-actions">
@@ -932,7 +1253,6 @@ Reject
 </button>
 
 </div>
-
 `;
 
 list.appendChild(div);
@@ -942,39 +1262,24 @@ list.appendChild(div);
 }
 
 
-/* =========================================
-   ACCEPT REQUEST
-========================================= */
-
 async function acceptRequest(followerId){
 
-const {error} =
-await supabaseClient
+const {error}=await supabaseClient
 .from("follows")
-.update({
-status:"accepted"
-})
+.update({status:"accepted"})
 .eq("follower_id",followerId)
 .eq("following_id",currentUser.id)
 .eq("status","pending");
 
-
 if(error){
-
 alert(error.message);
-
 return;
-
 }
-
-
-/* notification to follower */
 
 await createNotification(
 followerId,
 "follow_accepted"
 );
-
 
 await loadRequests();
 await loadFollowCounts();
@@ -982,14 +1287,9 @@ await loadFollowCounts();
 }
 
 
-/* =========================================
-   REJECT REQUEST
-========================================= */
-
 async function rejectRequest(followerId){
 
-const {error} =
-await supabaseClient
+const {error}=await supabaseClient
 .from("follows")
 .delete()
 .eq("follower_id",followerId)
@@ -997,11 +1297,8 @@ await supabaseClient
 .eq("status","pending");
 
 if(error){
-
 alert(error.message);
-
 return;
-
 }
 
 await loadRequests();
@@ -1010,7 +1307,7 @@ await loadRequests();
 
 
 /* =========================================
-   NOTIFICATIONS
+NOTIFICATIONS
 ========================================= */
 
 async function createNotification(
@@ -1021,22 +1318,17 @@ postId=null
 
 if(userId===currentUser.id)return;
 
-const {error} =
-await supabaseClient
+const {error}=await supabaseClient
 .from("notifications")
 .insert({
-
 user_id:userId,
 actor_id:currentUser.id,
 type:type,
 post_id:postId
-
 });
 
 if(error){
-
 console.error("Notification:",error);
-
 }
 
 }
@@ -1044,16 +1336,11 @@ console.error("Notification:",error);
 
 async function loadNotifications(){
 
-const list =
-document.getElementById(
-"notificationsList"
-);
+const list=document.getElementById("notificationsList");
 
 list.innerHTML="Loading...";
 
-
-const {data,error} =
-await supabaseClient
+const {data,error}=await supabaseClient
 .from("notifications")
 .select(`
 id,
@@ -1070,86 +1357,63 @@ full_name
 .order("created_at",{ascending:false})
 .limit(50);
 
-
 if(error){
 
 console.error(error);
 
-list.innerHTML =
-`<div class="empty">
-Unable to load notifications.
-</div>`;
+list.innerHTML=
+`<div class="empty">Unable to load notifications.</div>`;
 
 return;
-
 }
-
 
 if(!data.length){
 
-list.innerHTML =
-`<div class="empty">
-No notifications yet.
-</div>`;
+list.innerHTML=
+`<div class="empty">No notifications yet.</div>`;
 
 return;
-
 }
-
 
 list.innerHTML="";
 
-
 data.forEach(notification=>{
 
-const profile =
-notification.profiles || {};
+const profile=notification.profiles||{};
 
-const name =
-profile.full_name ||
-profile.username ||
+const name=
+profile.full_name||
+profile.username||
 "Someone";
-
 
 let message="sent you a notification.";
 
-if(notification.type==="follow_request"){
+if(notification.type==="follow_request")
 message="sent you a follow request.";
-}
 
-if(notification.type==="follow_accepted"){
+if(notification.type==="follow_accepted")
 message="accepted your follow request.";
-}
 
+const div=document.createElement("div");
 
-const div =
-document.createElement("div");
-
-div.className =
-"notification " +
-(notification.read ? "" : "unread");
-
+div.className=
+"notification "+
+(notification.read?"":"unread");
 
 div.innerHTML=`
 
-<strong>
-${escapeHTML(name)}
-</strong>
+<strong>${escapeHTML(name)}</strong>
 
 ${message}
 
 <small>
 ${new Date(notification.created_at).toLocaleString()}
 </small>
-
 `;
 
 list.appendChild(div);
 
 });
-
-
-/* mark notifications read */
 
 await supabaseClient
 .from("notifications")
@@ -1161,7 +1425,596 @@ await supabaseClient
 
 
 /* =========================================
-   POSTS
+MESSAGING — START
+========================================= */
+
+async function startMessaging(){
+
+startLastSeen();
+
+await loadConversations();
+
+startRealtimeMessages();
+
+}
+
+
+/* =========================================
+REALTIME MESSAGES
+========================================= */
+
+function startRealtimeMessages(){
+
+if(realtimeChannel){
+supabaseClient.removeChannel(realtimeChannel);
+}
+
+realtimeChannel=
+supabaseClient
+.channel("dayoff-messages-"+currentUser.id)
+
+.on(
+"postgres_changes",
+{
+event:"INSERT",
+schema:"public",
+table:"messages"
+},
+payload=>{
+
+const message=payload.new;
+
+if(
+message.sender_id===currentUser.id ||
+message.receiver_id===currentUser.id
+){
+
+if(
+activeChatUser &&
+(
+message.sender_id===activeChatUser ||
+message.receiver_id===activeChatUser
+)
+){
+
+loadChatMessages(activeChatUser);
+
+}else{
+
+loadConversations();
+
+}
+
+}
+
+}
+)
+
+.subscribe(status=>{
+console.log("Messages realtime:",status);
+});
+
+}
+
+
+/* =========================================
+LOAD CONVERSATIONS
+========================================= */
+
+async function loadConversations(){
+
+const list=document.getElementById("conversationList");
+
+if(!list)return;
+
+const {data,error}=await supabaseClient
+.from("messages")
+.select(`
+id,
+sender_id,
+receiver_id,
+content,
+created_at,
+read
+`)
+.or(
+`sender_id.eq.${currentUser.id},receiver_id.eq.${currentUser.id}`
+)
+.order("created_at",{ascending:false});
+
+if(error){
+
+console.error(error);
+
+list.innerHTML=
+`<div class="empty">Unable to load conversations.</div>`;
+
+return;
+}
+
+if(!data||!data.length){
+
+list.innerHTML=
+`<div class="empty">No conversations yet.</div>`;
+
+return;
+}
+
+
+/* get unique users */
+
+const users={};
+
+data.forEach(message=>{
+
+const otherId=
+message.sender_id===currentUser.id
+?message.receiver_id
+:message.sender_id;
+
+if(!users[otherId]){
+users[otherId]={
+id:otherId,
+lastMessage:message.content,
+created_at:message.created_at,
+unread:0
+};
+}
+
+if(
+message.receiver_id===currentUser.id &&
+message.read===false
+){
+users[otherId].unread++;
+}
+
+});
+
+const ids=Object.keys(users);
+
+const {data:profiles,error:profileError}=
+await supabaseClient
+.from("profiles")
+.select("id,username,full_name,last_seen")
+.in("id",ids);
+
+if(profileError){
+
+console.error(profileError);
+return;
+}
+
+const profileMap={};
+
+(profiles||[]).forEach(profile=>{
+profileMap[profile.id]=profile;
+});
+
+list.innerHTML="";
+
+ids.forEach(id=>{
+
+const item=users[id];
+const profile=profileMap[id]||{};
+
+const name=
+profile.full_name||
+profile.username||
+"User";
+
+const div=document.createElement("div");
+
+div.className=
+"conversation "+
+(activeChatUser===id?"active":"");
+
+div.dataset.name=name.toLowerCase();
+
+div.onclick=()=>openChat(id);
+
+const initial=
+(name.charAt(0)||"U").toUpperCase();
+
+div.innerHTML=`
+
+<div class="avatar">${escapeHTML(initial)}</div>
+
+<div class="conversation-info">
+
+<div class="conversation-name">
+${escapeHTML(name)}
+</div>
+
+<div class="conversation-preview">
+${escapeHTML(item.lastMessage||"")}
+</div>
+
+</div>
+
+${
+item.unread
+?`<div class="unread-count">${item.unread}</div>`
+:""
+}
+
+`;
+
+list.appendChild(div);
+
+});
+
+}
+
+
+/* =========================================
+CHAT USER SEARCH
+========================================= */
+
+let chatSearchTimer=null;
+
+function searchChatUsers(){
+
+clearTimeout(chatSearchTimer);
+
+chatSearchTimer=setTimeout(
+performChatUserSearch,
+300
+);
+
+}
+
+
+async function performChatUserSearch(){
+
+const input=
+document.getElementById("messageUserSearch");
+
+const term=input.value.trim();
+
+const results=
+document.getElementById("chatSearchResults");
+
+if(term.length<2){
+
+results.innerHTML="";
+
+return;
+}
+
+const {data,error}=await supabaseClient
+.from("profiles")
+.select("id,username,full_name")
+.or(
+`username.ilike.%${term}%,full_name.ilike.%${term}%`
+)
+.limit(10);
+
+if(error){
+
+console.error(error);
+
+results.innerHTML=
+"<small>Search failed.</small>";
+
+return;
+}
+
+const users=(data||[]).filter(
+user=>user.id!==currentUser.id
+);
+
+results.innerHTML="";
+
+users.forEach(user=>{
+
+const div=document.createElement("div");
+
+div.className="chat-search-result";
+
+const name=
+user.full_name||
+user.username||
+"User";
+
+div.innerHTML=`
+
+<span>
+${escapeHTML(name)}
+</span>
+
+<button onclick="openChat('${user.id}')">
+Chat
+</button>
+`;
+
+results.appendChild(div);
+
+});
+
+}
+
+
+/* =========================================
+OPEN CHAT
+========================================= */
+
+async function openChat(userId){
+
+activeChatUser=userId;
+
+showMessages();
+
+const {data:user,error}=await supabaseClient
+.from("profiles")
+.select("id,username,full_name,last_seen")
+.eq("id",userId)
+.maybeSingle();
+
+if(error||!user){
+
+console.error(error);
+return;
+
+}
+
+const name=
+user.full_name||
+user.username||
+"User";
+
+const initial=
+(name.charAt(0)||"U").toUpperCase();
+
+const online=isUserOnline(user.last_seen);
+
+document.getElementById("chatHeader").innerHTML=`
+
+<div class="avatar">
+${escapeHTML(initial)}
+</div>
+
+<div>
+<div class="chat-user-name">
+${escapeHTML(name)}
+</div>
+
+<div class="chat-status ${
+online?"online":""
+}">
+${online?"● Online":"Offline"}
+</div>
+</div>
+
+`;
+
+document.getElementById("messageInput").disabled=false;
+document.getElementById("sendMessageButton").disabled=false;
+
+await loadChatMessages(userId);
+await loadConversations();
+
+const searchInput=
+document.getElementById("messageUserSearch");
+
+if(searchInput){
+searchInput.value="";
+}
+
+document.getElementById("chatSearchResults").innerHTML="";
+
+}
+
+
+/* =========================================
+ONLINE STATUS
+========================================= */
+
+function isUserOnline(lastSeen){
+
+if(!lastSeen)return false;
+
+const difference=
+Date.now()-new Date(lastSeen).getTime();
+
+return difference<2*60*1000;
+
+}
+
+
+/* =========================================
+LOAD CHAT
+========================================= */
+
+async function loadChatMessages(userId){
+
+const list=
+document.getElementById("messagesList");
+
+if(!list)return;
+
+const {data:sent,error:sentError}=
+await supabaseClient
+.from("messages")
+.select("id,sender_id,receiver_id,content,created_at,read")
+.eq("sender_id",currentUser.id)
+.eq("receiver_id",userId)
+.order("created_at",{ascending:true});
+
+const {data:received,error:receivedError}=
+await supabaseClient
+.from("messages")
+.select("id,sender_id,receiver_id,content,created_at,read")
+.eq("sender_id",userId)
+.eq("receiver_id",currentUser.id)
+.order("created_at",{ascending:true});
+
+if(sentError||receivedError){
+
+console.error(sentError||receivedError);
+
+list.innerHTML=
+`<div class="empty">Unable to load messages.</div>`;
+
+return;
+}
+
+const messages=[
+...(sent||[]),
+...(received||[])
+].sort(
+(a,b)=>
+new Date(a.created_at)-new Date(b.created_at)
+);
+
+if(!messages.length){
+
+list.innerHTML=
+`<div class="empty">
+No messages yet.<br>
+Say hello 👋
+</div>`;
+
+}else{
+
+list.innerHTML="";
+
+messages.forEach(message=>{
+
+const mine=
+message.sender_id===currentUser.id;
+
+const row=document.createElement("div");
+
+row.className=
+"message-row "+
+(mine?"mine":"");
+
+const bubble=document.createElement("div");
+
+bubble.className="message-bubble";
+
+bubble.innerHTML=`
+
+<div>${escapeHTML(message.content)}</div>
+
+<div class="message-time">
+${new Date(message.created_at).toLocaleTimeString([],{
+hour:"2-digit",
+minute:"2-digit"
+})}
+${mine?(message.read?" ✓✓":" ✓"):""}
+</div>
+`;
+
+row.appendChild(bubble);
+list.appendChild(row);
+
+});
+
+list.scrollTop=list.scrollHeight;
+
+}
+
+
+/* mark received messages as read */
+
+await supabaseClient
+.from("messages")
+.update({read:true})
+.eq("sender_id",userId)
+.eq("receiver_id",currentUser.id)
+.eq("read",false);
+
+}
+
+
+/* =========================================
+SEND MESSAGE
+========================================= */
+
+async function sendMessage(){
+
+if(!activeChatUser)return;
+
+const input=
+document.getElementById("messageInput");
+
+const content=input.value.trim();
+
+if(!content)return;
+
+const {error}=await supabaseClient
+.from("messages")
+.insert({
+sender_id:currentUser.id,
+receiver_id:activeChatUser,
+content:content,
+read:false
+});
+
+if(error){
+
+alert(error.message);
+console.error(error);
+return;
+}
+
+input.value="";
+
+await loadChatMessages(activeChatUser);
+await loadConversations();
+
+}
+
+
+/* =========================================
+ENTER TO SEND
+========================================= */
+
+function handleMessageKey(event){
+
+if(event.key==="Enter"&&!event.shiftKey){
+
+event.preventDefault();
+
+sendMessage();
+
+}
+
+}
+
+
+/* =========================================
+FILTER CONVERSATIONS
+========================================= */
+
+function filterConversations(){
+
+const term=
+document.getElementById("conversationSearch")
+.value
+.toLowerCase()
+.trim();
+
+document
+.querySelectorAll(".conversation")
+.forEach(item=>{
+
+const name=
+item.dataset.name||"";
+
+item.style.display=
+name.includes(term)
+?"flex"
+:"none";
+
+});
+
+}
+
+
+/* =========================================
+POSTS
 ========================================= */
 
 function choosePhoto(){
@@ -1172,21 +2025,19 @@ function chooseVideo(){
 document.getElementById("videoInput").click();
 }
 
-
 function showSelectedFile(input){
 
 if(!input.files.length)return;
 
 selectedFile=input.files[0];
 
-selectedFileType =
+selectedFileType=
 selectedFile.type.startsWith("image/")
-? "image"
-: selectedFile.type.startsWith("video/")
-? "video"
-: null;
+?"image":
+selectedFile.type.startsWith("video/")
+?"video":null;
 
-document.getElementById("selectedFile").textContent =
+document.getElementById("selectedFile").textContent=
 "Selected: "+selectedFile.name;
 
 }
@@ -1194,11 +2045,11 @@ document.getElementById("selectedFile").textContent =
 
 async function createPost(){
 
-const content =
+const content=
 document.getElementById("postContent")
 .value.trim();
 
-if(!content && !selectedFile){
+if(!content&&!selectedFile){
 
 alert("Write something or select a photo/video.");
 return;
@@ -1208,13 +2059,12 @@ return;
 let mediaUrl=null;
 let mediaType=null;
 
-
 if(selectedFile){
 
-const extension =
+const extension=
 selectedFile.name.split(".").pop().toLowerCase();
 
-const fileName =
+const fileName=
 currentUser.id+
 "/"+
 Date.now()+
@@ -1222,8 +2072,7 @@ Date.now()+
 Math.random().toString(36).substring(2)+
 "."+extension;
 
-
-const {error:uploadError} =
+const {error:uploadError}=
 await supabaseClient
 .storage
 .from("post-media")
@@ -1243,7 +2092,7 @@ return;
 
 }
 
-const {data:publicData} =
+const {data:publicData}=
 supabaseClient
 .storage
 .from("post-media")
@@ -1254,19 +2103,15 @@ mediaType=selectedFileType;
 
 }
 
-
-const {error} =
+const {error}=
 await supabaseClient
 .from("posts")
 .insert({
-
 user_id:currentUser.id,
-content:content || null,
+content:content||null,
 media_url:mediaUrl,
 media_type:mediaType
-
 });
-
 
 if(error){
 
@@ -1274,7 +2119,6 @@ alert(error.message);
 return;
 
 }
-
 
 document.getElementById("postContent").value="";
 document.getElementById("selectedFile").textContent="";
@@ -1292,10 +2136,10 @@ await loadPosts();
 
 async function loadPosts(){
 
-const container =
+const container=
 document.getElementById("postsContainer");
 
-const {data,error} =
+const {data,error}=
 await supabaseClient
 .from("posts")
 .select(`
@@ -1312,7 +2156,6 @@ full_name
 `)
 .order("created_at",{ascending:false});
 
-
 if(error){
 
 console.error(error);
@@ -1321,9 +2164,7 @@ container.innerHTML=
 `<div class="empty">Unable to load posts.</div>`;
 
 return;
-
 }
-
 
 if(!data.length){
 
@@ -1333,26 +2174,22 @@ No posts yet. Be the first to post!
 </div>`;
 
 return;
-
 }
 
-
 container.innerHTML="";
-
 
 for(const post of data){
 
 const profile=post.profiles||{};
 
-const name =
-profile.full_name ||
-profile.username ||
+const name=
+profile.full_name||
+profile.username||
 "Dayoff User";
 
 let mediaHTML="";
 
-
-if(post.media_url && post.media_type==="image"){
+if(post.media_url&&post.media_type==="image"){
 
 mediaHTML=
 `<img class="post-media"
@@ -1361,8 +2198,7 @@ alt="Post image">`;
 
 }
 
-
-if(post.media_url && post.media_type==="video"){
+if(post.media_url&&post.media_type==="video"){
 
 mediaHTML=
 `<video class="post-media" controls playsinline>
@@ -1371,27 +2207,31 @@ mediaHTML=
 
 }
 
-
-const article =
-document.createElement("article");
+const article=document.createElement("article");
 
 article.className="card post";
-
 
 article.innerHTML=`
 
 <div class="post-header">
+
 <div>
-<div class="author">${escapeHTML(name)}</div>
+
+<div class="author">
+${escapeHTML(name)}
+</div>
+
 <div class="date">
 ${new Date(post.created_at).toLocaleString()}
 </div>
+
 </div>
+
 </div>
 
 ${
 post.content
-? `<div class="post-content">
+?`<div class="post-content">
 ${escapeHTML(post.content)}
 </div>`
 :""
@@ -1416,8 +2256,10 @@ onclick="toggleLike(${post.id})">
 
 ${
 post.user_id===currentUser.id
-? `<button class="delete-btn"
-onclick="deletePost(${post.id})">🗑️</button>`
+?`<button class="delete-btn"
+onclick="deletePost(${post.id})">
+🗑️
+</button>`
 :""
 }
 
@@ -1452,24 +2294,21 @@ await loadLikeStatus(post.id);
 
 
 /* =========================================
-   LIKES
+LIKES
 ========================================= */
 
 async function loadLikeStatus(postId){
 
-const {data} =
-await supabaseClient
+const {data}=await supabaseClient
 .from("post_likes")
 .select("user_id")
 .eq("post_id",postId);
 
-const button =
-document.getElementById("like-"+postId);
+const button=document.getElementById("like-"+postId);
 
 if(!button)return;
 
-const liked =
-(data||[]).some(
+const liked=(data||[]).some(
 row=>row.user_id===currentUser.id
 );
 
@@ -1490,14 +2329,12 @@ button.textContent="❤️ Like";
 
 async function toggleLike(postId){
 
-const {data} =
-await supabaseClient
+const {data}=await supabaseClient
 .from("post_likes")
 .select("post_id")
 .eq("post_id",postId)
 .eq("user_id",currentUser.id)
 .maybeSingle();
-
 
 if(data){
 
@@ -1524,18 +2361,16 @@ await loadLikeStatus(postId);
 
 
 /* =========================================
-   COMMENTS
+COMMENTS
 ========================================= */
 
 async function toggleComments(postId){
 
-const box =
-document.getElementById("comments-"+postId);
+const box=document.getElementById("comments-"+postId);
 
 if(box.style.display==="block"){
 
 box.style.display="none";
-
 return;
 
 }
@@ -1549,13 +2384,11 @@ await loadComments(postId);
 
 async function loadComments(postId){
 
-const list =
-document.getElementById(
+const list=document.getElementById(
 "comment-list-"+postId
 );
 
-const {data,error} =
-await supabaseClient
+const {data,error}=await supabaseClient
 .from("comments")
 .select(`
 id,
@@ -1591,9 +2424,9 @@ data.forEach(comment=>{
 
 const profile=comment.profiles||{};
 
-const name =
-profile.full_name ||
-profile.username ||
+const name=
+profile.full_name||
+profile.username||
 "User";
 
 const div=document.createElement("div");
@@ -1613,8 +2446,7 @@ list.appendChild(div);
 
 async function addComment(postId){
 
-const input =
-document.getElementById(
+const input=document.getElementById(
 "comment-input-"+postId
 );
 
@@ -1622,8 +2454,7 @@ const content=input.value.trim();
 
 if(!content)return;
 
-const {error} =
-await supabaseClient
+const {error}=await supabaseClient
 .from("comments")
 .insert({
 post_id:postId,
@@ -1646,15 +2477,14 @@ await loadComments(postId);
 
 
 /* =========================================
-   DELETE / SHARE
+DELETE / SHARE
 ========================================= */
 
 async function deletePost(postId){
 
 if(!confirm("Delete this post?"))return;
 
-const {error} =
-await supabaseClient
+const {error}=await supabaseClient
 .from("posts")
 .delete()
 .eq("id",postId)
@@ -1674,7 +2504,7 @@ await loadPosts();
 
 async function sharePost(postId){
 
-const url =
+const url=
 window.location.origin+
 window.location.pathname+
 "?post="+postId;
@@ -1711,13 +2541,12 @@ alert(url);
 
 
 /* =========================================
-   LIVE
+LIVE
 ========================================= */
 
 function openLiveModal(){
 
-const modal =
-document.getElementById("liveModal");
+const modal=document.getElementById("liveModal");
 
 modal.classList.remove("hidden");
 modal.style.display="flex";
@@ -1727,8 +2556,7 @@ modal.style.display="flex";
 
 function closeLiveModal(){
 
-const modal =
-document.getElementById("liveModal");
+const modal=document.getElementById("liveModal");
 
 modal.classList.add("hidden");
 modal.style.display="none";
@@ -1748,7 +2576,7 @@ closeLiveModal();
 
 
 /* =========================================
-   SECURITY
+SECURITY
 ========================================= */
 
 function escapeHTML(value){
@@ -1762,14 +2590,13 @@ return String(value??"")
 
 }
 
-
 function escapeAttribute(value){
 return escapeHTML(value);
 }
 
 
 /* =========================================
-   START
+START
 ========================================= */
 
 checkSession();
