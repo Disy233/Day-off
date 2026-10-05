@@ -17,284 +17,248 @@
     }
 
     body {
-      background: #f5f6f8;
-      color: #111827;
+      background: #f0f2f5;
+      color: #222;
     }
 
-    button {
-      cursor: pointer;
-      border: none;
-    }
-
-    .topbar {
-      height: 64px;
+    header {
+      height: 60px;
       background: white;
-      border-bottom: 1px solid #ddd;
       display: flex;
       align-items: center;
       justify-content: space-between;
-      padding: 0 25px;
+      padding: 0 20px;
       position: sticky;
       top: 0;
       z-index: 100;
+      border-bottom: 1px solid #ddd;
     }
 
     .logo {
-      font-size: 28px;
+      font-size: 25px;
       font-weight: bold;
-      color: #2563eb;
+      color: #1877f2;
     }
 
-    .search {
-      width: 35%;
-      background: #f1f3f5;
-      border-radius: 25px;
-      padding: 12px 18px;
+    .header-buttons button,
+    button {
       border: none;
-      outline: none;
-    }
-
-    .top-actions {
-      display: flex;
-      gap: 10px;
-      align-items: center;
-    }
-
-    .top-btn {
-      background: #f1f5f9;
-      padding: 10px 15px;
-      border-radius: 20px;
-    }
-
-    .live-btn {
-      background: #ef4444;
+      padding: 9px 14px;
+      border-radius: 8px;
+      cursor: pointer;
+      background: #1877f2;
       color: white;
-      padding: 10px 18px;
-      border-radius: 20px;
       font-weight: bold;
     }
 
-    .layout {
-      display: grid;
-      grid-template-columns: 230px 1fr 280px;
-      gap: 20px;
-      max-width: 1400px;
+    .header-buttons button {
+      margin-left: 6px;
+    }
+
+    .container {
+      max-width: 1100px;
       margin: auto;
+      display: grid;
+      grid-template-columns: 220px 1fr 250px;
+      gap: 20px;
       padding: 20px;
     }
 
     .sidebar,
-    .rightbar {
+    .rightbar,
+    .card,
+    .create-post,
+    .auth-box {
       background: white;
-      border-radius: 15px;
-      padding: 18px;
+      border-radius: 12px;
+      padding: 16px;
+      box-shadow: 0 1px 4px rgba(0,0,0,.08);
+    }
+
+    .sidebar {
       height: fit-content;
+      position: sticky;
+      top: 80px;
     }
 
-    .menu-item {
-      padding: 13px;
-      margin-bottom: 5px;
-      border-radius: 10px;
-      cursor: pointer;
+    .sidebar button {
+      display: block;
+      width: 100%;
+      margin-bottom: 10px;
+      text-align: left;
+      background: transparent;
+      color: #333;
     }
 
-    .menu-item:hover {
-      background: #f1f5f9;
+    .sidebar button:hover {
+      background: #f0f2f5;
     }
 
     .stories {
-      background: white;
-      padding: 15px;
-      border-radius: 15px;
       display: flex;
-      gap: 12px;
+      gap: 10px;
       overflow-x: auto;
-      margin-bottom: 20px;
+      margin-bottom: 18px;
     }
 
     .story {
-      min-width: 80px;
-      height: 110px;
+      min-width: 100px;
+      height: 145px;
+      background: linear-gradient(135deg,#1877f2,#8b5cf6);
       border-radius: 12px;
-      background: linear-gradient(135deg, #2563eb, #9333ea);
       color: white;
       display: flex;
       align-items: flex-end;
-      justify-content: center;
-      padding: 8px;
-      font-size: 12px;
+      padding: 10px;
       font-weight: bold;
     }
 
-    .composer {
-      background: white;
-      border-radius: 15px;
-      padding: 18px;
-      margin-bottom: 20px;
+    .create-post {
+      margin-bottom: 18px;
     }
 
-    .composer textarea {
+    textarea {
       width: 100%;
       min-height: 80px;
       border: 1px solid #ddd;
-      border-radius: 12px;
+      border-radius: 10px;
       padding: 12px;
       resize: vertical;
-      outline: none;
+      margin-bottom: 10px;
     }
 
-    .composer-bottom {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      margin-top: 12px;
-      gap: 10px;
-      flex-wrap: wrap;
-    }
-
-    .media-buttons {
+    .post-tools {
       display: flex;
       gap: 8px;
       flex-wrap: wrap;
     }
 
-    .media-btn {
-      background: #f1f5f9;
-      padding: 9px 12px;
-      border-radius: 10px;
+    .post-tools button {
+      background: #f0f2f5;
+      color: #333;
     }
 
-    .post-btn {
-      background: #2563eb;
+    .post-tools .publish {
+      background: #1877f2;
       color: white;
-      padding: 10px 22px;
-      border-radius: 20px;
-      font-weight: bold;
+    }
+
+    .selected-file {
+      font-size: 13px;
+      color: #555;
+      margin: 8px 0;
     }
 
     .post {
-      background: white;
-      border-radius: 15px;
-      padding: 18px;
-      margin-bottom: 20px;
+      margin-bottom: 18px;
     }
 
     .post-header {
       display: flex;
       justify-content: space-between;
-      margin-bottom: 12px;
+      align-items: center;
+      margin-bottom: 10px;
     }
 
     .author {
       font-weight: bold;
     }
 
-    .post-time {
+    .date {
       color: #777;
       font-size: 12px;
-      margin-top: 4px;
     }
 
     .post-content {
-      line-height: 1.6;
-      margin-bottom: 15px;
       white-space: pre-wrap;
+      margin-bottom: 10px;
+      line-height: 1.5;
     }
 
     .post-media {
       width: 100%;
-      max-height: 600px;
-      object-fit: contain;
-      border-radius: 12px;
-      background: #000;
-      margin-bottom: 15px;
+      max-height: 550px;
+      object-fit: cover;
+      border-radius: 10px;
+      margin-bottom: 10px;
     }
 
-    .post-actions {
+    .actions {
       display: flex;
       gap: 8px;
       border-top: 1px solid #eee;
-      padding-top: 12px;
-      flex-wrap: wrap;
+      padding-top: 10px;
     }
 
-    .action-btn {
-      background: #f3f4f6;
-      padding: 8px 15px;
-      border-radius: 20px;
+    .actions button {
+      flex: 1;
+      background: #f0f2f5;
+      color: #333;
     }
 
-    .action-btn.liked {
-      background: #dbeafe;
-      color: #2563eb;
+    .actions button.liked {
+      color: #1877f2;
       font-weight: bold;
     }
 
-    .delete-btn {
-      color: #dc2626;
-      background: #fee2e2;
-      padding: 6px 10px;
-      border-radius: 10px;
-    }
-
     .comments {
+      display: none;
       margin-top: 12px;
       border-top: 1px solid #eee;
       padding-top: 12px;
     }
 
     .comment {
-      background: #f8fafc;
+      background: #f0f2f5;
       padding: 8px 10px;
       border-radius: 10px;
       margin-bottom: 7px;
-      font-size: 14px;
     }
 
-    .comment-name {
-      font-weight: bold;
+    .comment strong {
+      display: block;
+      font-size: 13px;
+      margin-bottom: 3px;
     }
 
     .comment-form {
       display: flex;
-      gap: 8px;
-      margin-top: 10px;
+      gap: 6px;
     }
 
     .comment-form input {
       flex: 1;
-      padding: 10px;
       border: 1px solid #ddd;
-      border-radius: 10px;
-      outline: none;
+      border-radius: 8px;
+      padding: 9px;
     }
 
-    .comment-form button {
-      background: #2563eb;
-      color: white;
-      padding: 10px 14px;
-      border-radius: 10px;
+    .delete-btn {
+      background: #ffebee !important;
+      color: #d32f2f !important;
+      flex: 0 0 auto !important;
     }
 
-    .right-title {
-      font-weight: bold;
-      margin-bottom: 15px;
-    }
-
-    .online-user {
-      padding: 10px 0;
-      border-bottom: 1px solid #eee;
-    }
-
-    .status {
-      color: #16a34a;
-      font-size: 12px;
+    .auth-screen {
+      min-height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding: 20px;
     }
 
     .auth-box {
-      background: white;
-      padding: 20px;
-      border-radius: 15px;
+      width: 100%;
+      max-width: 400px;
+    }
+
+    .auth-box h1 {
+      color: #1877f2;
+      margin-bottom: 8px;
+    }
+
+    .auth-box p {
+      color: #666;
       margin-bottom: 20px;
     }
 
@@ -303,111 +267,61 @@
       padding: 12px;
       margin-bottom: 10px;
       border: 1px solid #ddd;
-      border-radius: 10px;
-      outline: none;
-    }
-
-    .auth-btn {
-      width: 100%;
-      padding: 12px;
-      background: #2563eb;
-      color: white;
-      border-radius: 10px;
-      margin-top: 5px;
-    }
-
-    .logout-btn {
-      width: 100%;
-      padding: 10px;
-      background: #ef4444;
-      color: white;
-      border-radius: 10px;
-      margin-top: 10px;
-    }
-
-    .user-info {
-      background: #eff6ff;
-      padding: 12px;
-      border-radius: 10px;
-      margin-bottom: 15px;
-      font-size: 14px;
-    }
-
-    .message {
-      margin-top: 10px;
-      font-size: 13px;
-    }
-
-    .success {
-      color: #16a34a;
-    }
-
-    .error {
-      color: #dc2626;
-    }
-
-    .selected-file {
-      margin-top: 10px;
-      padding: 8px;
-      background: #eff6ff;
       border-radius: 8px;
-      font-size: 13px;
     }
 
-    .modal {
-      display: none;
-      position: fixed;
-      inset: 0;
-      background: rgba(0,0,0,.7);
-      align-items: center;
-      justify-content: center;
-      z-index: 1000;
-      padding: 20px;
-    }
-
-    .modal-content {
-      background: white;
+    .auth-box button {
       width: 100%;
-      max-width: 500px;
-      border-radius: 18px;
-      padding: 25px;
+      margin-bottom: 8px;
     }
 
-    .modal-content h2 {
+    .secondary {
+      background: #eee !important;
+      color: #333 !important;
+    }
+
+    .hidden {
+      display: none !important;
+    }
+
+    .profile-name {
+      font-weight: bold;
+      margin-bottom: 5px;
+    }
+
+    .profile-email {
+      font-size: 12px;
+      color: #777;
+      margin-bottom: 12px;
+      word-break: break-word;
+    }
+
+    .live-card {
+      background: linear-gradient(135deg,#ff416c,#ff4b2b);
+      color: white;
+      padding: 15px;
+      border-radius: 12px;
       margin-bottom: 15px;
     }
 
-    .modal-content input {
-      width: 100%;
-      padding: 12px;
-      border: 1px solid #ddd;
-      border-radius: 10px;
-      margin-bottom: 12px;
-    }
-
-    .start-live {
-      width: 100%;
-      background: #ef4444;
-      color: white;
-      padding: 13px;
-      border-radius: 10px;
-      font-weight: bold;
-    }
-
-    .close-modal {
+    .live-card button {
+      background: white;
+      color: #ff416c;
       margin-top: 10px;
-      width: 100%;
-      background: #e5e7eb;
-      padding: 12px;
-      border-radius: 10px;
     }
 
-    .mobile-nav {
+    .empty {
+      text-align: center;
+      color: #777;
+      padding: 30px 10px;
+    }
+
+    .bottom-nav {
       display: none;
     }
 
-    @media(max-width: 900px) {
-      .layout {
+    @media(max-width: 850px) {
+      .container {
         grid-template-columns: 1fr;
       }
 
@@ -416,48 +330,28 @@
         display: none;
       }
 
-      .search {
-        width: 45%;
-      }
-
-      .mobile-nav {
-        display: flex;
+      .bottom-nav {
         position: fixed;
         bottom: 0;
         left: 0;
         right: 0;
         height: 60px;
         background: white;
-        border-top: 1px solid #ddd;
+        display: flex;
         justify-content: space-around;
         align-items: center;
+        border-top: 1px solid #ddd;
         z-index: 100;
       }
 
+      .bottom-nav button {
+        background: transparent;
+        color: #333;
+        font-size: 12px;
+      }
+
       body {
-        padding-bottom: 65px;
-      }
-    }
-
-    @media(max-width: 500px) {
-      .topbar {
-        padding: 0 12px;
-      }
-
-      .logo {
-        font-size: 23px;
-      }
-
-      .search {
-        width: 35%;
-      }
-
-      .top-btn {
-        display: none;
-      }
-
-      .layout {
-        padding: 10px;
+        padding-bottom: 60px;
       }
     }
   </style>
@@ -465,327 +359,271 @@
 
 <body>
 
-<header class="topbar">
-
-  <div class="logo">Dayoff</div>
-
-  <input
-    class="search"
-    type="text"
-    placeholder="Search Dayoff..."
-    id="searchInput"
-  >
-
-  <div class="top-actions">
-    <button class="top-btn">🔔</button>
-
-    <button class="live-btn" onclick="openLiveModal()">
-      🔴 Go Live
-    </button>
-  </div>
-
-</header>
-
-
-<div class="layout">
-
-  <aside class="sidebar">
-
-    <div class="menu-item">🏠 Home</div>
-    <div class="menu-item">👤 Profile</div>
-    <div class="menu-item">👥 Friends</div>
-    <div class="menu-item">💬 Messages</div>
-    <div class="menu-item">🔔 Notifications</div>
-    <div class="menu-item">🎥 Live</div>
-    <div class="menu-item">⚙️ Settings</div>
-
-  </aside>
-
-
-  <main>
-
-    <!-- AUTH -->
-
-    <section class="auth-box">
-
-      <div id="loggedOut">
-
-        <h3>Welcome to Dayoff</h3>
-
-        <p style="margin:8px 0 15px;color:#666;">
-          Create an account or login to Dayoff.
-        </p>
-
-        <input
-          type="email"
-          id="email"
-          placeholder="Email"
-        >
-
-        <input
-          type="password"
-          id="password"
-          placeholder="Password"
-        >
-
-        <input
-          type="text"
-          id="username"
-          placeholder="Username"
-        >
-
-        <input
-          type="text"
-          id="fullName"
-          placeholder="Full name"
-        >
-
-        <button
-          class="auth-btn"
-          onclick="signup()"
-        >
-          Create Account
-        </button>
-
-        <button
-          class="auth-btn"
-          onclick="login()"
-          style="background:#111827;"
-        >
-          Login
-        </button>
-
-      </div>
-
-
-      <div id="loggedIn" style="display:none;">
-
-        <div class="user-info">
-
-          <strong id="userNameDisplay">
-            User
-          </strong>
-
-          <br>
-
-          <span id="userEmailDisplay"></span>
-
-        </div>
-
-        <button
-          class="logout-btn"
-          onclick="logout()"
-        >
-          Logout
-        </button>
-
-      </div>
-
-      <div id="authMessage" class="message"></div>
-
-    </section>
-
-
-    <!-- STORIES -->
-
-    <section class="stories">
-
-      <div class="story">Your Story</div>
-      <div class="story">Friends</div>
-      <div class="story">Music</div>
-      <div class="story">Travel</div>
-      <div class="story">Sports</div>
-
-    </section>
-
-
-    <!-- CREATE POST -->
-
-    <section class="composer">
-
-      <h3 style="margin-bottom:12px;">
-        Create a post
-      </h3>
-
-      <textarea
-        id="postContent"
-        placeholder="What's happening on Dayoff?"
-      ></textarea>
+  <!-- AUTH SCREEN -->
+  <section id="authScreen" class="auth-screen">
+    <div class="auth-box">
+      <h1>Dayoff</h1>
+      <p>Connect, share and enjoy your day.</p>
 
       <input
-        type="file"
-        id="mediaFile"
-        accept="image/*,video/*"
-        style="display:none"
-        onchange="showSelectedFile()"
+        type="email"
+        id="email"
+        placeholder="Email"
       >
 
-      <div
-        id="selectedFile"
-        class="selected-file"
-        style="display:none"
-      ></div>
+      <input
+        type="password"
+        id="password"
+        placeholder="Password"
+      >
 
-      <div class="composer-bottom">
+      <input
+        type="text"
+        id="username"
+        placeholder="Username (for sign up)"
+      >
 
-        <div class="media-buttons">
+      <button onclick="signUp()">Create account</button>
+      <button class="secondary" onclick="signIn()">Log in</button>
 
-          <button
-            class="media-btn"
-            onclick="choosePhoto()"
-          >
-            📷 Photo
-          </button>
+      <p id="authMessage"></p>
+    </div>
+  </section>
 
-          <button
-            class="media-btn"
-            onclick="chooseVideo()"
-          >
-            🎥 Video
+
+  <!-- MAIN APP -->
+  <div id="app" class="hidden">
+
+    <header>
+      <div class="logo">Dayoff</div>
+
+      <div class="header-buttons">
+        <button onclick="openLiveModal()">🔴 Go Live</button>
+        <button onclick="logout()">Logout</button>
+      </div>
+    </header>
+
+
+    <div class="container">
+
+      <!-- LEFT SIDEBAR -->
+      <aside class="sidebar">
+
+        <div class="profile-name" id="profileName">
+          User
+        </div>
+
+        <div class="profile-email" id="profileEmail">
+          -
+        </div>
+
+        <button>🏠 Home</button>
+        <button>👤 Friends</button>
+        <button>🔔 Notifications</button>
+        <button>💬 Messages</button>
+        <button>🔎 Search</button>
+        <button onclick="openLiveModal()">🔴 Live</button>
+
+      </aside>
+
+
+      <!-- FEED -->
+      <main>
+
+        <div class="stories">
+
+          <div class="story">
+            Your Story
+          </div>
+
+          <div class="story">
+            Friends
+          </div>
+
+          <div class="story">
+            Discover
+          </div>
+
+        </div>
+
+
+        <div class="live-card">
+
+          <strong>🔴 Dayoff Live</strong>
+
+          <p>
+            Start a live broadcast and connect with your audience.
+          </p>
+
+          <button onclick="openLiveModal()">
+            Start Live
           </button>
 
         </div>
 
-        <button
-          class="post-btn"
-          onclick="createPost()"
-        >
-          Post
-        </button>
 
-      </div>
+        <!-- CREATE POST -->
+        <div class="create-post">
 
-      <div
-        id="postMessage"
-        class="message"
-      ></div>
+          <textarea
+            id="postContent"
+            placeholder="What's happening?"
+          ></textarea>
 
-    </section>
+          <div id="selectedFile" class="selected-file"></div>
+
+          <div class="post-tools">
+
+            <button onclick="choosePhoto()">
+              📷 Photo
+            </button>
+
+            <button onclick="chooseVideo()">
+              🎥 Video
+            </button>
+
+            <button class="publish" onclick="createPost()">
+              Post
+            </button>
+
+          </div>
+
+          <input
+            type="file"
+            id="photoInput"
+            accept="image/*"
+            hidden
+            onchange="showSelectedFile(this)"
+          >
+
+          <input
+            type="file"
+            id="videoInput"
+            accept="video/*"
+            hidden
+            onchange="showSelectedFile(this)"
+          >
+
+        </div>
 
 
-    <!-- POSTS -->
+        <!-- POSTS -->
+        <div id="postsContainer">
 
-    <section id="postsContainer">
+          <div class="empty">
+            Loading posts...
+          </div>
 
-      <p style="text-align:center;color:#777;">
-        Loading posts...
-      </p>
+        </div>
 
-    </section>
-
-  </main>
+      </main>
 
 
-  <aside class="rightbar">
+      <!-- RIGHT SIDEBAR -->
+      <aside class="rightbar">
 
-    <div class="right-title">
-      Online Friends
+        <h3>Dayoff</h3>
+
+        <p style="margin-top:10px;color:#666;">
+          Welcome to your social space.
+        </p>
+
+        <hr style="margin:15px 0;">
+
+        <strong>Coming soon</strong>
+
+        <p style="margin-top:8px;color:#777;">
+          Friends, messaging, notifications,
+          search and real live streaming.
+        </p>
+
+      </aside>
+
     </div>
 
-    <div class="online-user">
-      John
-      <div class="status">● Online</div>
+
+    <!-- MOBILE NAV -->
+    <div class="bottom-nav">
+
+      <button>🏠<br>Home</button>
+      <button>🔎<br>Search</button>
+      <button onclick="openLiveModal()">🔴<br>Live</button>
+      <button>💬<br>Chat</button>
+      <button>👤<br>Profile</button>
+
     </div>
-
-    <div class="online-user">
-      Sarah
-      <div class="status">● Online</div>
-    </div>
-
-    <div class="online-user">
-      Mike
-      <div class="status">● Online</div>
-    </div>
-
-    <br>
-
-    <button
-      class="live-btn"
-      style="width:100%;"
-      onclick="openLiveModal()"
-    >
-      🔴 Start Live
-    </button>
-
-  </aside>
-
-</div>
-
-
-<!-- MOBILE NAV -->
-
-<nav class="mobile-nav">
-
-  <div>🏠</div>
-  <div>🔍</div>
-  <div onclick="openLiveModal()">🔴</div>
-  <div>💬</div>
-  <div>👤</div>
-
-</nav>
-
-
-<!-- LIVE MODAL -->
-
-<div
-  class="modal"
-  id="liveModal"
->
-
-  <div class="modal-content">
-
-    <h2>🔴 Go Live on Dayoff</h2>
-
-    <p style="color:#666;margin-bottom:15px;">
-      Start your live broadcast and connect with your audience.
-    </p>
-
-    <input
-      type="text"
-      id="liveTitle"
-      placeholder="Live title"
-    >
-
-    <button
-      class="start-live"
-      onclick="startLive()"
-    >
-      Start Live
-    </button>
-
-    <button
-      class="close-modal"
-      onclick="closeLiveModal()"
-    >
-      Cancel
-    </button>
-
-    <div
-      id="liveMessage"
-      class="message"
-    ></div>
 
   </div>
 
-</div>
+
+  <!-- LIVE MODAL -->
+  <div
+    id="liveModal"
+    class="hidden"
+    style="
+      position:fixed;
+      inset:0;
+      background:rgba(0,0,0,.75);
+      z-index:999;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      padding:20px;
+    "
+  >
+
+    <div
+      style="
+        background:white;
+        width:100%;
+        max-width:500px;
+        border-radius:15px;
+        padding:20px;
+      "
+    >
+
+      <h2>🔴 Dayoff Live</h2>
+
+      <p style="margin:15px 0;color:#666;">
+        Real camera broadcasting will be connected
+        in the Live Streaming stage.
+      </p>
+
+      <button onclick="startLive()">
+        Start Live
+      </button>
+
+      <button
+        onclick="closeLiveModal()"
+        style="background:#eee;color:#333;"
+      >
+        Cancel
+      </button>
+
+    </div>
+
+  </div>
 
 
 <script>
 
-/* =========================================
+/* ==========================================
    SUPABASE CONNECTION
-========================================= */
+========================================== */
 
 const SUPABASE_URL =
   "https://bdqjpwyalsuxyiczyeui.supabase.co";
 
+
 /*
-   PASTE THE PUBLISHABLE KEY FROM
-   THIS NEW SUPABASE PROJECT HERE.
+  IMPORTANT:
+  Paste the PUBLISHABLE KEY from your
+  current Supabase project below.
 */
 
 const SUPABASE_KEY =
-  "PASTE_NEW_SUPABASE_PUBLISHABLE_KEY_HERE";
+  "PASTE_YOUR_CURRENT_SUPABASE_PUBLISHABLE_KEY_HERE";
+
 
 const supabaseClient =
   supabase.createClient(
@@ -794,153 +632,107 @@ const supabaseClient =
   );
 
 
-/* =========================================
-   GLOBAL USER
-========================================= */
+/* ==========================================
+   GLOBAL VARIABLES
+========================================== */
 
 let currentUser = null;
+let selectedFile = null;
+let selectedFileType = null;
 
 
-/* =========================================
-   AUTH MESSAGE
-========================================= */
+/* ==========================================
+   AUTH
+========================================== */
 
-function showAuthMessage(message, type = "") {
-
-  const box =
-    document.getElementById("authMessage");
-
-  box.textContent = message;
-
-  box.className =
-    "message " + type;
-
-}
-
-
-/* =========================================
-   SIGN UP
-========================================= */
-
-async function signup() {
+async function signUp() {
 
   const email =
-    document.getElementById("email")
-      .value.trim();
+    document.getElementById("email").value.trim();
 
   const password =
-    document.getElementById("password")
-      .value;
+    document.getElementById("password").value;
 
   const username =
-    document.getElementById("username")
-      .value.trim();
-
-  const fullName =
-    document.getElementById("fullName")
-      .value.trim();
-
+    document.getElementById("username").value.trim();
 
   if (!email || !password || !username) {
 
     showAuthMessage(
-      "Please enter email, password and username.",
-      "error"
+      "Please enter email, password and username."
     );
 
     return;
   }
 
+  const {
+    data,
+    error
+  } = await supabaseClient.auth.signUp({
 
-  showAuthMessage("Creating account...");
+    email: email,
 
+    password: password,
 
-  const { data, error } =
-    await supabaseClient.auth.signUp({
-
-      email: email,
-
-      password: password,
-
-      options: {
-        data: {
-          username: username,
-          full_name: fullName
-        }
+    options: {
+      data: {
+        username: username,
+        full_name: username
       }
+    }
 
-    });
+  });
 
 
   if (error) {
 
-    showAuthMessage(
-      error.message,
-      "error"
-    );
+    showAuthMessage(error.message);
 
     return;
   }
 
 
-  if (data.user) {
-
-    showAuthMessage(
-      "Account created. Check your email if confirmation is required.",
-      "success"
-    );
-
-  }
+  showAuthMessage(
+    "Account created. Check your email if confirmation is required."
+  );
 
 }
 
 
-/* =========================================
-   LOGIN
-========================================= */
-
-async function login() {
+async function signIn() {
 
   const email =
-    document.getElementById("email")
-      .value.trim();
+    document.getElementById("email").value.trim();
 
   const password =
-    document.getElementById("password")
-      .value;
+    document.getElementById("password").value;
 
 
   if (!email || !password) {
 
     showAuthMessage(
-      "Enter your email and password.",
-      "error"
+      "Enter your email and password."
     );
 
     return;
   }
 
 
-  showAuthMessage("Logging in...");
+  const {
+    data,
+    error
+  } = await supabaseClient.auth.signInWithPassword({
 
+    email: email,
 
-  const { data, error } =
-    await supabaseClient.auth
-      .signInWithPassword({
+    password: password
 
-        email: email,
-
-        password: password
-
-      });
+  });
 
 
   if (error) {
 
-    showAuthMessage(
-      error.message,
-      "error"
-    );
+    showAuthMessage(error.message);
 
     return;
   }
@@ -948,21 +740,10 @@ async function login() {
 
   currentUser = data.user;
 
-  showAuthMessage(
-    "Login successful.",
-    "success"
-  );
-
-  await updateAuthUI();
-
-  loadPosts();
+  await showApp();
 
 }
 
-
-/* =========================================
-   LOGOUT
-========================================= */
 
 async function logout() {
 
@@ -970,67 +751,113 @@ async function logout() {
 
   currentUser = null;
 
-  updateAuthUI();
+  document
+    .getElementById("app")
+    .classList
+    .add("hidden");
 
-  showAuthMessage(
-    "You have logged out.",
-    "success"
-  );
-
-  loadPosts();
+  document
+    .getElementById("authScreen")
+    .classList
+    .remove("hidden");
 
 }
 
 
-/* =========================================
-   UPDATE AUTH UI
-========================================= */
+function showAuthMessage(message) {
 
-async function updateAuthUI() {
+  document.getElementById(
+    "authMessage"
+  ).textContent = message;
 
-  const loggedOut =
-    document.getElementById("loggedOut");
-
-  const loggedIn =
-    document.getElementById("loggedIn");
+}
 
 
-  if (!currentUser) {
+/* ==========================================
+   SESSION
+========================================== */
 
-    loggedOut.style.display = "block";
+async function checkSession() {
 
-    loggedIn.style.display = "none";
+  const {
+    data
+  } = await supabaseClient.auth.getSession();
+
+
+  if (data.session) {
+
+    currentUser =
+      data.session.user;
+
+    await showApp();
+
+  }
+
+}
+
+
+async function showApp() {
+
+  document
+    .getElementById("authScreen")
+    .classList
+    .add("hidden");
+
+  document
+    .getElementById("app")
+    .classList
+    .remove("hidden");
+
+
+  document.getElementById(
+    "profileEmail"
+  ).textContent =
+    currentUser.email || "";
+
+
+  await loadProfile();
+
+  await loadPosts();
+
+}
+
+
+/* ==========================================
+   PROFILE
+========================================== */
+
+async function loadProfile() {
+
+  const {
+    data,
+    error
+  } = await supabaseClient
+    .from("profiles")
+    .select(
+      "username, full_name"
+    )
+    .eq(
+      "id",
+      currentUser.id
+    )
+    .maybeSingle();
+
+
+  if (error) {
+
+    console.error(error);
 
     return;
   }
 
 
-  loggedOut.style.display = "none";
-
-  loggedIn.style.display = "block";
-
-
-  document.getElementById(
-    "userEmailDisplay"
-  ).textContent =
-    currentUser.email || "";
-
-
-  const { data: profile } =
-    await supabaseClient
-      .from("profiles")
-      .select("username, full_name")
-      .eq("id", currentUser.id)
-      .maybeSingle();
-
-
-  if (profile) {
+  if (data) {
 
     document.getElementById(
-      "userNameDisplay"
+      "profileName"
     ).textContent =
-      profile.full_name ||
-      profile.username ||
+      data.full_name ||
+      data.username ||
       "User";
 
   }
@@ -1038,138 +865,106 @@ async function updateAuthUI() {
 }
 
 
-/* =========================================
-   CHOOSE PHOTO
-========================================= */
+/* ==========================================
+   FILE PICKERS
+========================================== */
 
 function choosePhoto() {
 
-  const input =
-    document.getElementById("mediaFile");
-
-  input.accept =
-    "image/*";
-
-  input.click();
+  document
+    .getElementById("photoInput")
+    .click();
 
 }
 
-
-/* =========================================
-   CHOOSE VIDEO
-========================================= */
 
 function chooseVideo() {
 
-  const input =
-    document.getElementById("mediaFile");
-
-  input.accept =
-    "video/*";
-
-  input.click();
+  document
+    .getElementById("videoInput")
+    .click();
 
 }
 
 
-/* =========================================
-   SHOW SELECTED FILE
-========================================= */
+function showSelectedFile(input) {
 
-function showSelectedFile() {
-
-  const input =
-    document.getElementById("mediaFile");
-
-  const display =
-    document.getElementById("selectedFile");
+  if (!input.files.length) return;
 
 
-  if (!input.files.length) {
-
-    display.style.display =
-      "none";
-
-    return;
-
-  }
-
-
-  const file =
+  selectedFile =
     input.files[0];
 
 
-  display.textContent =
-    "Selected: " + file.name;
+  if (
+    selectedFile.type.startsWith("image/")
+  ) {
+
+    selectedFileType = "image";
+
+  } else if (
+    selectedFile.type.startsWith("video/")
+  ) {
+
+    selectedFileType = "video";
+
+  } else {
+
+    selectedFileType = null;
+
+  }
 
 
-  display.style.display =
-    "block";
+  document.getElementById(
+    "selectedFile"
+  ).textContent =
+    "Selected: " +
+    selectedFile.name;
 
 }
 
 
-/* =========================================
+/* ==========================================
    CREATE POST
-========================================= */
+========================================== */
 
 async function createPost() {
 
-  const message =
-    document.getElementById("postMessage");
-
-  const content =
-    document.getElementById("postContent")
-      .value.trim();
-
-  const file =
-    document.getElementById("mediaFile")
-      .files[0];
-
-
   if (!currentUser) {
 
-    message.textContent =
-      "Please login before creating a post.";
-
-    message.className =
-      "message error";
+    alert("Please log in first.");
 
     return;
   }
 
 
-  if (!content && !file) {
+  const content =
+    document
+      .getElementById("postContent")
+      .value
+      .trim();
 
-    message.textContent =
-      "Write something or select a photo/video.";
 
-    message.className =
-      "message error";
+  if (!content && !selectedFile) {
+
+    alert(
+      "Write something or select a photo/video."
+    );
 
     return;
-
   }
-
-
-  message.textContent =
-    "Publishing...";
-
-  message.className =
-    "message";
 
 
   let mediaUrl = null;
-
   let mediaType = null;
 
 
-  /* UPLOAD MEDIA */
+  /* Upload media */
 
-  if (file) {
+  if (selectedFile) {
 
     const extension =
-      file.name
+      selectedFile.name
         .split(".")
         .pop()
         .toLowerCase();
@@ -1187,85 +982,80 @@ async function createPost() {
       extension;
 
 
-    const { error: uploadError } =
-      await supabaseClient
-        .storage
-        .from("post-media")
-        .upload(
-          fileName,
-          file,
-          {
-            cacheControl: "3600",
-            upsert: false
-          }
-        );
+    const {
+      error: uploadError
+    } = await supabaseClient
+      .storage
+      .from("post-media")
+      .upload(
+        fileName,
+        selectedFile,
+        {
+          cacheControl: "3600",
+          upsert: false
+        }
+      );
 
 
     if (uploadError) {
 
-      message.textContent =
+      alert(
         "Media upload failed: " +
-        uploadError.message;
-
-      message.className =
-        "message error";
+        uploadError.message
+      );
 
       return;
-
     }
 
 
-    const { data: publicData } =
-      supabaseClient
-        .storage
-        .from("post-media")
-        .getPublicUrl(fileName);
+    const {
+      data: publicData
+    } = supabaseClient
+      .storage
+      .from("post-media")
+      .getPublicUrl(fileName);
 
 
     mediaUrl =
       publicData.publicUrl;
 
-
     mediaType =
-      file.type.startsWith("video/")
-        ? "video"
-        : "image";
+      selectedFileType;
 
   }
 
 
-  /* SAVE POST */
+  /* Create database post */
 
-  const { error } =
-    await supabaseClient
-      .from("posts")
-      .insert({
+  const {
+    error
+  } = await supabaseClient
+    .from("posts")
+    .insert({
 
-        user_id:
-          currentUser.id,
+      user_id:
+        currentUser.id,
 
-        content:
-          content || null,
+      content:
+        content || null,
 
-        media_url:
-          mediaUrl,
+      media_url:
+        mediaUrl,
 
-        media_type:
-          mediaType
+      media_type:
+        mediaType
 
-      });
+    });
 
 
   if (error) {
 
-    message.textContent =
-      error.message;
-
-    message.className =
-      "message error";
+    alert(
+      "Could not create post: " +
+      error.message
+    );
 
     return;
-
   }
 
 
@@ -1275,31 +1065,31 @@ async function createPost() {
 
 
   document.getElementById(
-    "mediaFile"
-  ).value = "";
+    "selectedFile"
+  ).textContent = "";
+
+
+  selectedFile = null;
+  selectedFileType = null;
 
 
   document.getElementById(
-    "selectedFile"
-  ).style.display =
-    "none";
+    "photoInput"
+  ).value = "";
+
+  document.getElementById(
+    "videoInput"
+  ).value = "";
 
 
-  message.textContent =
-    "Post published successfully.";
-
-  message.className =
-    "message success";
-
-
-  loadPosts();
+  await loadPosts();
 
 }
 
 
-/* =========================================
+/* ==========================================
    LOAD POSTS
-========================================= */
+========================================== */
 
 async function loadPosts() {
 
@@ -1309,56 +1099,52 @@ async function loadPosts() {
     );
 
 
-  const { data, error } =
-    await supabaseClient
-      .from("posts")
-      .select(`
-        id,
-        user_id,
-        content,
-        media_url,
-        media_type,
-        created_at,
-        profiles (
-          username,
-          full_name
-        )
-      `)
-      .order(
-        "created_at",
-        {
-          ascending: false
-        }
-      );
+  const {
+    data,
+    error
+  } = await supabaseClient
+    .from("posts")
+    .select(`
+      id,
+      user_id,
+      content,
+      media_url,
+      media_type,
+      created_at,
+      profiles (
+        username,
+        full_name
+      )
+    `)
+    .order(
+      "created_at",
+      {
+        ascending: false
+      }
+    );
 
 
   if (error) {
 
-    container.innerHTML = `
-      <div class="post">
-        <p class="error">
-          ${escapeHTML(error.message)}
-        </p>
-      </div>
-    `;
+    console.error(error);
+
+    container.innerHTML =
+      `<div class="empty">
+        Unable to load posts.
+      </div>`;
 
     return;
-
   }
 
 
   if (!data || data.length === 0) {
 
-    container.innerHTML = `
-      <div class="post">
-        <p style="text-align:center;color:#777;">
-          No posts yet. Be the first to post!
-        </p>
-      </div>
-    `;
+    container.innerHTML =
+      `<div class="empty">
+        No posts yet. Be the first to post!
+      </div>`;
 
     return;
-
   }
 
 
@@ -1367,15 +1153,20 @@ async function loadPosts() {
 
   for (const post of data) {
 
+    const article =
+      document.createElement("article");
+
+    article.className =
+      "card post";
+
+
     const profile =
-      Array.isArray(post.profiles)
-        ? post.profiles[0]
-        : post.profiles;
+      post.profiles || {};
 
 
     const username =
-      profile?.full_name ||
-      profile?.username ||
+      profile.full_name ||
+      profile.username ||
       "Dayoff User";
 
 
@@ -1393,13 +1184,12 @@ async function loadPosts() {
       post.media_type === "image"
     ) {
 
-      mediaHTML = `
-        <img
+      mediaHTML =
+        `<img
           class="post-media"
           src="${escapeAttribute(post.media_url)}"
-          alt="Dayoff post image"
-        >
-      `;
+          alt="Post image"
+        >`;
 
     }
 
@@ -1409,82 +1199,48 @@ async function loadPosts() {
       post.media_type === "video"
     ) {
 
-      mediaHTML = `
-        <video
+      mediaHTML =
+        `<video
           class="post-media"
           controls
           playsinline
-          preload="metadata"
         >
           <source
             src="${escapeAttribute(post.media_url)}"
             type="video/mp4"
           >
           Your browser does not support video.
-        </video>
-      `;
+        </video>`;
 
     }
 
 
-    let deleteButton = "";
+    const ownPost =
+      post.user_id === currentUser.id;
 
 
-    if (
-      currentUser &&
-      currentUser.id === post.user_id
-    ) {
-
-      deleteButton = `
-        <button
-          class="delete-btn"
-          onclick="deletePost(${post.id})"
-        >
-          Delete
-        </button>
-      `;
-
-    }
-
-
-    const postElement =
-      document.createElement(
-        "article"
-      );
-
-
-    postElement.className =
-      "post";
-
-
-    postElement.innerHTML = `
+    article.innerHTML = `
 
       <div class="post-header">
 
         <div>
-
           <div class="author">
             ${escapeHTML(username)}
           </div>
 
-          <div class="post-time">
+          <div class="date">
             ${escapeHTML(date)}
           </div>
-
         </div>
-
-        ${deleteButton}
 
       </div>
 
 
       ${
         post.content
-          ? `
-            <div class="post-content">
+          ? `<div class="post-content">
               ${escapeHTML(post.content)}
-            </div>
-          `
+             </div>`
           : ""
       }
 
@@ -1492,42 +1248,51 @@ async function loadPosts() {
       ${mediaHTML}
 
 
-      <div class="post-actions">
+      <div class="actions">
 
         <button
-          class="action-btn"
           id="like-${post.id}"
           onclick="toggleLike(${post.id})"
         >
-          ❤️ <span id="like-count-${post.id}">0</span>
+          ❤️ Like
         </button>
 
         <button
-          class="action-btn"
           onclick="toggleComments(${post.id})"
         >
-          💬 Comments
+          💬 Comment
         </button>
 
         <button
-          class="action-btn"
           onclick="sharePost(${post.id})"
         >
-          ↗ Share
+          🔗 Share
         </button>
+
+        ${
+          ownPost
+            ? `<button
+                 class="delete-btn"
+                 onclick="deletePost(${post.id})"
+               >
+                 🗑️
+               </button>`
+            : ""
+        }
 
       </div>
 
 
       <div
-        class="comments"
         id="comments-${post.id}"
-        style="display:none;"
+        class="comments"
       >
 
-        <div id="comment-list-${post.id}">
-          Loading comments...
+        <div
+          id="comment-list-${post.id}"
+        >
         </div>
+
 
         <div class="comment-form">
 
@@ -1549,70 +1314,40 @@ async function loadPosts() {
     `;
 
 
-    container.appendChild(
-      postElement
-    );
+    container.appendChild(article);
 
 
-    loadLikeStatus(post.id);
+    await loadLikeStatus(post.id);
 
   }
 
 }
 
 
-/* =========================================
+/* ==========================================
    LIKE STATUS
-========================================= */
+========================================== */
 
 async function loadLikeStatus(postId) {
 
-  const { count } =
-    await supabaseClient
-      .from("post_likes")
-      .select(
-        "*",
-        {
-          count: "exact",
-          head: true
-        }
-      )
-      .eq(
-        "post_id",
-        postId
-      );
-
-
-  const countElement =
-    document.getElementById(
-      "like-count-" + postId
+  const {
+    data,
+    error
+  } = await supabaseClient
+    .from("post_likes")
+    .select("user_id")
+    .eq(
+      "post_id",
+      postId
     );
 
 
-  if (countElement) {
+  if (error) {
 
-    countElement.textContent =
-      count || 0;
+    console.error(error);
 
+    return;
   }
-
-
-  if (!currentUser) return;
-
-
-  const { data } =
-    await supabaseClient
-      .from("post_likes")
-      .select("post_id")
-      .eq(
-        "post_id",
-        postId
-      )
-      .eq(
-        "user_id",
-        currentUser.id
-      )
-      .maybeSingle();
 
 
   const button =
@@ -1621,53 +1356,61 @@ async function loadLikeStatus(postId) {
     );
 
 
-  if (
-    button &&
-    data
-  ) {
+  if (!button) return;
 
-    button.classList.add(
-      "liked"
+
+  const liked =
+    data.some(
+      row =>
+        row.user_id === currentUser.id
     );
+
+
+  if (liked) {
+
+    button.classList.add("liked");
+
+    button.textContent =
+      "❤️ Liked";
+
+  } else {
+
+    button.classList.remove("liked");
+
+    button.textContent =
+      "❤️ Like";
 
   }
 
 }
 
 
-/* =========================================
+/* ==========================================
    TOGGLE LIKE
-========================================= */
+========================================== */
 
 async function toggleLike(postId) {
 
-  if (!currentUser) {
-
-    alert(
-      "Please login to like posts."
-    );
-
-    return;
-
-  }
+  if (!currentUser) return;
 
 
-  const { data: existing } =
-    await supabaseClient
-      .from("post_likes")
-      .select("post_id")
-      .eq(
-        "post_id",
-        postId
-      )
-      .eq(
-        "user_id",
-        currentUser.id
-      )
-      .maybeSingle();
+  const {
+    data
+  } = await supabaseClient
+    .from("post_likes")
+    .select("post_id")
+    .eq(
+      "post_id",
+      postId
+    )
+    .eq(
+      "user_id",
+      currentUser.id
+    )
+    .maybeSingle();
 
 
-  if (existing) {
+  if (data) {
 
     await supabaseClient
       .from("post_likes")
@@ -1698,14 +1441,14 @@ async function toggleLike(postId) {
   }
 
 
-  loadLikeStatus(postId);
+  await loadLikeStatus(postId);
 
 }
 
 
-/* =========================================
-   SHOW COMMENTS
-========================================= */
+/* ==========================================
+   COMMENTS
+========================================== */
 
 async function toggleComments(postId) {
 
@@ -1716,28 +1459,25 @@ async function toggleComments(postId) {
 
 
   if (
-    box.style.display ===
-    "none"
+    box.style.display === "block"
   ) {
-
-    box.style.display =
-      "block";
-
-    loadComments(postId);
-
-  } else {
 
     box.style.display =
       "none";
 
+    return;
+
   }
+
+
+  box.style.display =
+    "block";
+
+
+  await loadComments(postId);
 
 }
 
-
-/* =========================================
-   LOAD COMMENTS
-========================================= */
 
 async function loadComments(postId) {
 
@@ -1747,110 +1487,95 @@ async function loadComments(postId) {
     );
 
 
-  const { data, error } =
-    await supabaseClient
-      .from("comments")
-      .select(`
-        id,
-        content,
-        created_at,
-        profiles (
-          username,
-          full_name
-        )
-      `)
-      .eq(
-        "post_id",
-        postId
+  const {
+    data,
+    error
+  } = await supabaseClient
+    .from("comments")
+    .select(`
+      id,
+      content,
+      created_at,
+      user_id,
+      profiles (
+        username,
+        full_name
       )
-      .order(
-        "created_at",
-        {
-          ascending: true
-        }
-      );
+    `)
+    .eq(
+      "post_id",
+      postId
+    )
+    .order(
+      "created_at",
+      {
+        ascending: true
+      }
+    );
 
 
   if (error) {
 
+    console.error(error);
+
     list.innerHTML =
-      `<p class="error">
-        ${escapeHTML(error.message)}
-      </p>`;
+      "<p>Unable to load comments.</p>";
 
     return;
-
   }
 
 
   if (!data.length) {
 
     list.innerHTML =
-      `<p style="color:#777;">
-        No comments yet.
-      </p>`;
+      "<p style='color:#777;'>No comments yet.</p>";
 
     return;
-
   }
 
 
-  list.innerHTML =
-    data.map(comment => {
-
-      const profile =
-        Array.isArray(
-          comment.profiles
-        )
-          ? comment.profiles[0]
-          : comment.profiles;
+  list.innerHTML = "";
 
 
-      const name =
-        profile?.full_name ||
-        profile?.username ||
-        "User";
+  data.forEach(comment => {
+
+    const profile =
+      comment.profiles || {};
 
 
-      return `
+    const name =
+      profile.full_name ||
+      profile.username ||
+      "User";
 
-        <div class="comment">
 
-          <span class="comment-name">
-            ${escapeHTML(name)}
-          </span>
+    const div =
+      document.createElement("div");
 
-          <br>
 
-          ${escapeHTML(
-            comment.content
-          )}
+    div.className =
+      "comment";
 
-        </div>
 
-      `;
+    div.innerHTML = `
 
-    }).join("");
+      <strong>
+        ${escapeHTML(name)}
+      </strong>
+
+      ${escapeHTML(comment.content)}
+
+    `;
+
+
+    list.appendChild(div);
+
+  });
 
 }
 
 
-/* =========================================
-   ADD COMMENT
-========================================= */
-
 async function addComment(postId) {
-
-  if (!currentUser) {
-
-    alert(
-      "Please login to comment."
-    );
-
-    return;
-
-  }
-
 
   const input =
     document.getElementById(
@@ -1865,90 +1590,92 @@ async function addComment(postId) {
   if (!content) return;
 
 
-  const { error } =
-    await supabaseClient
-      .from("comments")
-      .insert({
+  const {
+    error
+  } = await supabaseClient
+    .from("comments")
+    .insert({
 
-        post_id:
-          postId,
+      post_id:
+        postId,
 
-        user_id:
-          currentUser.id,
+      user_id:
+        currentUser.id,
 
-        content:
-          content
+      content:
+        content
 
-      });
+    });
 
 
   if (error) {
 
     alert(
+      "Comment failed: " +
       error.message
     );
 
     return;
-
   }
 
 
   input.value = "";
 
-  loadComments(postId);
+
+  await loadComments(postId);
 
 }
 
 
-/* =========================================
+/* ==========================================
    DELETE POST
-========================================= */
+========================================== */
 
 async function deletePost(postId) {
 
-  if (!currentUser) return;
-
-
-  if (
-    !confirm(
+  const confirmed =
+    confirm(
       "Delete this post?"
+    );
+
+
+  if (!confirmed) return;
+
+
+  const {
+    error
+  } = await supabaseClient
+    .from("posts")
+    .delete()
+    .eq(
+      "id",
+      postId
     )
-  ) return;
-
-
-  const { error } =
-    await supabaseClient
-      .from("posts")
-      .delete()
-      .eq(
-        "id",
-        postId
-      )
-      .eq(
-        "user_id",
-        currentUser.id
-      );
+    .eq(
+      "user_id",
+      currentUser.id
+    );
 
 
   if (error) {
 
     alert(
+      "Delete failed: " +
       error.message
     );
 
     return;
-
   }
 
 
-  loadPosts();
+  await loadPosts();
 
 }
 
 
-/* =========================================
+/* ==========================================
    SHARE
-========================================= */
+========================================== */
 
 async function sharePost(postId) {
 
@@ -1968,7 +1695,7 @@ async function sharePost(postId) {
       await navigator.share({
 
         title:
-          "Dayoff",
+          "Dayoff Post",
 
         text:
           "Check out this post on Dayoff.",
@@ -1978,32 +1705,49 @@ async function sharePost(postId) {
 
       });
 
-    } catch (error) {}
+    } catch (error) {
+
+      console.log(error);
+
+    }
 
   } else {
 
-    await navigator.clipboard.writeText(
-      url
-    );
+    try {
 
-    alert(
-      "Post link copied."
-    );
+      await navigator.clipboard.writeText(url);
+
+      alert(
+        "Post link copied!"
+      );
+
+    } catch (error) {
+
+      alert(url);
+
+    }
 
   }
 
 }
 
 
-/* =========================================
+/* ==========================================
    LIVE
-========================================= */
+========================================== */
 
 function openLiveModal() {
 
-  document.getElementById(
-    "liveModal"
-  ).style.display =
+  const modal =
+    document.getElementById(
+      "liveModal"
+    );
+
+  modal.classList.remove(
+    "hidden"
+  );
+
+  modal.style.display =
     "flex";
 
 }
@@ -2011,9 +1755,16 @@ function openLiveModal() {
 
 function closeLiveModal() {
 
-  document.getElementById(
-    "liveModal"
-  ).style.display =
+  const modal =
+    document.getElementById(
+      "liveModal"
+    );
+
+  modal.classList.add(
+    "hidden"
+  );
+
+  modal.style.display =
     "none";
 
 }
@@ -2021,102 +1772,56 @@ function closeLiveModal() {
 
 function startLive() {
 
-  const message =
-    document.getElementById(
-      "liveMessage"
-    );
+  alert(
+    "Live streaming camera will be connected in the Dayoff Live Streaming stage."
+  );
 
-
-  if (!currentUser) {
-
-    message.textContent =
-      "Please login before starting a live stream.";
-
-    message.className =
-      "message error";
-
-    return;
-
-  }
-
-
-  message.textContent =
-    "Live streaming will be connected in the next stage.";
-
-  message.className =
-    "message success";
+  closeLiveModal();
 
 }
 
 
-/* =========================================
-   SECURITY
-========================================= */
+/* ==========================================
+   SECURITY HELPERS
+========================================== */
 
 function escapeHTML(value) {
 
-  return String(value)
-    .replaceAll("&", "&amp;")
-    .replaceAll("<", "&lt;")
-    .replaceAll(">", "&gt;")
-    .replaceAll('"', "&quot;")
-    .replaceAll("'", "&#039;");
+  return String(value ?? "")
+    .replace(
+      /&/g,
+      "&amp;"
+    )
+    .replace(
+      /</g,
+      "&lt;"
+    )
+    .replace(
+      />/g,
+      "&gt;"
+    )
+    .replace(
+      /"/g,
+      "&quot;"
+    )
+    .replace(
+      /'/g,
+      "&#039;"
+    );
 
 }
 
 
 function escapeAttribute(value) {
 
-  return String(value)
-    .replaceAll("&", "&amp;")
-    .replaceAll('"', "&quot;")
-    .replaceAll("<", "&lt;")
-    .replaceAll(">", "&gt;");
+  return escapeHTML(value);
 
 }
 
 
-/* =========================================
-   SESSION
-========================================= */
-
-async function checkSession() {
-
-  const {
-    data
-  } =
-    await supabaseClient.auth
-      .getSession();
-
-
-  currentUser =
-    data.session
-      ? data.session.user
-      : null;
-
-
-  await updateAuthUI();
-
-  loadPosts();
-
-}
-
-
-supabaseClient.auth.onAuthStateChange(
-  async (event, session) => {
-
-    currentUser =
-      session
-        ? session.user
-        : null;
-
-    await updateAuthUI();
-
-    loadPosts();
-
-  }
-);
-
+/* ==========================================
+   START DAYOFF
+========================================== */
 
 checkSession();
 
