@@ -6,7 +6,6 @@
 
   <title>Dayoff</title>
 
-  <!-- Supabase -->
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
   <style>
@@ -149,6 +148,20 @@
       justify-content: space-between;
       align-items: center;
       margin-top: 12px;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+
+    .media-buttons {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+
+    .media-btn {
+      background: #f1f5f9;
+      padding: 9px 12px;
+      border-radius: 10px;
     }
 
     .post-btn {
@@ -179,6 +192,7 @@
     .post-time {
       color: #777;
       font-size: 12px;
+      margin-top: 4px;
     }
 
     .post-content {
@@ -187,11 +201,21 @@
       white-space: pre-wrap;
     }
 
+    .post-media {
+      width: 100%;
+      max-height: 600px;
+      object-fit: contain;
+      border-radius: 12px;
+      background: #000;
+      margin-bottom: 15px;
+    }
+
     .post-actions {
       display: flex;
-      gap: 10px;
+      gap: 8px;
       border-top: 1px solid #eee;
       padding-top: 12px;
+      flex-wrap: wrap;
     }
 
     .action-btn {
@@ -200,10 +224,55 @@
       border-radius: 20px;
     }
 
+    .action-btn.liked {
+      background: #dbeafe;
+      color: #2563eb;
+      font-weight: bold;
+    }
+
     .delete-btn {
       color: #dc2626;
       background: #fee2e2;
       padding: 6px 10px;
+      border-radius: 10px;
+    }
+
+    .comments {
+      margin-top: 12px;
+      border-top: 1px solid #eee;
+      padding-top: 12px;
+    }
+
+    .comment {
+      background: #f8fafc;
+      padding: 8px 10px;
+      border-radius: 10px;
+      margin-bottom: 7px;
+      font-size: 14px;
+    }
+
+    .comment-name {
+      font-weight: bold;
+    }
+
+    .comment-form {
+      display: flex;
+      gap: 8px;
+      margin-top: 10px;
+    }
+
+    .comment-form input {
+      flex: 1;
+      padding: 10px;
+      border: 1px solid #ddd;
+      border-radius: 10px;
+      outline: none;
+    }
+
+    .comment-form button {
+      background: #2563eb;
+      color: white;
+      padding: 10px 14px;
       border-radius: 10px;
     }
 
@@ -277,7 +346,13 @@
       color: #dc2626;
     }
 
-    /* LIVE MODAL */
+    .selected-file {
+      margin-top: 10px;
+      padding: 8px;
+      background: #eff6ff;
+      border-radius: 8px;
+      font-size: 13px;
+    }
 
     .modal {
       display: none;
@@ -390,1131 +465,1662 @@
 
 <body>
 
-  <!-- TOP BAR -->
-  <header class="topbar">
-
-    <div class="logo">Dayoff</div>
-
-    <input
-      class="search"
-      type="text"
-      placeholder="Search Dayoff..."
-      id="searchInput"
-    >
-
-    <div class="top-actions">
-
-      <button class="top-btn">🔔</button>
-
-      <button class="live-btn" onclick="openLiveModal()">
-        🔴 Go Live
-      </button>
-
-    </div>
-
-  </header>
-
-
-  <!-- MAIN LAYOUT -->
-
-  <div class="layout">
-
-    <!-- LEFT SIDEBAR -->
-
-    <aside class="sidebar">
-
-      <div class="menu-item">🏠 Home</div>
-      <div class="menu-item">👤 Profile</div>
-      <div class="menu-item">👥 Friends</div>
-      <div class="menu-item">💬 Messages</div>
-      <div class="menu-item">🔔 Notifications</div>
-      <div class="menu-item">🎥 Live</div>
-      <div class="menu-item">⚙️ Settings</div>
-
-    </aside>
-
-
-    <!-- CENTER -->
-
-    <main>
-
-      <!-- AUTH -->
-
-      <section class="auth-box">
-
-        <div id="loggedOut">
-
-          <h3>Welcome to Dayoff</h3>
-
-          <p style="margin:8px 0 15px;color:#666;">
-            Create an account or login to post.
-          </p>
-
-          <input
-            type="email"
-            id="email"
-            placeholder="Email"
-          >
-
-          <input
-            type="password"
-            id="password"
-            placeholder="Password"
-          >
-
-          <input
-            type="text"
-            id="username"
-            placeholder="Username (for signup)"
-          >
-
-          <input
-            type="text"
-            id="fullName"
-            placeholder="Full name (for signup)"
-          >
-
-          <button
-            class="auth-btn"
-            onclick="signup()"
-          >
-            Create Account
-          </button>
-
-          <button
-            class="auth-btn"
-            onclick="login()"
-            style="background:#111827;"
-          >
-            Login
-          </button>
-
-        </div>
-
-
-        <div id="loggedIn" style="display:none;">
-
-          <div class="user-info">
-
-            <strong id="userNameDisplay">
-              User
-            </strong>
-
-            <br>
-
-            <span id="userEmailDisplay"></span>
-
-          </div>
-
-          <button
-            class="logout-btn"
-            onclick="logout()"
-          >
-            Logout
-          </button>
-
-        </div>
-
-
-        <div id="authMessage" class="message"></div>
-
-      </section>
-
-
-      <!-- STORIES -->
-
-      <section class="stories">
-
-        <div class="story">Your Story</div>
-        <div class="story">Friends</div>
-        <div class="story">Music</div>
-        <div class="story">Travel</div>
-        <div class="story">Sports</div>
-
-      </section>
-
-
-      <!-- CREATE POST -->
-
-      <section class="composer">
-
-        <h3 style="margin-bottom:12px;">
-          Create a post
-        </h3>
-
-        <textarea
-          id="postContent"
-          placeholder="What's happening on Dayoff?"
-        ></textarea>
-
-        <div class="composer-bottom">
-
-          <div>
-            📷 Photo &nbsp;
-            🎥 Video
-          </div>
-
-          <button
-            class="post-btn"
-            onclick="createPost()"
-          >
-            Post
-          </button>
-
-        </div>
-
-        <div
-          id="postMessage"
-          class="message"
-        ></div>
-
-      </section>
-
-
-      <!-- POSTS -->
-
-      <section id="postsContainer">
-
-        <p style="text-align:center;color:#777;">
-          Loading posts...
-        </p>
-
-      </section>
-
-    </main>
-
-
-    <!-- RIGHT SIDEBAR -->
-
-    <aside class="rightbar">
-
-      <div class="right-title">
-        Online Friends
-      </div>
-
-      <div class="online-user">
-        John
-        <div class="status">● Online</div>
-      </div>
-
-      <div class="online-user">
-        Sarah
-        <div class="status">● Online</div>
-      </div>
-
-      <div class="online-user">
-        Mike
-        <div class="status">● Online</div>
-      </div>
-
-      <br>
-
-      <button
-        class="live-btn"
-        style="width:100%;"
-        onclick="openLiveModal()"
-      >
-        🔴 Start Live
-      </button>
-
-    </aside>
-
-  </div>
-
-
-  <!-- MOBILE NAV -->
-
-  <nav class="mobile-nav">
-
-    <div>🏠</div>
-    <div>🔍</div>
-    <div onclick="openLiveModal()">🔴</div>
-    <div>💬</div>
-    <div>👤</div>
-
-  </nav>
-
-
-  <!-- LIVE MODAL -->
-
-  <div
-    class="modal"
-    id="liveModal"
+<header class="topbar">
+
+  <div class="logo">Dayoff</div>
+
+  <input
+    class="search"
+    type="text"
+    placeholder="Search Dayoff..."
+    id="searchInput"
   >
 
-    <div class="modal-content">
+  <div class="top-actions">
+    <button class="top-btn">🔔</button>
 
-      <h2>🔴 Go Live on Dayoff</h2>
+    <button class="live-btn" onclick="openLiveModal()">
+      🔴 Go Live
+    </button>
+  </div>
 
-      <p style="color:#666;margin-bottom:15px;">
-        Start your live broadcast and connect with your audience.
-      </p>
+</header>
+
+
+<div class="layout">
+
+  <aside class="sidebar">
+
+    <div class="menu-item">🏠 Home</div>
+    <div class="menu-item">👤 Profile</div>
+    <div class="menu-item">👥 Friends</div>
+    <div class="menu-item">💬 Messages</div>
+    <div class="menu-item">🔔 Notifications</div>
+    <div class="menu-item">🎥 Live</div>
+    <div class="menu-item">⚙️ Settings</div>
+
+  </aside>
+
+
+  <main>
+
+    <!-- AUTH -->
+
+    <section class="auth-box">
+
+      <div id="loggedOut">
+
+        <h3>Welcome to Dayoff</h3>
+
+        <p style="margin:8px 0 15px;color:#666;">
+          Create an account or login to Dayoff.
+        </p>
+
+        <input
+          type="email"
+          id="email"
+          placeholder="Email"
+        >
+
+        <input
+          type="password"
+          id="password"
+          placeholder="Password"
+        >
+
+        <input
+          type="text"
+          id="username"
+          placeholder="Username"
+        >
+
+        <input
+          type="text"
+          id="fullName"
+          placeholder="Full name"
+        >
+
+        <button
+          class="auth-btn"
+          onclick="signup()"
+        >
+          Create Account
+        </button>
+
+        <button
+          class="auth-btn"
+          onclick="login()"
+          style="background:#111827;"
+        >
+          Login
+        </button>
+
+      </div>
+
+
+      <div id="loggedIn" style="display:none;">
+
+        <div class="user-info">
+
+          <strong id="userNameDisplay">
+            User
+          </strong>
+
+          <br>
+
+          <span id="userEmailDisplay"></span>
+
+        </div>
+
+        <button
+          class="logout-btn"
+          onclick="logout()"
+        >
+          Logout
+        </button>
+
+      </div>
+
+      <div id="authMessage" class="message"></div>
+
+    </section>
+
+
+    <!-- STORIES -->
+
+    <section class="stories">
+
+      <div class="story">Your Story</div>
+      <div class="story">Friends</div>
+      <div class="story">Music</div>
+      <div class="story">Travel</div>
+      <div class="story">Sports</div>
+
+    </section>
+
+
+    <!-- CREATE POST -->
+
+    <section class="composer">
+
+      <h3 style="margin-bottom:12px;">
+        Create a post
+      </h3>
+
+      <textarea
+        id="postContent"
+        placeholder="What's happening on Dayoff?"
+      ></textarea>
 
       <input
-        type="text"
-        id="liveTitle"
-        placeholder="Live title"
+        type="file"
+        id="mediaFile"
+        accept="image/*,video/*"
+        style="display:none"
+        onchange="showSelectedFile()"
       >
-
-      <button
-        class="start-live"
-        onclick="startLive()"
-      >
-        Start Live
-      </button>
-
-      <button
-        class="close-modal"
-        onclick="closeLiveModal()"
-      >
-        Cancel
-      </button>
 
       <div
-        id="liveMessage"
+        id="selectedFile"
+        class="selected-file"
+        style="display:none"
+      ></div>
+
+      <div class="composer-bottom">
+
+        <div class="media-buttons">
+
+          <button
+            class="media-btn"
+            onclick="choosePhoto()"
+          >
+            📷 Photo
+          </button>
+
+          <button
+            class="media-btn"
+            onclick="chooseVideo()"
+          >
+            🎥 Video
+          </button>
+
+        </div>
+
+        <button
+          class="post-btn"
+          onclick="createPost()"
+        >
+          Post
+        </button>
+
+      </div>
+
+      <div
+        id="postMessage"
         class="message"
       ></div>
 
+    </section>
+
+
+    <!-- POSTS -->
+
+    <section id="postsContainer">
+
+      <p style="text-align:center;color:#777;">
+        Loading posts...
+      </p>
+
+    </section>
+
+  </main>
+
+
+  <aside class="rightbar">
+
+    <div class="right-title">
+      Online Friends
     </div>
+
+    <div class="online-user">
+      John
+      <div class="status">● Online</div>
+    </div>
+
+    <div class="online-user">
+      Sarah
+      <div class="status">● Online</div>
+    </div>
+
+    <div class="online-user">
+      Mike
+      <div class="status">● Online</div>
+    </div>
+
+    <br>
+
+    <button
+      class="live-btn"
+      style="width:100%;"
+      onclick="openLiveModal()"
+    >
+      🔴 Start Live
+    </button>
+
+  </aside>
+
+</div>
+
+
+<!-- MOBILE NAV -->
+
+<nav class="mobile-nav">
+
+  <div>🏠</div>
+  <div>🔍</div>
+  <div onclick="openLiveModal()">🔴</div>
+  <div>💬</div>
+  <div>👤</div>
+
+</nav>
+
+
+<!-- LIVE MODAL -->
+
+<div
+  class="modal"
+  id="liveModal"
+>
+
+  <div class="modal-content">
+
+    <h2>🔴 Go Live on Dayoff</h2>
+
+    <p style="color:#666;margin-bottom:15px;">
+      Start your live broadcast and connect with your audience.
+    </p>
+
+    <input
+      type="text"
+      id="liveTitle"
+      placeholder="Live title"
+    >
+
+    <button
+      class="start-live"
+      onclick="startLive()"
+    >
+      Start Live
+    </button>
+
+    <button
+      class="close-modal"
+      onclick="closeLiveModal()"
+    >
+      Cancel
+    </button>
+
+    <div
+      id="liveMessage"
+      class="message"
+    ></div>
 
   </div>
 
-
-  <script>
-
-    /* =========================================
-       SUPABASE CONNECTION
-    ========================================= */
-
-    const SUPABASE_URL =
-      "https://zifjtcwvfwpkzavztlgc.supabase.co";
-
-    /*
-      PASTE YOUR SUPABASE PUBLISHABLE KEY
-      BETWEEN THE QUOTES BELOW.
-    */
-
-    const SUPABASE_KEY =
-      "PASTE_YOUR_PUBLISHABLE_KEY_HERE";
-
-    const supabaseClient =
-      supabase.createClient(
-        SUPABASE_URL,
-        SUPABASE_KEY
-      );
+</div>
 
 
-    /* =========================================
-       GLOBAL USER
-    ========================================= */
+<script>
 
-    let currentUser = null;
+/* =========================================
+   SUPABASE CONNECTION
+========================================= */
 
+const SUPABASE_URL =
+  "https://bdqjpwyalsuxyiczyeui.supabase.co";
 
-    /* =========================================
-       AUTH MESSAGE
-    ========================================= */
+/*
+   PASTE THE PUBLISHABLE KEY FROM
+   THIS NEW SUPABASE PROJECT HERE.
+*/
 
-    function showAuthMessage(message, type = "") {
+const SUPABASE_KEY =
+  "PASTE_NEW_SUPABASE_PUBLISHABLE_KEY_HERE";
 
-      const box =
-        document.getElementById("authMessage");
-
-      box.textContent = message;
-
-      box.className =
-        "message " + type;
-
-    }
-
-
-    /* =========================================
-       SIGN UP
-    ========================================= */
-
-    async function signup() {
-
-      const email =
-        document.getElementById("email").value.trim();
-
-      const password =
-        document.getElementById("password").value;
-
-      const username =
-        document.getElementById("username").value.trim();
-
-      const fullName =
-        document.getElementById("fullName").value.trim();
+const supabaseClient =
+  supabase.createClient(
+    SUPABASE_URL,
+    SUPABASE_KEY
+  );
 
 
-      if (!email || !password || !username) {
+/* =========================================
+   GLOBAL USER
+========================================= */
 
-        showAuthMessage(
-          "Please enter email, password and username.",
-          "error"
-        );
+let currentUser = null;
 
-        return;
+
+/* =========================================
+   AUTH MESSAGE
+========================================= */
+
+function showAuthMessage(message, type = "") {
+
+  const box =
+    document.getElementById("authMessage");
+
+  box.textContent = message;
+
+  box.className =
+    "message " + type;
+
+}
+
+
+/* =========================================
+   SIGN UP
+========================================= */
+
+async function signup() {
+
+  const email =
+    document.getElementById("email")
+      .value.trim();
+
+  const password =
+    document.getElementById("password")
+      .value;
+
+  const username =
+    document.getElementById("username")
+      .value.trim();
+
+  const fullName =
+    document.getElementById("fullName")
+      .value.trim();
+
+
+  if (!email || !password || !username) {
+
+    showAuthMessage(
+      "Please enter email, password and username.",
+      "error"
+    );
+
+    return;
+  }
+
+
+  showAuthMessage("Creating account...");
+
+
+  const { data, error } =
+    await supabaseClient.auth.signUp({
+
+      email: email,
+
+      password: password,
+
+      options: {
+        data: {
+          username: username,
+          full_name: fullName
+        }
       }
 
+    });
 
-      showAuthMessage("Creating account...");
+
+  if (error) {
+
+    showAuthMessage(
+      error.message,
+      "error"
+    );
+
+    return;
+  }
 
 
-      const { data, error } =
-        await supabaseClient.auth.signUp({
+  if (data.user) {
 
-          email: email,
+    showAuthMessage(
+      "Account created. Check your email if confirmation is required.",
+      "success"
+    );
 
-          password: password,
+  }
 
-          options: {
+}
 
-            data: {
 
-              username: username,
+/* =========================================
+   LOGIN
+========================================= */
 
-              full_name: fullName
+async function login() {
 
-            }
+  const email =
+    document.getElementById("email")
+      .value.trim();
 
+  const password =
+    document.getElementById("password")
+      .value;
+
+
+  if (!email || !password) {
+
+    showAuthMessage(
+      "Enter your email and password.",
+      "error"
+    );
+
+    return;
+  }
+
+
+  showAuthMessage("Logging in...");
+
+
+  const { data, error } =
+    await supabaseClient.auth
+      .signInWithPassword({
+
+        email: email,
+
+        password: password
+
+      });
+
+
+  if (error) {
+
+    showAuthMessage(
+      error.message,
+      "error"
+    );
+
+    return;
+  }
+
+
+  currentUser = data.user;
+
+  showAuthMessage(
+    "Login successful.",
+    "success"
+  );
+
+  await updateAuthUI();
+
+  loadPosts();
+
+}
+
+
+/* =========================================
+   LOGOUT
+========================================= */
+
+async function logout() {
+
+  await supabaseClient.auth.signOut();
+
+  currentUser = null;
+
+  updateAuthUI();
+
+  showAuthMessage(
+    "You have logged out.",
+    "success"
+  );
+
+  loadPosts();
+
+}
+
+
+/* =========================================
+   UPDATE AUTH UI
+========================================= */
+
+async function updateAuthUI() {
+
+  const loggedOut =
+    document.getElementById("loggedOut");
+
+  const loggedIn =
+    document.getElementById("loggedIn");
+
+
+  if (!currentUser) {
+
+    loggedOut.style.display = "block";
+
+    loggedIn.style.display = "none";
+
+    return;
+  }
+
+
+  loggedOut.style.display = "none";
+
+  loggedIn.style.display = "block";
+
+
+  document.getElementById(
+    "userEmailDisplay"
+  ).textContent =
+    currentUser.email || "";
+
+
+  const { data: profile } =
+    await supabaseClient
+      .from("profiles")
+      .select("username, full_name")
+      .eq("id", currentUser.id)
+      .maybeSingle();
+
+
+  if (profile) {
+
+    document.getElementById(
+      "userNameDisplay"
+    ).textContent =
+      profile.full_name ||
+      profile.username ||
+      "User";
+
+  }
+
+}
+
+
+/* =========================================
+   CHOOSE PHOTO
+========================================= */
+
+function choosePhoto() {
+
+  const input =
+    document.getElementById("mediaFile");
+
+  input.accept =
+    "image/*";
+
+  input.click();
+
+}
+
+
+/* =========================================
+   CHOOSE VIDEO
+========================================= */
+
+function chooseVideo() {
+
+  const input =
+    document.getElementById("mediaFile");
+
+  input.accept =
+    "video/*";
+
+  input.click();
+
+}
+
+
+/* =========================================
+   SHOW SELECTED FILE
+========================================= */
+
+function showSelectedFile() {
+
+  const input =
+    document.getElementById("mediaFile");
+
+  const display =
+    document.getElementById("selectedFile");
+
+
+  if (!input.files.length) {
+
+    display.style.display =
+      "none";
+
+    return;
+
+  }
+
+
+  const file =
+    input.files[0];
+
+
+  display.textContent =
+    "Selected: " + file.name;
+
+
+  display.style.display =
+    "block";
+
+}
+
+
+/* =========================================
+   CREATE POST
+========================================= */
+
+async function createPost() {
+
+  const message =
+    document.getElementById("postMessage");
+
+  const content =
+    document.getElementById("postContent")
+      .value.trim();
+
+  const file =
+    document.getElementById("mediaFile")
+      .files[0];
+
+
+  if (!currentUser) {
+
+    message.textContent =
+      "Please login before creating a post.";
+
+    message.className =
+      "message error";
+
+    return;
+  }
+
+
+  if (!content && !file) {
+
+    message.textContent =
+      "Write something or select a photo/video.";
+
+    message.className =
+      "message error";
+
+    return;
+
+  }
+
+
+  message.textContent =
+    "Publishing...";
+
+  message.className =
+    "message";
+
+
+  let mediaUrl = null;
+
+  let mediaType = null;
+
+
+  /* UPLOAD MEDIA */
+
+  if (file) {
+
+    const extension =
+      file.name
+        .split(".")
+        .pop()
+        .toLowerCase();
+
+
+    const fileName =
+      currentUser.id +
+      "/" +
+      Date.now() +
+      "-" +
+      Math.random()
+        .toString(36)
+        .substring(2) +
+      "." +
+      extension;
+
+
+    const { error: uploadError } =
+      await supabaseClient
+        .storage
+        .from("post-media")
+        .upload(
+          fileName,
+          file,
+          {
+            cacheControl: "3600",
+            upsert: false
           }
-
-        });
-
-
-      if (error) {
-
-        showAuthMessage(
-          error.message,
-          "error"
         );
 
-        return;
-      }
 
-
-      if (data.user) {
-
-        showAuthMessage(
-          "Account created successfully. Check your email if confirmation is required.",
-          "success"
-        );
-
-      }
-
-    }
-
-
-    /* =========================================
-       LOGIN
-    ========================================= */
-
-    async function login() {
-
-      const email =
-        document.getElementById("email").value.trim();
-
-      const password =
-        document.getElementById("password").value;
-
-
-      if (!email || !password) {
-
-        showAuthMessage(
-          "Enter your email and password.",
-          "error"
-        );
-
-        return;
-      }
-
-
-      showAuthMessage("Logging in...");
-
-
-      const { data, error } =
-        await supabaseClient.auth.signInWithPassword({
-
-          email: email,
-
-          password: password
-
-        });
-
-
-      if (error) {
-
-        showAuthMessage(
-          error.message,
-          "error"
-        );
-
-        return;
-      }
-
-
-      currentUser = data.user;
-
-      showAuthMessage(
-        "Login successful.",
-        "success"
-      );
-
-      updateAuthUI();
-
-      loadPosts();
-
-    }
-
-
-    /* =========================================
-       LOGOUT
-    ========================================= */
-
-    async function logout() {
-
-      await supabaseClient.auth.signOut();
-
-      currentUser = null;
-
-      updateAuthUI();
-
-      showAuthMessage(
-        "You have logged out.",
-        "success"
-      );
-
-      loadPosts();
-
-    }
-
-
-    /* =========================================
-       UPDATE AUTH UI
-    ========================================= */
-
-    async function updateAuthUI() {
-
-      const loggedOut =
-        document.getElementById("loggedOut");
-
-      const loggedIn =
-        document.getElementById("loggedIn");
-
-      if (!currentUser) {
-
-        loggedOut.style.display = "block";
-
-        loggedIn.style.display = "none";
-
-        return;
-
-      }
-
-
-      loggedOut.style.display = "none";
-
-      loggedIn.style.display = "block";
-
-
-      document.getElementById(
-        "userEmailDisplay"
-      ).textContent =
-        currentUser.email || "";
-
-
-      const { data: profile } =
-        await supabaseClient
-          .from("profiles")
-          .select("username, full_name")
-          .eq("id", currentUser.id)
-          .maybeSingle();
-
-
-      if (profile) {
-
-        document.getElementById(
-          "userNameDisplay"
-        ).textContent =
-          profile.full_name ||
-          profile.username ||
-          "User";
-
-      }
-
-    }
-
-
-    /* =========================================
-       CREATE POST
-    ========================================= */
-
-    async function createPost() {
-
-      const message =
-        document.getElementById("postMessage");
-
-      const content =
-        document.getElementById("postContent")
-          .value
-          .trim();
-
-
-      if (!currentUser) {
-
-        message.textContent =
-          "Please login before creating a post.";
-
-        message.className =
-          "message error";
-
-        return;
-
-      }
-
-
-      if (!content) {
-
-        message.textContent =
-          "Write something before posting.";
-
-        message.className =
-          "message error";
-
-        return;
-
-      }
-
+    if (uploadError) {
 
       message.textContent =
-        "Publishing...";
+        "Media upload failed: " +
+        uploadError.message;
 
       message.className =
-        "message";
+        "message error";
 
-
-      const { error } =
-        await supabaseClient
-          .from("posts")
-          .insert({
-
-            user_id: currentUser.id,
-
-            content: content
-
-          });
-
-
-      if (error) {
-
-        message.textContent =
-          error.message;
-
-        message.className =
-          "message error";
-
-        return;
-
-      }
-
-
-      document.getElementById(
-        "postContent"
-      ).value = "";
-
-
-      message.textContent =
-        "Post published successfully.";
-
-      message.className =
-        "message success";
-
-
-      loadPosts();
+      return;
 
     }
 
 
-    /* =========================================
-       LOAD POSTS
-    ========================================= */
+    const { data: publicData } =
+      supabaseClient
+        .storage
+        .from("post-media")
+        .getPublicUrl(fileName);
 
-    async function loadPosts() {
 
-      const container =
-        document.getElementById(
-          "postsContainer"
-        );
+    mediaUrl =
+      publicData.publicUrl;
 
 
-      const { data, error } =
-        await supabaseClient
-          .from("posts")
-          .select(`
-            id,
-            user_id,
-            content,
-            created_at
-          `)
-          .order(
-            "created_at",
-            {
-              ascending: false
-            }
-          );
+    mediaType =
+      file.type.startsWith("video/")
+        ? "video"
+        : "image";
 
+  }
 
-      if (error) {
 
-        container.innerHTML =
-          `<p class="error">
-            ${escapeHTML(error.message)}
-          </p>`;
+  /* SAVE POST */
 
-        return;
+  const { error } =
+    await supabaseClient
+      .from("posts")
+      .insert({
 
-      }
+        user_id:
+          currentUser.id,
 
+        content:
+          content || null,
 
-      if (!data || data.length === 0) {
+        media_url:
+          mediaUrl,
 
-        container.innerHTML = `
-          <div class="post">
-            <p style="text-align:center;color:#777;">
-              No posts yet. Be the first to post!
-            </p>
-          </div>
-        `;
+        media_type:
+          mediaType
 
-        return;
+      });
 
-      }
 
+  if (error) {
 
-      container.innerHTML = "";
+    message.textContent =
+      error.message;
 
+    message.className =
+      "message error";
 
-      for (const post of data) {
+    return;
 
-        let username =
-          "Dayoff User";
+  }
 
 
-        const { data: profile } =
-          await supabaseClient
-            .from("profiles")
-            .select(
-              "username, full_name"
-            )
-            .eq(
-              "id",
-              post.user_id
-            )
-            .maybeSingle();
+  document.getElementById(
+    "postContent"
+  ).value = "";
 
 
-        if (profile) {
+  document.getElementById(
+    "mediaFile"
+  ).value = "";
 
-          username =
-            profile.full_name ||
-            profile.username ||
-            "Dayoff User";
 
-        }
+  document.getElementById(
+    "selectedFile"
+  ).style.display =
+    "none";
 
 
-        const postElement =
-          document.createElement("article");
+  message.textContent =
+    "Post published successfully.";
 
+  message.className =
+    "message success";
 
-        postElement.className =
-          "post";
 
+  loadPosts();
 
-        const date =
-          new Date(
-            post.created_at
-          ).toLocaleString();
+}
 
 
-        let deleteButton = "";
+/* =========================================
+   LOAD POSTS
+========================================= */
 
+async function loadPosts() {
 
-        if (
-          currentUser &&
-          currentUser.id === post.user_id
-        ) {
-
-          deleteButton = `
-            <button
-              class="delete-btn"
-              onclick="deletePost(${post.id})"
-            >
-              Delete
-            </button>
-          `;
-
-        }
-
-
-        postElement.innerHTML = `
-
-          <div class="post-header">
-
-            <div>
-
-              <div class="author">
-                ${escapeHTML(username)}
-              </div>
-
-              <div class="post-time">
-                ${escapeHTML(date)}
-              </div>
-
-            </div>
-
-            ${deleteButton}
-
-          </div>
-
-
-          <div class="post-content">
-            ${escapeHTML(post.content)}
-          </div>
-
-
-          <div class="post-actions">
-
-            <button
-              class="action-btn"
-              onclick="likePost(${post.id})"
-            >
-              👍 Like
-            </button>
-
-            <button
-              class="action-btn"
-              onclick="commentPost(${post.id})"
-            >
-              💬 Comment
-            </button>
-
-            <button
-              class="action-btn"
-              onclick="sharePost(${post.id})"
-            >
-              ↗ Share
-            </button>
-
-          </div>
-
-        `;
-
-
-        container.appendChild(
-          postElement
-        );
-
-      }
-
-    }
-
-
-    /* =========================================
-       DELETE POST
-    ========================================= */
-
-    async function deletePost(postId) {
-
-      if (!currentUser) {
-
-        alert(
-          "Please login first."
-        );
-
-        return;
-
-      }
-
-
-      const confirmed =
-        confirm(
-          "Delete this post?"
-        );
-
-
-      if (!confirmed) return;
-
-
-      const { error } =
-        await supabaseClient
-          .from("posts")
-          .delete()
-          .eq(
-            "id",
-            postId
-          )
-          .eq(
-            "user_id",
-            currentUser.id
-          );
-
-
-      if (error) {
-
-        alert(
-          error.message
-        );
-
-        return;
-
-      }
-
-
-      loadPosts();
-
-    }
-
-
-    /* =========================================
-       LIKE
-    ========================================= */
-
-    function likePost(postId) {
-
-      if (!currentUser) {
-
-        alert(
-          "Login to like posts."
-        );
-
-        return;
-
-      }
-
-      alert(
-        "Like system will be connected in the next step."
-      );
-
-    }
-
-
-    /* =========================================
-       COMMENT
-    ========================================= */
-
-    function commentPost(postId) {
-
-      if (!currentUser) {
-
-        alert(
-          "Login to comment."
-        );
-
-        return;
-
-      }
-
-      alert(
-        "Comment system will be connected in the next step."
-      );
-
-    }
-
-
-    /* =========================================
-       SHARE
-    ========================================= */
-
-    async function sharePost(postId) {
-
-      const url =
-        window.location.href +
-        "?post=" +
-        postId;
-
-
-      if (
-        navigator.share
-      ) {
-
-        try {
-
-          await navigator.share({
-
-            title: "Dayoff",
-
-            text: "Check out this post on Dayoff.",
-
-            url: url
-
-          });
-
-        } catch (error) {
-
-          // User cancelled share.
-
-        }
-
-      } else {
-
-        await navigator.clipboard.writeText(
-          url
-        );
-
-        alert(
-          "Post link copied."
-        );
-
-      }
-
-    }
-
-
-    /* =========================================
-       LIVE MODAL
-    ========================================= */
-
-    function openLiveModal() {
-
-      document.getElementById(
-        "liveModal"
-      ).style.display = "flex";
-
-    }
-
-
-    function closeLiveModal() {
-
-      document.getElementById(
-        "liveModal"
-      ).style.display = "none";
-
-    }
-
-
-    /* =========================================
-       START LIVE
-    ========================================= */
-
-    function startLive() {
-
-      const title =
-        document.getElementById(
-          "liveTitle"
-        ).value.trim();
-
-
-      const message =
-        document.getElementById(
-          "liveMessage"
-        );
-
-
-      if (!currentUser) {
-
-        message.textContent =
-          "Please login before starting a live stream.";
-
-        message.className =
-          "message error";
-
-        return;
-
-      }
-
-
-      if (!title) {
-
-        message.textContent =
-          "Enter a title for your live stream.";
-
-        message.className =
-          "message error";
-
-        return;
-
-      }
-
-
-      message.textContent =
-        "Live streaming will be connected in the Live Streaming step.";
-
-      message.className =
-        "message success";
-
-    }
-
-
-    /* =========================================
-       HTML SECURITY
-    ========================================= */
-
-    function escapeHTML(value) {
-
-      return String(value)
-        .replaceAll("&", "&amp;")
-        .replaceAll("<", "&lt;")
-        .replaceAll(">", "&gt;")
-        .replaceAll('"', "&quot;")
-        .replaceAll("'", "&#039;");
-
-    }
-
-
-    /* =========================================
-       CHECK CURRENT SESSION
-    ========================================= */
-
-    async function checkSession() {
-
-      const {
-        data
-      } =
-        await supabaseClient.auth.getSession();
-
-
-      currentUser =
-        data.session
-          ? data.session.user
-          : null;
-
-
-      await updateAuthUI();
-
-      loadPosts();
-
-    }
-
-
-    /* =========================================
-       AUTH STATE LISTENER
-    ========================================= */
-
-    supabaseClient.auth.onAuthStateChange(
-      async (event, session) => {
-
-        currentUser =
-          session
-            ? session.user
-            : null;
-
-        await updateAuthUI();
-
-        loadPosts();
-
-      }
+  const container =
+    document.getElementById(
+      "postsContainer"
     );
 
 
-    /* =========================================
-       START DAYOFF
-    ========================================= */
+  const { data, error } =
+    await supabaseClient
+      .from("posts")
+      .select(`
+        id,
+        user_id,
+        content,
+        media_url,
+        media_type,
+        created_at,
+        profiles (
+          username,
+          full_name
+        )
+      `)
+      .order(
+        "created_at",
+        {
+          ascending: false
+        }
+      );
 
-    checkSession();
 
-  </script>
+  if (error) {
+
+    container.innerHTML = `
+      <div class="post">
+        <p class="error">
+          ${escapeHTML(error.message)}
+        </p>
+      </div>
+    `;
+
+    return;
+
+  }
+
+
+  if (!data || data.length === 0) {
+
+    container.innerHTML = `
+      <div class="post">
+        <p style="text-align:center;color:#777;">
+          No posts yet. Be the first to post!
+        </p>
+      </div>
+    `;
+
+    return;
+
+  }
+
+
+  container.innerHTML = "";
+
+
+  for (const post of data) {
+
+    const profile =
+      Array.isArray(post.profiles)
+        ? post.profiles[0]
+        : post.profiles;
+
+
+    const username =
+      profile?.full_name ||
+      profile?.username ||
+      "Dayoff User";
+
+
+    const date =
+      new Date(
+        post.created_at
+      ).toLocaleString();
+
+
+    let mediaHTML = "";
+
+
+    if (
+      post.media_url &&
+      post.media_type === "image"
+    ) {
+
+      mediaHTML = `
+        <img
+          class="post-media"
+          src="${escapeAttribute(post.media_url)}"
+          alt="Dayoff post image"
+        >
+      `;
+
+    }
+
+
+    if (
+      post.media_url &&
+      post.media_type === "video"
+    ) {
+
+      mediaHTML = `
+        <video
+          class="post-media"
+          controls
+          playsinline
+          preload="metadata"
+        >
+          <source
+            src="${escapeAttribute(post.media_url)}"
+            type="video/mp4"
+          >
+          Your browser does not support video.
+        </video>
+      `;
+
+    }
+
+
+    let deleteButton = "";
+
+
+    if (
+      currentUser &&
+      currentUser.id === post.user_id
+    ) {
+
+      deleteButton = `
+        <button
+          class="delete-btn"
+          onclick="deletePost(${post.id})"
+        >
+          Delete
+        </button>
+      `;
+
+    }
+
+
+    const postElement =
+      document.createElement(
+        "article"
+      );
+
+
+    postElement.className =
+      "post";
+
+
+    postElement.innerHTML = `
+
+      <div class="post-header">
+
+        <div>
+
+          <div class="author">
+            ${escapeHTML(username)}
+          </div>
+
+          <div class="post-time">
+            ${escapeHTML(date)}
+          </div>
+
+        </div>
+
+        ${deleteButton}
+
+      </div>
+
+
+      ${
+        post.content
+          ? `
+            <div class="post-content">
+              ${escapeHTML(post.content)}
+            </div>
+          `
+          : ""
+      }
+
+
+      ${mediaHTML}
+
+
+      <div class="post-actions">
+
+        <button
+          class="action-btn"
+          id="like-${post.id}"
+          onclick="toggleLike(${post.id})"
+        >
+          ❤️ <span id="like-count-${post.id}">0</span>
+        </button>
+
+        <button
+          class="action-btn"
+          onclick="toggleComments(${post.id})"
+        >
+          💬 Comments
+        </button>
+
+        <button
+          class="action-btn"
+          onclick="sharePost(${post.id})"
+        >
+          ↗ Share
+        </button>
+
+      </div>
+
+
+      <div
+        class="comments"
+        id="comments-${post.id}"
+        style="display:none;"
+      >
+
+        <div id="comment-list-${post.id}">
+          Loading comments...
+        </div>
+
+        <div class="comment-form">
+
+          <input
+            id="comment-input-${post.id}"
+            placeholder="Write a comment..."
+          >
+
+          <button
+            onclick="addComment(${post.id})"
+          >
+            Send
+          </button>
+
+        </div>
+
+      </div>
+
+    `;
+
+
+    container.appendChild(
+      postElement
+    );
+
+
+    loadLikeStatus(post.id);
+
+  }
+
+}
+
+
+/* =========================================
+   LIKE STATUS
+========================================= */
+
+async function loadLikeStatus(postId) {
+
+  const { count } =
+    await supabaseClient
+      .from("post_likes")
+      .select(
+        "*",
+        {
+          count: "exact",
+          head: true
+        }
+      )
+      .eq(
+        "post_id",
+        postId
+      );
+
+
+  const countElement =
+    document.getElementById(
+      "like-count-" + postId
+    );
+
+
+  if (countElement) {
+
+    countElement.textContent =
+      count || 0;
+
+  }
+
+
+  if (!currentUser) return;
+
+
+  const { data } =
+    await supabaseClient
+      .from("post_likes")
+      .select("post_id")
+      .eq(
+        "post_id",
+        postId
+      )
+      .eq(
+        "user_id",
+        currentUser.id
+      )
+      .maybeSingle();
+
+
+  const button =
+    document.getElementById(
+      "like-" + postId
+    );
+
+
+  if (
+    button &&
+    data
+  ) {
+
+    button.classList.add(
+      "liked"
+    );
+
+  }
+
+}
+
+
+/* =========================================
+   TOGGLE LIKE
+========================================= */
+
+async function toggleLike(postId) {
+
+  if (!currentUser) {
+
+    alert(
+      "Please login to like posts."
+    );
+
+    return;
+
+  }
+
+
+  const { data: existing } =
+    await supabaseClient
+      .from("post_likes")
+      .select("post_id")
+      .eq(
+        "post_id",
+        postId
+      )
+      .eq(
+        "user_id",
+        currentUser.id
+      )
+      .maybeSingle();
+
+
+  if (existing) {
+
+    await supabaseClient
+      .from("post_likes")
+      .delete()
+      .eq(
+        "post_id",
+        postId
+      )
+      .eq(
+        "user_id",
+        currentUser.id
+      );
+
+  } else {
+
+    await supabaseClient
+      .from("post_likes")
+      .insert({
+
+        post_id:
+          postId,
+
+        user_id:
+          currentUser.id
+
+      });
+
+  }
+
+
+  loadLikeStatus(postId);
+
+}
+
+
+/* =========================================
+   SHOW COMMENTS
+========================================= */
+
+async function toggleComments(postId) {
+
+  const box =
+    document.getElementById(
+      "comments-" + postId
+    );
+
+
+  if (
+    box.style.display ===
+    "none"
+  ) {
+
+    box.style.display =
+      "block";
+
+    loadComments(postId);
+
+  } else {
+
+    box.style.display =
+      "none";
+
+  }
+
+}
+
+
+/* =========================================
+   LOAD COMMENTS
+========================================= */
+
+async function loadComments(postId) {
+
+  const list =
+    document.getElementById(
+      "comment-list-" + postId
+    );
+
+
+  const { data, error } =
+    await supabaseClient
+      .from("comments")
+      .select(`
+        id,
+        content,
+        created_at,
+        profiles (
+          username,
+          full_name
+        )
+      `)
+      .eq(
+        "post_id",
+        postId
+      )
+      .order(
+        "created_at",
+        {
+          ascending: true
+        }
+      );
+
+
+  if (error) {
+
+    list.innerHTML =
+      `<p class="error">
+        ${escapeHTML(error.message)}
+      </p>`;
+
+    return;
+
+  }
+
+
+  if (!data.length) {
+
+    list.innerHTML =
+      `<p style="color:#777;">
+        No comments yet.
+      </p>`;
+
+    return;
+
+  }
+
+
+  list.innerHTML =
+    data.map(comment => {
+
+      const profile =
+        Array.isArray(
+          comment.profiles
+        )
+          ? comment.profiles[0]
+          : comment.profiles;
+
+
+      const name =
+        profile?.full_name ||
+        profile?.username ||
+        "User";
+
+
+      return `
+
+        <div class="comment">
+
+          <span class="comment-name">
+            ${escapeHTML(name)}
+          </span>
+
+          <br>
+
+          ${escapeHTML(
+            comment.content
+          )}
+
+        </div>
+
+      `;
+
+    }).join("");
+
+}
+
+
+/* =========================================
+   ADD COMMENT
+========================================= */
+
+async function addComment(postId) {
+
+  if (!currentUser) {
+
+    alert(
+      "Please login to comment."
+    );
+
+    return;
+
+  }
+
+
+  const input =
+    document.getElementById(
+      "comment-input-" + postId
+    );
+
+
+  const content =
+    input.value.trim();
+
+
+  if (!content) return;
+
+
+  const { error } =
+    await supabaseClient
+      .from("comments")
+      .insert({
+
+        post_id:
+          postId,
+
+        user_id:
+          currentUser.id,
+
+        content:
+          content
+
+      });
+
+
+  if (error) {
+
+    alert(
+      error.message
+    );
+
+    return;
+
+  }
+
+
+  input.value = "";
+
+  loadComments(postId);
+
+}
+
+
+/* =========================================
+   DELETE POST
+========================================= */
+
+async function deletePost(postId) {
+
+  if (!currentUser) return;
+
+
+  if (
+    !confirm(
+      "Delete this post?"
+    )
+  ) return;
+
+
+  const { error } =
+    await supabaseClient
+      .from("posts")
+      .delete()
+      .eq(
+        "id",
+        postId
+      )
+      .eq(
+        "user_id",
+        currentUser.id
+      );
+
+
+  if (error) {
+
+    alert(
+      error.message
+    );
+
+    return;
+
+  }
+
+
+  loadPosts();
+
+}
+
+
+/* =========================================
+   SHARE
+========================================= */
+
+async function sharePost(postId) {
+
+  const url =
+    window.location.origin +
+    window.location.pathname +
+    "?post=" +
+    postId;
+
+
+  if (
+    navigator.share
+  ) {
+
+    try {
+
+      await navigator.share({
+
+        title:
+          "Dayoff",
+
+        text:
+          "Check out this post on Dayoff.",
+
+        url:
+          url
+
+      });
+
+    } catch (error) {}
+
+  } else {
+
+    await navigator.clipboard.writeText(
+      url
+    );
+
+    alert(
+      "Post link copied."
+    );
+
+  }
+
+}
+
+
+/* =========================================
+   LIVE
+========================================= */
+
+function openLiveModal() {
+
+  document.getElementById(
+    "liveModal"
+  ).style.display =
+    "flex";
+
+}
+
+
+function closeLiveModal() {
+
+  document.getElementById(
+    "liveModal"
+  ).style.display =
+    "none";
+
+}
+
+
+function startLive() {
+
+  const message =
+    document.getElementById(
+      "liveMessage"
+    );
+
+
+  if (!currentUser) {
+
+    message.textContent =
+      "Please login before starting a live stream.";
+
+    message.className =
+      "message error";
+
+    return;
+
+  }
+
+
+  message.textContent =
+    "Live streaming will be connected in the next stage.";
+
+  message.className =
+    "message success";
+
+}
+
+
+/* =========================================
+   SECURITY
+========================================= */
+
+function escapeHTML(value) {
+
+  return String(value)
+    .replaceAll("&", "&amp;")
+    .replaceAll("<", "&lt;")
+    .replaceAll(">", "&gt;")
+    .replaceAll('"', "&quot;")
+    .replaceAll("'", "&#039;");
+
+}
+
+
+function escapeAttribute(value) {
+
+  return String(value)
+    .replaceAll("&", "&amp;")
+    .replaceAll('"', "&quot;")
+    .replaceAll("<", "&lt;")
+    .replaceAll(">", "&gt;");
+
+}
+
+
+/* =========================================
+   SESSION
+========================================= */
+
+async function checkSession() {
+
+  const {
+    data
+  } =
+    await supabaseClient.auth
+      .getSession();
+
+
+  currentUser =
+    data.session
+      ? data.session.user
+      : null;
+
+
+  await updateAuthUI();
+
+  loadPosts();
+
+}
+
+
+supabaseClient.auth.onAuthStateChange(
+  async (event, session) => {
+
+    currentUser =
+      session
+        ? session.user
+        : null;
+
+    await updateAuthUI();
+
+    loadPosts();
+
+  }
+);
+
+
+checkSession();
+
+</script>
 
 </body>
 </html>
