@@ -2,432 +2,718 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<meta name="viewport" content="width=device-width,initial-scale=1.0,viewport-fit=cover">
+<meta name="theme-color" content="#09090b">
 <title>Dayoff</title>
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
 <style>
+:root{
+  --bg:#09090b;
+  --surface:#111114;
+  --surface2:#18181c;
+  --card:#151518;
+  --border:rgba(255,255,255,.09);
+  --text:#fff;
+  --muted:#a1a1aa;
+  --blue:#4f7cff;
+  --purple:#8b5cf6;
+  --pink:#ec4899;
+  --danger:#ff4757;
+  --green:#22c55e;
+  --radius:20px;
+}
+
 *{
-box-sizing:border-box;
-margin:0;
-padding:0;
-font-family:Arial,sans-serif
+  box-sizing:border-box;
+  margin:0;
+  padding:0;
+  font-family:Inter,Arial,sans-serif;
+}
+
+html{
+  background:var(--bg);
+  scroll-behavior:smooth;
 }
 
 body{
-background:#f0f2f5;
-color:#222
-}
-
-header{
-height:60px;
-background:#fff;
-display:flex;
-align-items:center;
-justify-content:space-between;
-padding:0 20px;
-position:sticky;
-top:0;
-z-index:100;
-border-bottom:1px solid #ddd
-}
-
-.logo{
-font-size:25px;
-font-weight:bold;
-color:#1877f2
+  background:
+    radial-gradient(circle at top right,rgba(79,124,255,.12),transparent 30%),
+    var(--bg);
+  color:var(--text);
+  min-height:100vh;
 }
 
 button{
-border:0;
-padding:9px 14px;
-border-radius:8px;
-cursor:pointer;
-background:#1877f2;
-color:#fff;
-font-weight:bold
+  border:0;
+  cursor:pointer;
+  font-weight:700;
+  color:#fff;
 }
 
 button:disabled{
-opacity:.5;
-cursor:not-allowed
+  opacity:.45;
+  cursor:not-allowed;
 }
 
-.header-buttons button{
-margin-left:6px
-}
-
-.container{
-max-width:1100px;
-margin:auto;
-display:grid;
-grid-template-columns:220px 1fr 250px;
-gap:20px;
-padding:20px
-}
-
-.sidebar,
-.rightbar,
-.card,
-.create-post,
-.search-box,
-.profile-card{
-background:#fff;
-border-radius:12px;
-padding:16px;
-box-shadow:0 1px 4px rgba(0,0,0,.08)
-}
-
-.sidebar{
-height:fit-content;
-position:sticky;
-top:80px
-}
-
-.sidebar button{
-display:block;
-width:100%;
-margin-bottom:8px;
-text-align:left;
-background:transparent;
-color:#333
-}
-
-.sidebar button:hover{
-background:#f0f2f5
-}
-
-.stories{
-display:flex;
-gap:10px;
-overflow-x:auto;
-margin-bottom:18px
-}
-
-.story{
-min-width:100px;
-height:145px;
-background:linear-gradient(135deg,#1877f2,#8b5cf6);
-border-radius:12px;
-color:#fff;
-display:flex;
-align-items:flex-end;
-padding:10px;
-font-weight:bold
-}
-
-.create-post{
-margin-bottom:18px
-}
-
+input,
 textarea{
-width:100%;
-min-height:80px;
-border:1px solid #ddd;
-border-radius:10px;
-padding:12px;
-resize:vertical;
-margin-bottom:10px
+  outline:none;
 }
 
-.post-tools{
-display:flex;
-gap:8px;
-flex-wrap:wrap
-}
-
-.post-tools button{
-background:#f0f2f5;
-color:#333
-}
-
-.post-tools .publish{
-background:#1877f2;
-color:#fff
-}
-
-.selected-file{
-font-size:13px;
-color:#555;
-margin:8px 0
-}
-
-.post{
-margin-bottom:18px
-}
-
-.post-header{
-display:flex;
-justify-content:space-between;
-align-items:center;
-margin-bottom:10px
-}
-
-.author{
-font-weight:bold
-}
-
-.date{
-color:#777;
-font-size:12px
-}
-
-.post-content{
-white-space:pre-wrap;
-margin-bottom:10px;
-line-height:1.5
-}
-
-.post-media{
-width:100%;
-max-height:550px;
-object-fit:cover;
-border-radius:10px;
-margin-bottom:10px
-}
-
-.actions{
-display:flex;
-gap:6px;
-border-top:1px solid #eee;
-padding-top:10px;
-flex-wrap:wrap
-}
-
-.actions button{
-flex:1;
-background:#f0f2f5;
-color:#333
-}
-
-.actions button.liked{
-color:#1877f2
-}
-
-.delete-btn{
-background:#ffebee!important;
-color:#d32f2f!important;
-flex:0 0 auto!important
-}
-
-.comments{
-display:none;
-margin-top:12px;
-border-top:1px solid #eee;
-padding-top:12px
-}
-
-.comment{
-background:#f0f2f5;
-padding:8px 10px;
-border-radius:10px;
-margin-bottom:7px
-}
-
-.comment strong{
-display:block;
-font-size:13px;
-margin-bottom:3px
-}
-
-.comment-form{
-display:flex;
-gap:6px
-}
-
-.comment-form input{
-flex:1;
-border:1px solid #ddd;
-border-radius:8px;
-padding:9px
-}
+/* =========================
+AUTH
+========================= */
 
 .auth-screen{
-min-height:100vh;
-display:flex;
-justify-content:center;
-align-items:center;
-padding:20px
+  min-height:100vh;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  padding:20px;
+  background:
+    radial-gradient(circle at 20% 20%,rgba(79,124,255,.25),transparent 35%),
+    radial-gradient(circle at 80% 80%,rgba(236,72,153,.18),transparent 35%),
+    #070709;
 }
 
 .auth-box{
-background:#fff;
-border-radius:18px;
-padding:30px;
-width:100%;
-max-width:420px;
-box-shadow:0 1px 6px rgba(0,0,0,.1)
+  width:100%;
+  max-width:420px;
+  background:rgba(20,20,24,.92);
+  border:1px solid var(--border);
+  border-radius:28px;
+  padding:32px 25px;
+  box-shadow:0 25px 80px rgba(0,0,0,.5);
+  backdrop-filter:blur(20px);
+}
+
+.auth-logo{
+  width:70px;
+  height:70px;
+  border-radius:22px;
+  background:linear-gradient(135deg,#4f7cff,#8b5cf6,#ec4899);
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  font-size:30px;
+  font-weight:900;
+  margin-bottom:18px;
 }
 
 .auth-box h1{
-color:#1877f2;
-font-size:42px;
-margin-bottom:8px
+  font-size:42px;
+  letter-spacing:-2px;
+  margin-bottom:5px;
 }
 
 .auth-box p{
-color:#666;
-margin-bottom:15px
+  color:var(--muted);
+  margin-bottom:22px;
+  line-height:1.5;
 }
 
 .auth-box input{
-width:100%;
-padding:14px;
-margin-bottom:10px;
-border:1px solid #ddd;
-border-radius:10px;
-font-size:16px
+  width:100%;
+  padding:15px;
+  margin-bottom:11px;
+  background:#0c0c0f;
+  border:1px solid var(--border);
+  color:#fff;
+  border-radius:14px;
+  font-size:15px;
+}
+
+.auth-box input:focus{
+  border-color:var(--blue);
 }
 
 .auth-box button{
-width:100%;
-margin-bottom:8px;
-padding:13px;
-font-size:16px
+  width:100%;
+  padding:14px;
+  border-radius:14px;
+  margin-bottom:9px;
+  background:linear-gradient(135deg,#4f7cff,#6d5dfc);
+  font-size:15px;
 }
 
-.secondary{
-background:#eee!important;
-color:#333!important
+.auth-box .secondary{
+  background:#25252b!important;
+  color:#fff!important;
 }
 
 #authMessage{
-min-height:20px;
-margin-top:10px;
-font-size:14px
+  min-height:20px;
+  margin-top:8px;
+  color:#fbbf24;
+  font-size:13px;
 }
 
+/* =========================
+GENERAL
+========================= */
+
 .hidden{
-display:none!important
+  display:none!important;
+}
+
+.app{
+  min-height:100vh;
+}
+
+header{
+  height:66px;
+  position:sticky;
+  top:0;
+  z-index:100;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  padding:0 22px;
+  background:rgba(9,9,11,.86);
+  backdrop-filter:blur(20px);
+  border-bottom:1px solid var(--border);
+}
+
+.logo{
+  font-size:27px;
+  font-weight:900;
+  letter-spacing:-1px;
+  background:linear-gradient(90deg,#fff,#7897ff,#d27aff);
+  -webkit-background-clip:text;
+  color:transparent;
+}
+
+.header-actions{
+  display:flex;
+  align-items:center;
+  gap:8px;
+}
+
+.icon-btn,
+.live-btn,
+.logout-btn{
+  border-radius:13px;
+  padding:10px 14px;
+}
+
+.live-btn{
+  background:linear-gradient(135deg,#ff315b,#ff5b36);
+}
+
+.logout-btn{
+  background:#242429;
+}
+
+/* =========================
+MAIN LAYOUT
+========================= */
+
+.container{
+  width:100%;
+  max-width:1250px;
+  margin:auto;
+  display:grid;
+  grid-template-columns:220px minmax(0,650px) 250px;
+  gap:22px;
+  padding:22px;
+}
+
+.sidebar,
+.rightbar{
+  height:max-content;
+  position:sticky;
+  top:88px;
+}
+
+.sidebar-card,
+.right-card{
+  background:rgba(20,20,24,.9);
+  border:1px solid var(--border);
+  border-radius:22px;
+  padding:16px;
+}
+
+.profile-mini{
+  padding:10px;
+  margin-bottom:12px;
+}
+
+.profile-avatar{
+  width:54px;
+  height:54px;
+  border-radius:50%;
+  background:linear-gradient(135deg,#4f7cff,#8b5cf6,#ec4899);
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  font-weight:900;
+  font-size:21px;
+  margin-bottom:10px;
 }
 
 .profile-name{
-font-weight:bold;
-margin-bottom:5px
+  font-weight:800;
+  margin-bottom:3px;
 }
 
 .profile-email{
-font-size:12px;
-color:#777;
-margin-bottom:12px;
-word-break:break-word
-}
-
-.live-card{
-background:linear-gradient(135deg,#ff416c,#ff4b2b);
-color:#fff;
-padding:15px;
-border-radius:12px;
-margin-bottom:15px
-}
-
-.live-card button{
-background:#fff;
-color:#ff416c;
-margin-top:10px
-}
-
-.empty{
-text-align:center;
-color:#777;
-padding:30px 10px
-}
-
-.search-box{
-margin-bottom:18px
-}
-
-.search-box input{
-width:100%;
-padding:12px;
-border:1px solid #ddd;
-border-radius:8px
-}
-
-.user-result{
-display:flex;
-align-items:center;
-justify-content:space-between;
-padding:12px 0;
-border-bottom:1px solid #eee;
-gap:10px
-}
-
-.user-info{
-flex:1
-}
-
-.user-name{
-font-weight:bold
-}
-
-.user-username{
-font-size:12px;
-color:#777
-}
-
-.user-result button{
-font-size:12px
-}
-
-.following{
-background:#e4e6eb;
-color:#333
-}
-
-.requested{
-background:#ddd;
-color:#555
-}
-
-.notification{
-padding:12px;
-border-bottom:1px solid #eee
-}
-
-.notification.unread{
-background:#eef5ff
-}
-
-.notification small{
-display:block;
-color:#777;
-margin-top:4px
-}
-
-.request-actions{
-display:flex;
-gap:6px;
-margin-top:8px
-}
-
-.request-actions button{
-font-size:12px
-}
-
-.accept{
-background:#1877f2
-}
-
-.reject{
-background:#eee;
-color:#333
+  color:var(--muted);
+  font-size:11px;
+  word-break:break-word;
 }
 
 .count-box{
-display:flex;
-gap:8px;
-margin-top:8px
+  display:flex;
+  gap:7px;
+  margin:15px 0;
 }
 
 .count-box div{
-flex:1;
-background:#f0f2f5;
-padding:8px;
-border-radius:8px;
-text-align:center;
-font-size:12px
+  flex:1;
+  text-align:center;
+  padding:9px 4px;
+  border-radius:12px;
+  background:#1c1c21;
+  color:var(--muted);
+  font-size:10px;
+}
+
+.count-box strong{
+  color:#fff;
+  font-size:15px;
+}
+
+.side-button{
+  width:100%;
+  text-align:left;
+  padding:12px;
+  margin-bottom:4px;
+  background:transparent;
+  border-radius:13px;
+  color:#d4d4d8;
+  font-size:14px;
+}
+
+.side-button:hover{
+  background:#1c1c21;
+}
+
+.side-button.active{
+  background:rgba(79,124,255,.14);
+  color:#fff;
+}
+
+/* =========================
+STORIES
+========================= */
+
+.stories{
+  display:flex;
+  gap:10px;
+  overflow-x:auto;
+  padding:2px 0 8px;
+  scrollbar-width:none;
+}
+
+.stories::-webkit-scrollbar{
+  display:none;
+}
+
+.story{
+  position:relative;
+  min-width:108px;
+  height:155px;
+  border-radius:20px;
+  overflow:hidden;
+  display:flex;
+  align-items:flex-end;
+  padding:11px;
+  background:
+    linear-gradient(160deg,rgba(0,0,0,.05),rgba(0,0,0,.75)),
+    linear-gradient(135deg,#4f7cff,#8b5cf6,#ec4899);
+  border:1px solid rgba(255,255,255,.1);
+  font-weight:800;
+  box-shadow:0 8px 25px rgba(0,0,0,.25);
+}
+
+.story:first-child{
+  background:
+    linear-gradient(160deg,rgba(0,0,0,.05),rgba(0,0,0,.75)),
+    linear-gradient(135deg,#111827,#4f7cff);
+}
+
+.story-avatar{
+  position:absolute;
+  top:10px;
+  left:10px;
+  width:34px;
+  height:34px;
+  border-radius:50%;
+  background:#fff;
+  color:#111;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  font-weight:900;
+  border:3px solid #4f7cff;
+}
+
+/* =========================
+LIVE
+========================= */
+
+.live-card{
+  margin:15px 0;
+  border-radius:24px;
+  padding:20px;
+  background:
+    radial-gradient(circle at 90% 0%,rgba(255,255,255,.18),transparent 35%),
+    linear-gradient(135deg,#e11d48,#7c3aed);
+  box-shadow:0 15px 35px rgba(124,58,237,.18);
+}
+
+.live-title{
+  display:flex;
+  align-items:center;
+  gap:9px;
+  font-size:18px;
+  font-weight:900;
+}
+
+.live-dot{
+  width:12px;
+  height:12px;
+  border-radius:50%;
+  background:#ff304f;
+  box-shadow:0 0 0 5px rgba(255,255,255,.12);
+}
+
+.live-card p{
+  color:rgba(255,255,255,.75);
+  margin:8px 0 15px;
+}
+
+.live-card button{
+  background:#fff;
+  color:#d11d48;
+  padding:11px 16px;
+  border-radius:13px;
+}
+
+/* =========================
+CREATE POST
+========================= */
+
+.create-post{
+  background:rgba(20,20,24,.9);
+  border:1px solid var(--border);
+  border-radius:23px;
+  padding:15px;
+  margin-bottom:16px;
+}
+
+.create-top{
+  display:flex;
+  gap:10px;
+  align-items:flex-start;
+}
+
+.create-avatar{
+  width:43px;
+  height:43px;
+  border-radius:50%;
+  flex-shrink:0;
+  background:linear-gradient(135deg,#4f7cff,#8b5cf6);
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  font-weight:900;
+}
+
+textarea{
+  width:100%;
+  min-height:60px;
+  resize:none;
+  background:#1a1a1f;
+  border:1px solid transparent;
+  color:#fff;
+  border-radius:17px;
+  padding:13px;
+  font-size:15px;
+}
+
+textarea:focus{
+  border-color:#3d4d83;
+}
+
+.post-tools{
+  display:flex;
+  align-items:center;
+  gap:7px;
+  margin-top:10px;
+}
+
+.post-tools button{
+  background:#202025;
+  color:#ddd;
+  padding:10px 12px;
+  border-radius:12px;
+}
+
+.post-tools .publish{
+  margin-left:auto;
+  background:linear-gradient(135deg,#4f7cff,#735cf7);
+  color:#fff;
+}
+
+.selected-file{
+  color:#8da8ff;
+  font-size:12px;
+  margin:7px 0 0 53px;
+}
+
+/* =========================
+POST
+========================= */
+
+.post{
+  background:rgba(20,20,24,.92);
+  border:1px solid var(--border);
+  border-radius:23px;
+  overflow:hidden;
+  margin-bottom:16px;
+}
+
+.post-header{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  padding:15px 15px 8px;
+}
+
+.author-wrap{
+  display:flex;
+  align-items:center;
+  gap:10px;
+}
+
+.author-avatar{
+  width:43px;
+  height:43px;
+  border-radius:50%;
+  background:linear-gradient(135deg,#4f7cff,#8b5cf6,#ec4899);
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  font-weight:900;
+}
+
+.author{
+  font-weight:800;
+  font-size:14px;
+}
+
+.date{
+  color:#71717a;
+  font-size:11px;
+  margin-top:3px;
+}
+
+.post-content{
+  padding:7px 15px 13px;
+  line-height:1.55;
+  white-space:pre-wrap;
+  color:#f4f4f5;
+}
+
+.post-media{
+  width:100%;
+  max-height:700px;
+  display:block;
+  object-fit:cover;
+  background:#050505;
+}
+
+.actions{
+  display:flex;
+  align-items:center;
+  padding:9px;
+  border-top:1px solid var(--border);
+  gap:4px;
+}
+
+.actions button{
+  flex:1;
+  background:transparent;
+  color:#a1a1aa;
+  padding:10px 5px;
+  border-radius:11px;
+  font-size:13px;
+}
+
+.actions button:hover{
+  background:#202025;
+  color:#fff;
+}
+
+.actions button.liked{
+  color:#ff4d6d;
+}
+
+.delete-btn{
+  flex:0 0 42px!important;
+  color:#ff5c6c!important;
+}
+
+.comments{
+  display:none;
+  padding:12px 15px 15px;
+  border-top:1px solid var(--border);
+}
+
+.comment{
+  background:#1c1c21;
+  padding:9px 11px;
+  border-radius:13px;
+  margin-bottom:7px;
+  font-size:13px;
+}
+
+.comment strong{
+  display:block;
+  margin-bottom:3px;
+}
+
+.comment-form{
+  display:flex;
+  gap:6px;
+}
+
+.comment-form input{
+  flex:1;
+  background:#1c1c21;
+  color:#fff;
+  border:1px solid var(--border);
+  border-radius:13px;
+  padding:10px;
+}
+
+.comment-form button{
+  background:#4f7cff;
+  padding:10px 13px;
+  border-radius:12px;
+}
+
+.empty{
+  text-align:center;
+  color:#71717a;
+  padding:40px 15px;
+}
+
+/* =========================
+SEARCH
+========================= */
+
+.card,
+.search-box{
+  background:rgba(20,20,24,.92);
+  border:1px solid var(--border);
+  border-radius:22px;
+  padding:17px;
+}
+
+.search-box h2{
+  margin-bottom:6px;
+}
+
+.search-box p{
+  color:var(--muted);
+  margin-bottom:13px;
+}
+
+.search-box input{
+  width:100%;
+  background:#0e0e11;
+  color:#fff;
+  border:1px solid var(--border);
+  padding:13px;
+  border-radius:13px;
+}
+
+.user-result{
+  display:flex;
+  align-items:center;
+  gap:10px;
+  padding:13px 4px;
+  border-bottom:1px solid var(--border);
+}
+
+.user-info{
+  flex:1;
+}
+
+.user-name{
+  font-weight:800;
+}
+
+.user-username{
+  color:#777;
+  font-size:12px;
+  margin-top:3px;
+}
+
+.user-result button{
+  padding:8px 11px;
+  border-radius:10px;
+  background:#4f7cff;
+}
+
+.following{
+  background:#27272a!important;
+}
+
+.requested{
+  background:#27272a!important;
+  color:#aaa!important;
+}
+
+/* =========================
+NOTIFICATIONS
+========================= */
+
+.notification{
+  padding:14px 4px;
+  border-bottom:1px solid var(--border);
+}
+
+.notification.unread{
+  background:rgba(79,124,255,.08);
+}
+
+.notification small{
+  display:block;
+  color:#71717a;
+  margin-top:5px;
+}
+
+.request-actions{
+  display:flex;
+  gap:7px;
+  margin-top:9px;
+}
+
+.accept{
+  background:#4f7cff;
+  padding:8px 13px;
+  border-radius:10px;
+}
+
+.reject{
+  background:#29292e;
+  padding:8px 13px;
+  border-radius:10px;
 }
 
 /* =========================
@@ -435,287 +721,468 @@ MESSAGING
 ========================= */
 
 .messages-layout{
-display:grid;
-grid-template-columns:230px 1fr;
-height:600px;
-background:#fff;
-border-radius:12px;
-overflow:hidden;
-box-shadow:0 1px 4px rgba(0,0,0,.08)
+  height:650px;
+  display:grid;
+  grid-template-columns:260px 1fr;
+  background:#111114;
+  border:1px solid var(--border);
+  border-radius:23px;
+  overflow:hidden;
 }
 
 .conversations{
-border-right:1px solid #ddd;
-overflow-y:auto
+  border-right:1px solid var(--border);
+  overflow-y:auto;
 }
 
 .conversations-header{
-padding:15px;
-border-bottom:1px solid #eee
+  padding:16px;
+  border-bottom:1px solid var(--border);
 }
 
 .conversations-header h2{
-font-size:20px;
-margin-bottom:10px
+  margin-bottom:11px;
 }
 
-.chat-search{
-width:100%;
-padding:10px;
-border:1px solid #ddd;
-border-radius:8px
-}
-
-.conversation{
-padding:13px;
-display:flex;
-gap:10px;
-align-items:center;
-cursor:pointer;
-border-bottom:1px solid #eee
-}
-
-.conversation:hover{
-background:#f5f6f7
-}
-
-.conversation.active{
-background:#eef5ff
-}
-
-.avatar{
-width:42px;
-height:42px;
-border-radius:50%;
-background:#1877f2;
-color:#fff;
-display:flex;
-align-items:center;
-justify-content:center;
-font-weight:bold;
-flex-shrink:0
-}
-
-.conversation-info{
-flex:1;
-min-width:0
-}
-
-.conversation-name{
-font-weight:bold;
-white-space:nowrap;
-overflow:hidden;
-text-overflow:ellipsis
-}
-
-.conversation-preview{
-font-size:12px;
-color:#777;
-white-space:nowrap;
-overflow:hidden;
-text-overflow:ellipsis
-}
-
-.unread-count{
-background:#1877f2;
-color:#fff;
-font-size:11px;
-min-width:20px;
-height:20px;
-border-radius:10px;
-display:flex;
-align-items:center;
-justify-content:center
-}
-
-.chat-area{
-display:flex;
-flex-direction:column;
-min-width:0
-}
-
-.chat-header{
-padding:14px 16px;
-border-bottom:1px solid #ddd;
-display:flex;
-align-items:center;
-gap:10px;
-min-height:70px
-}
-
-.chat-user-name{
-font-weight:bold
-}
-
-.chat-status{
-font-size:12px;
-color:#777;
-margin-top:3px
-}
-
-.online{
-color:#16a34a
-}
-
-.messages-list{
-flex:1;
-padding:18px;
-overflow-y:auto;
-background:#f5f7fa;
-display:flex;
-flex-direction:column;
-gap:8px
-}
-
-.message-row{
-display:flex
-}
-
-.message-row.mine{
-justify-content:flex-end
-}
-
-.message-bubble{
-max-width:75%;
-padding:10px 13px;
-border-radius:16px;
-background:#e4e6eb;
-word-wrap:break-word
-}
-
-.message-row.mine .message-bubble{
-background:#1877f2;
-color:#fff;
-border-bottom-right-radius:4px
-}
-
-.message-row:not(.mine) .message-bubble{
-border-bottom-left-radius:4px
-}
-
-.message-time{
-font-size:10px;
-opacity:.7;
-margin-top:4px;
-text-align:right
-}
-
-.chat-input-area{
-display:flex;
-gap:8px;
-padding:12px;
-border-top:1px solid #ddd;
-background:#fff
-}
-
-.chat-input{
-flex:1;
-padding:12px;
-border:1px solid #ddd;
-border-radius:20px;
-outline:none
-}
-
-.send-message{
-border-radius:20px
+.chat-search,
+.message-user-search{
+  width:100%;
+  padding:11px;
+  background:#1c1c21;
+  color:#fff;
+  border:1px solid var(--border);
+  border-radius:12px;
 }
 
 .start-chat{
-padding:15px;
-border-bottom:1px solid #eee
+  padding:13px 16px;
+  border-bottom:1px solid var(--border);
 }
 
 .message-user-search{
-width:100%;
-padding:10px;
-border:1px solid #ddd;
-border-radius:8px;
-margin-top:8px
+  margin-top:8px;
+}
+
+.conversation{
+  display:flex;
+  align-items:center;
+  gap:10px;
+  padding:13px 15px;
+  cursor:pointer;
+  border-bottom:1px solid rgba(255,255,255,.04);
+}
+
+.conversation:hover,
+.conversation.active{
+  background:#1b1b20;
+}
+
+.avatar{
+  width:42px;
+  height:42px;
+  flex-shrink:0;
+  border-radius:50%;
+  background:linear-gradient(135deg,#4f7cff,#8b5cf6);
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  font-weight:900;
+}
+
+.conversation-info{
+  flex:1;
+  min-width:0;
+}
+
+.conversation-name{
+  font-weight:800;
+  white-space:nowrap;
+  overflow:hidden;
+  text-overflow:ellipsis;
+}
+
+.conversation-preview{
+  color:#71717a;
+  font-size:12px;
+  white-space:nowrap;
+  overflow:hidden;
+  text-overflow:ellipsis;
+  margin-top:3px;
+}
+
+.unread-count{
+  width:21px;
+  height:21px;
+  border-radius:50%;
+  background:#4f7cff;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  font-size:10px;
+}
+
+.chat-area{
+  min-width:0;
+  display:flex;
+  flex-direction:column;
+}
+
+.chat-header{
+  min-height:70px;
+  padding:13px 16px;
+  display:flex;
+  align-items:center;
+  gap:10px;
+  border-bottom:1px solid var(--border);
+}
+
+.chat-user-name{
+  font-weight:800;
+}
+
+.chat-status{
+  color:#71717a;
+  font-size:11px;
+  margin-top:3px;
+}
+
+.online{
+  color:#22c55e;
+}
+
+.messages-list{
+  flex:1;
+  overflow-y:auto;
+  padding:18px;
+  display:flex;
+  flex-direction:column;
+  gap:7px;
+  background:
+    radial-gradient(circle at top right,rgba(79,124,255,.07),transparent 35%),
+    #0c0c0f;
+}
+
+.message-row{
+  display:flex;
+}
+
+.message-row.mine{
+  justify-content:flex-end;
+}
+
+.message-bubble{
+  max-width:75%;
+  background:#242429;
+  padding:10px 13px;
+  border-radius:17px;
+  word-break:break-word;
+}
+
+.message-row.mine .message-bubble{
+  background:linear-gradient(135deg,#4f7cff,#665df5);
+  border-bottom-right-radius:5px;
+}
+
+.message-row:not(.mine) .message-bubble{
+  border-bottom-left-radius:5px;
+}
+
+.message-time{
+  font-size:9px;
+  opacity:.6;
+  margin-top:4px;
+  text-align:right;
+}
+
+.chat-input-area{
+  padding:12px;
+  display:flex;
+  gap:7px;
+  border-top:1px solid var(--border);
+  background:#111114;
+}
+
+.chat-input{
+  flex:1;
+  background:#1e1e23;
+  color:#fff;
+  border:1px solid var(--border);
+  border-radius:22px;
+  padding:12px 15px;
+}
+
+.send-message{
+  background:#4f7cff;
+  border-radius:20px;
+  padding:0 17px;
 }
 
 .chat-search-results{
-padding:0 15px
+  max-height:200px;
+  overflow-y:auto;
 }
 
 .chat-search-result{
-padding:10px 0;
-border-bottom:1px solid #eee;
-display:flex;
-align-items:center;
-justify-content:space-between;
-gap:8px
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  padding:10px 0;
+  border-bottom:1px solid var(--border);
 }
 
-.chat-search-result span{
-font-weight:bold;
-font-size:13px
+.chat-search-result button{
+  background:#4f7cff;
+  padding:7px 10px;
+  border-radius:9px;
 }
+
+/* =========================
+RIGHT BAR
+========================= */
+
+.right-card h3{
+  font-size:17px;
+}
+
+.feature{
+  padding:10px 0;
+  color:#a1a1aa;
+  border-bottom:1px solid var(--border);
+  font-size:13px;
+}
+
+.feature:last-child{
+  border:0;
+}
+
+/* =========================
+LIVE MODAL
+========================= */
+
+#liveModal{
+  position:fixed;
+  inset:0;
+  background:rgba(0,0,0,.82);
+  backdrop-filter:blur(10px);
+  z-index:9999;
+  align-items:center;
+  justify-content:center;
+  padding:20px;
+}
+
+.live-modal-box{
+  width:100%;
+  max-width:500px;
+  background:#151518;
+  border:1px solid var(--border);
+  border-radius:27px;
+  padding:24px;
+  box-shadow:0 30px 80px #000;
+}
+
+.live-preview{
+  height:220px;
+  border-radius:20px;
+  background:
+    radial-gradient(circle at center,rgba(79,124,255,.3),transparent 35%),
+    #09090b;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  flex-direction:column;
+  margin:18px 0;
+  color:#a1a1aa;
+}
+
+.live-preview-icon{
+  font-size:45px;
+  margin-bottom:10px;
+}
+
+.live-modal-buttons{
+  display:flex;
+  gap:8px;
+}
+
+.live-modal-buttons button{
+  flex:1;
+  padding:13px;
+  border-radius:13px;
+  background:#4f7cff;
+}
+
+.live-modal-buttons .cancel{
+  background:#29292e;
+}
+
+/* =========================
+MOBILE NAV
+========================= */
 
 .bottom-nav{
-display:none
+  display:none;
+}
+
+.mobile-create{
+  display:none;
 }
 
 @media(max-width:850px){
 
-.container{
-grid-template-columns:1fr;
-padding:10px
-}
+  body{
+    padding-bottom:75px;
+  }
 
-.sidebar,
-.rightbar{
-display:none
-}
+  header{
+    height:61px;
+    padding:0 13px;
+  }
 
-.messages-layout{
-grid-template-columns:1fr;
-height:calc(100vh - 140px)
-}
+  .logo{
+    font-size:24px;
+  }
 
-.conversations{
-display:block;
-border-right:0
-}
+  .header-actions{
+    gap:5px;
+  }
 
-.messages-layout.chat-open .conversations{
-display:none
-}
+  .live-btn{
+    padding:9px 11px;
+    font-size:12px;
+  }
 
-.bottom-nav{
-position:fixed;
-bottom:0;
-left:0;
-right:0;
-height:60px;
-background:#fff;
-display:flex;
-justify-content:space-around;
-align-items:center;
-border-top:1px solid #ddd;
-z-index:100
-}
+  .logout-btn{
+    padding:9px 10px;
+    font-size:11px;
+  }
 
-.bottom-nav button{
-background:transparent;
-color:#333;
-font-size:12px;
-padding:5px
-}
+  .container{
+    display:block;
+    padding:10px;
+    width:100%;
+  }
 
-body{
-padding-bottom:60px
-}
+  .sidebar,
+  .rightbar{
+    display:none;
+  }
 
-.auth-box{
-padding:24px
-}
+  .stories{
+    margin:2px -2px 10px;
+  }
 
+  .story{
+    min-width:92px;
+    height:135px;
+    border-radius:18px;
+    font-size:12px;
+  }
+
+  .live-card{
+    border-radius:20px;
+    padding:16px;
+  }
+
+  .create-post{
+    border-radius:20px;
+    padding:12px;
+  }
+
+  .post{
+    border-radius:20px;
+  }
+
+  .post-media{
+    max-height:none;
+  }
+
+  .actions button{
+    font-size:12px;
+  }
+
+  .bottom-nav{
+    position:fixed;
+    display:flex;
+    left:0;
+    right:0;
+    bottom:0;
+    height:70px;
+    z-index:500;
+    background:rgba(14,14,17,.94);
+    backdrop-filter:blur(20px);
+    border-top:1px solid var(--border);
+    padding-bottom:env(safe-area-inset-bottom);
+  }
+
+  .bottom-nav button{
+    flex:1;
+    background:transparent;
+    color:#777;
+    font-size:10px;
+    padding:6px 2px;
+  }
+
+  .bottom-nav button span{
+    display:block;
+    font-size:21px;
+    margin-bottom:3px;
+  }
+
+  .bottom-nav button.active{
+    color:#fff;
+  }
+
+  .messages-layout{
+    height:calc(100vh - 150px);
+    grid-template-columns:1fr;
+    border-radius:19px;
+  }
+
+  .messages-layout.chat-open .conversations{
+    display:none;
+  }
+
+  .conversations{
+    border:0;
+  }
+
+  .chat-area{
+    height:100%;
+  }
+
+  .chat-back{
+    display:block!important;
+  }
+
+  .chat-header{
+    min-height:62px;
+  }
+
+  .message-bubble{
+    max-width:82%;
+  }
+
+  .mobile-create{
+    display:flex;
+    position:fixed;
+    right:18px;
+    bottom:85px;
+    z-index:400;
+    width:54px;
+    height:54px;
+    border-radius:50%;
+    align-items:center;
+    justify-content:center;
+    background:linear-gradient(135deg,#4f7cff,#8b5cf6);
+    box-shadow:0 10px 30px rgba(79,124,255,.4);
+    font-size:24px;
+  }
 }
 
 @media(min-width:851px){
-.mobile-chat-back{
-display:none
-}
+  .chat-back{
+    display:none!important;
+  }
 }
 </style>
 </head>
@@ -730,36 +1197,23 @@ AUTH
 
 <div class="auth-box">
 
+<div class="auth-logo">D</div>
+
 <h1>Dayoff</h1>
 
 <p>
-Connect, share and enjoy your day.
+Your space to connect, share moments and discover people.
 </p>
 
-<input
-id="email"
-type="email"
-placeholder="Email">
+<input id="email" type="email" placeholder="Email">
 
-<input
-id="password"
-type="password"
-placeholder="Password">
+<input id="password" type="password" placeholder="Password">
 
-<input
-id="username"
-type="text"
-placeholder="Username for sign up">
+<input id="username" type="text" placeholder="Username for sign up">
 
-<button onclick="signUp()">
-Create account
-</button>
+<button onclick="signUp()">Create account</button>
 
-<button
-class="secondary"
-onclick="signIn()">
-Log in
-</button>
+<button class="secondary" onclick="signIn()">Log in</button>
 
 <p id="authMessage"></p>
 
@@ -776,17 +1230,15 @@ APP
 
 <header>
 
-<div class="logo">
-Dayoff
-</div>
+<div class="logo">Dayoff</div>
 
-<div class="header-buttons">
+<div class="header-actions">
 
-<button onclick="openLiveModal()">
+<button class="live-btn" onclick="openLiveModal()">
 🔴 Go Live
 </button>
 
-<button onclick="logout()">
+<button class="logout-btn" onclick="logout()">
 Logout
 </button>
 
@@ -801,59 +1253,61 @@ Logout
 
 <aside class="sidebar">
 
-<div
-class="profile-name"
-id="profileName">
+<div class="sidebar-card">
+
+<div class="profile-mini">
+
+<div class="profile-avatar" id="sidebarAvatar">D</div>
+
+<div class="profile-name" id="profileName">
 User
 </div>
 
-<div
-class="profile-email"
-id="profileEmail">
+<div class="profile-email" id="profileEmail">
 -
+</div>
+
 </div>
 
 <div class="count-box">
 
 <div>
 <strong id="followersCount">0</strong>
-<br>
-Followers
+<br>Followers
 </div>
 
 <div>
 <strong id="followingCount">0</strong>
-<br>
-Following
+<br>Following
 </div>
 
 </div>
 
-<br>
-
-<button onclick="showHome()">
-🏠 Home
+<button class="side-button active" onclick="showHome()">
+🏠 &nbsp; Home
 </button>
 
-<button onclick="showSearch()">
-🔎 Search
+<button class="side-button" onclick="showSearch()">
+🔎 &nbsp; Discover
 </button>
 
-<button onclick="showMessages()">
-💬 Messages
+<button class="side-button" onclick="showMessages()">
+💬 &nbsp; Messages
 </button>
 
-<button onclick="showNotifications()">
-🔔 Notifications
+<button class="side-button" onclick="showNotifications()">
+🔔 &nbsp; Notifications
 </button>
 
-<button onclick="showRequests()">
-🤝 Requests
+<button class="side-button" onclick="showRequests()">
+🤝 &nbsp; Requests
 </button>
 
-<button onclick="openLiveModal()">
-🔴 Live
+<button class="side-button" onclick="openLiveModal()">
+🔴 &nbsp; Go Live
 </button>
+
+</div>
 
 </aside>
 
@@ -869,15 +1323,23 @@ Following
 <div class="stories">
 
 <div class="story">
+<div class="story-avatar">+</div>
 Your Story
 </div>
 
 <div class="story">
+<div class="story-avatar">F</div>
 Friends
 </div>
 
 <div class="story">
+<div class="story-avatar">D</div>
 Discover
+</div>
+
+<div class="story">
+<div class="story-avatar">🔥</div>
+Trending
 </div>
 
 </div>
@@ -885,12 +1347,13 @@ Discover
 
 <div class="live-card">
 
-<strong>
-🔴 Dayoff Live
-</strong>
+<div class="live-title">
+<span class="live-dot"></span>
+Dayoff Live
+</div>
 
-<p style="margin-top:6px">
-Connect with your audience.
+<p>
+Connect with your audience in real time.
 </p>
 
 <button onclick="openLiveModal()">
@@ -902,14 +1365,20 @@ Start Live
 
 <div class="create-post">
 
+<div class="create-top">
+
+<div class="create-avatar" id="createAvatar">
+D
+</div>
+
 <textarea
 id="postContent"
-placeholder="What's happening?"></textarea>
+placeholder="What's happening?">
+</textarea>
 
-<div
-id="selectedFile"
-class="selected-file">
 </div>
+
+<div id="selectedFile" class="selected-file"></div>
 
 <div class="post-tools">
 
@@ -921,9 +1390,7 @@ class="selected-file">
 🎥 Video
 </button>
 
-<button
-class="publish"
-onclick="createPost()">
+<button class="publish" onclick="createPost()">
 Post
 </button>
 
@@ -949,7 +1416,7 @@ onchange="showSelectedFile(this)">
 <div id="postsContainer">
 
 <div class="empty">
-Loading posts...
+Loading your feed...
 </div>
 
 </div>
@@ -959,19 +1426,13 @@ Loading posts...
 
 <!-- SEARCH -->
 
-<div
-id="searchSection"
-class="hidden">
+<div id="searchSection" class="hidden">
 
 <div class="search-box">
 
-<h2>
-🔎 Find People
-</h2>
+<h2>🔎 Discover People</h2>
 
-<p style="color:#777;margin:8px 0 12px">
-Search for Dayoff users.
-</p>
+<p>Find people and connect on Dayoff.</p>
 
 <input
 id="userSearch"
@@ -987,23 +1448,15 @@ oninput="searchUsers()">
 
 <!-- MESSAGES -->
 
-<div
-id="messagesSection"
-class="hidden">
+<div id="messagesSection" class="hidden">
 
-<div class="messages-layout"
-id="messagesLayout">
-
-
-<!-- CONVERSATIONS -->
+<div class="messages-layout" id="messagesLayout">
 
 <div class="conversations">
 
 <div class="conversations-header">
 
-<h2>
-💬 Messages
-</h2>
+<h2>💬 Messages</h2>
 
 <input
 id="conversationSearch"
@@ -1013,12 +1466,9 @@ oninput="filterConversations()">
 
 </div>
 
-
 <div class="start-chat">
 
-<strong>
-Start a new chat
-</strong>
+<strong>Start a new chat</strong>
 
 <input
 id="messageUserSearch"
@@ -1026,13 +1476,9 @@ class="message-user-search"
 placeholder="Search people..."
 oninput="searchChatUsers()">
 
-<div
-id="chatSearchResults"
-class="chat-search-results">
-</div>
+<div id="chatSearchResults" class="chat-search-results"></div>
 
 </div>
-
 
 <div id="conversationList">
 
@@ -1045,17 +1491,18 @@ No conversations yet.
 </div>
 
 
-<!-- CHAT -->
-
 <div class="chat-area">
 
-<div
-id="chatHeader"
-class="chat-header">
+<div id="chatHeader" class="chat-header">
 
-<div class="avatar">
-D
-</div>
+<button
+class="chat-back"
+onclick="closeMobileChat()"
+style="background:transparent;font-size:20px;padding:5px">
+‹
+</button>
+
+<div class="avatar">D</div>
 
 <div>
 
@@ -1064,7 +1511,7 @@ Select a conversation
 </div>
 
 <div class="chat-status">
-Choose a user to start chatting
+Choose someone to start chatting
 </div>
 
 </div>
@@ -1072,9 +1519,7 @@ Choose a user to start chatting
 </div>
 
 
-<div
-id="messagesList"
-class="messages-list">
+<div id="messagesList" class="messages-list">
 
 <div class="empty">
 💬 Select someone to start a conversation.
@@ -1097,7 +1542,7 @@ id="sendMessageButton"
 class="send-message"
 onclick="sendMessage()"
 disabled>
-Send
+➤
 </button>
 
 </div>
@@ -1111,19 +1556,13 @@ Send
 
 <!-- NOTIFICATIONS -->
 
-<div
-id="notificationsSection"
-class="hidden">
+<div id="notificationsSection" class="hidden">
 
 <div class="card">
 
-<h2>
-🔔 Notifications
-</h2>
+<h2>🔔 Notifications</h2>
 
-<div
-id="notificationsList"
-style="margin-top:12px">
+<div id="notificationsList" style="margin-top:12px">
 Loading...
 </div>
 
@@ -1134,19 +1573,13 @@ Loading...
 
 <!-- REQUESTS -->
 
-<div
-id="requestsSection"
-class="hidden">
+<div id="requestsSection" class="hidden">
 
 <div class="card">
 
-<h2>
-🤝 Follow Requests
-</h2>
+<h2>🤝 Follow Requests</h2>
 
-<div
-id="requestsList"
-style="margin-top:12px">
+<div id="requestsList" style="margin-top:12px">
 Loading...
 </div>
 
@@ -1157,38 +1590,31 @@ Loading...
 </main>
 
 
-<!-- RIGHT -->
+<!-- RIGHT BAR -->
 
 <aside class="rightbar">
 
-<h3>
-Dayoff
-</h3>
+<div class="right-card">
 
-<p style="margin-top:10px;color:#666">
+<h3>✨ Welcome to Dayoff</h3>
+
+<p style="color:#777;margin:8px 0 15px;font-size:13px">
 Your social space.
 </p>
 
-<hr style="margin:15px 0">
+<div class="feature">💬 Private messaging</div>
 
-<strong>
-Dayoff Features
-</strong>
+<div class="feature">👥 Friends & followers</div>
 
-<p style="margin-top:8px;color:#777">
+<div class="feature">📸 Photos & videos</div>
 
-💬 Private messaging
-<br><br>
+<div class="feature">🔔 Notifications</div>
 
-👥 Friends & followers
-<br><br>
+<div class="feature">🔴 Live broadcasting</div>
 
-🔔 Notifications
-<br><br>
+<div class="feature">🔎 Discover people</div>
 
-🔴 Live broadcasting
-
-</p>
+</div>
 
 </aside>
 
@@ -1199,75 +1625,76 @@ Dayoff Features
 
 <div class="bottom-nav">
 
-<button onclick="showHome()">
-🏠<br>
+<button onclick="showHome()" class="active">
+<span>⌂</span>
 Home
 </button>
 
 <button onclick="showSearch()">
-🔎<br>
-Search
+<span>⌕</span>
+Discover
 </button>
 
 <button onclick="showMessages()">
-💬<br>
+<span>💬</span>
 Chat
 </button>
 
 <button onclick="showNotifications()">
-🔔<br>
+<span>♡</span>
 Alerts
 </button>
 
 <button onclick="showRequests()">
-🤝<br>
+<span>♧</span>
 Requests
 </button>
 
 </div>
+
+
+<button class="mobile-create" onclick="document.getElementById('postContent').focus()">
++
+</button>
 
 </div>
 
 
 <!-- LIVE MODAL -->
 
-<div
-id="liveModal"
-class="hidden"
-style="
-position:fixed;
-inset:0;
-background:rgba(0,0,0,.75);
-z-index:999;
-align-items:center;
-justify-content:center;
-padding:20px">
+<div id="liveModal" class="hidden">
 
-<div
-style="
-background:#fff;
-width:100%;
-max-width:500px;
-border-radius:15px;
-padding:20px">
+<div class="live-modal-box">
 
-<h2>
-🔴 Dayoff Live
-</h2>
+<h2>🔴 Go Live</h2>
 
-<p style="margin:15px 0;color:#666">
-Camera live broadcasting will be connected in the Live Streaming stage.
+<div class="live-preview">
+
+<div class="live-preview-icon">📹</div>
+
+<div>Dayoff Live Camera</div>
+
+<small style="margin-top:5px">
+Camera & microphone
+</small>
+
+</div>
+
+<p style="color:#a1a1aa;line-height:1.5;margin-bottom:15px">
+Your real camera live-streaming system will be connected in the next Live Streaming stage.
 </p>
+
+<div class="live-modal-buttons">
 
 <button onclick="startLive()">
 Start Live
 </button>
 
-<button
-onclick="closeLiveModal()"
-style="background:#eee;color:#333">
+<button class="cancel" onclick="closeLiveModal()">
 Cancel
 </button>
+
+</div>
 
 </div>
 
@@ -1284,15 +1711,13 @@ const SUPABASE_URL =
 "https://bdqjpwyalsuxyiczyeui.supabase.co";
 
 const SUPABASE_KEY =
-"sb_publishable_SoowSke5se9LiXf1oAJBxg_Tkfw82E8";
-
+"PASTE_YOUR_SUPABASE_PUBLISHABLE_KEY_HERE";
 
 const supabaseClient =
 supabase.createClient(
 SUPABASE_URL,
 SUPABASE_KEY
 );
-
 
 let currentUser=null;
 let selectedFile=null;
@@ -1312,82 +1737,49 @@ AUTH
 
 async function signUp(){
 
-const email=
-document.getElementById("email")
-.value
-.trim();
-
-const password=
-document.getElementById("password")
-.value;
-
-const username=
-document.getElementById("username")
-.value
-.trim();
-
+const email=document.getElementById("email").value.trim();
+const password=document.getElementById("password").value;
+const username=document.getElementById("username").value.trim();
 
 if(!email||!password||!username){
-
-showAuthMessage(
-"Please enter email, password and username."
-);
-
+showAuthMessage("Please enter email, password and username.");
 return;
 }
-
 
 if(password.length<6){
-
-showAuthMessage(
-"Password must be at least 6 characters."
-);
-
+showAuthMessage("Password must be at least 6 characters.");
 return;
 }
-
 
 const {data,error}=
 await supabaseClient.auth.signUp({
-
-email:email,
-
-password:password,
-
+email,
+password,
 options:{
 data:{
-username:username,
+username,
 full_name:username
 }
 }
-
 });
 
-
 if(error){
-
-showAuthMessage(
-error.message
-);
-
+showAuthMessage(error.message);
 return;
 }
-
 
 if(data.session&&data.user){
 
 currentUser=data.user;
 
-showAuthMessage(
-"Account created successfully."
-);
+showAuthMessage("Account created successfully.");
 
 await showApp();
 
 }else{
 
 showAuthMessage(
-"Account created. Check your email to confirm your account, then log in."
+"Account created. You may need to confirm your email before logging in."
 );
 
 }
@@ -1397,45 +1789,24 @@ showAuthMessage(
 
 async function signIn(){
 
-const email=
-document.getElementById("email")
-.value
-.trim();
-
-const password=
-document.getElementById("password")
-.value;
-
+const email=document.getElementById("email").value.trim();
+const password=document.getElementById("password").value;
 
 if(!email||!password){
-
-showAuthMessage(
-"Enter your email and password."
-);
-
+showAuthMessage("Enter your email and password.");
 return;
 }
-
 
 const {data,error}=
 await supabaseClient.auth.signInWithPassword({
-
-email:email,
-
-password:password
-
+email,
+password
 });
 
-
 if(error){
-
-showAuthMessage(
-error.message
-);
-
+showAuthMessage(error.message);
 return;
 }
-
 
 currentUser=data.user;
 
@@ -1447,49 +1818,28 @@ await showApp();
 async function logout(){
 
 if(realtimeChannel){
-
-await supabaseClient.removeChannel(
-realtimeChannel
-);
-
+await supabaseClient.removeChannel(realtimeChannel);
 realtimeChannel=null;
-
 }
-
 
 if(lastSeenTimer){
-
-clearInterval(
-lastSeenTimer
-);
-
+clearInterval(lastSeenTimer);
 lastSeenTimer=null;
-
 }
-
 
 await supabaseClient.auth.signOut();
 
 currentUser=null;
 activeChatUser=null;
 
-document
-.getElementById("app")
-.classList.add("hidden");
-
-document
-.getElementById("authScreen")
-.classList.remove("hidden");
+document.getElementById("app").classList.add("hidden");
+document.getElementById("authScreen").classList.remove("hidden");
 
 }
 
 
 function showAuthMessage(message){
-
-document
-.getElementById("authMessage")
-.textContent=message;
-
+document.getElementById("authMessage").textContent=message;
 }
 
 
@@ -1520,27 +1870,15 @@ async function showApp(){
 
 if(!currentUser)return;
 
-document
-.getElementById("authScreen")
-.classList.add("hidden");
+document.getElementById("authScreen").classList.add("hidden");
+document.getElementById("app").classList.remove("hidden");
 
-document
-.getElementById("app")
-.classList.remove("hidden");
-
-
-document
-.getElementById("profileEmail")
-.textContent=
+document.getElementById("profileEmail").textContent=
 currentUser.email||"";
 
-
 await loadProfile();
-
 await loadPosts();
-
 await loadFollowCounts();
-
 await startMessaging();
 
 }
@@ -1555,33 +1893,29 @@ async function loadProfile(){
 const {data,error}=
 await supabaseClient
 .from("profiles")
-.select(
-"username,full_name,last_seen"
-)
+.select("username,full_name,last_seen")
 .eq("id",currentUser.id)
 .maybeSingle();
 
-
 if(error){
-
-console.error(
-"Profile error:",
-error
-);
-
+console.error("Profile:",error);
 return;
-
 }
-
 
 if(data){
 
-document
-.getElementById("profileName")
-.textContent=
+const name=
 data.full_name||
 data.username||
 "User";
+
+document.getElementById("profileName").textContent=name;
+
+const initial=
+name.charAt(0).toUpperCase();
+
+document.getElementById("sidebarAvatar").textContent=initial;
+document.getElementById("createAvatar").textContent=initial;
 
 }
 
@@ -1604,15 +1938,7 @@ last_seen:new Date().toISOString()
 })
 .eq("id",currentUser.id);
 
-
-if(error){
-
-console.error(
-"Last seen:",
-error
-);
-
-}
+if(error)console.error("Last seen:",error);
 
 }
 
@@ -1621,19 +1947,10 @@ function startLastSeen(){
 
 updateLastSeen();
 
-if(lastSeenTimer){
-
-clearInterval(
-lastSeenTimer
-);
-
-}
+if(lastSeenTimer)clearInterval(lastSeenTimer);
 
 lastSeenTimer=
-setInterval(
-updateLastSeen,
-60000
-);
+setInterval(updateLastSeen,60000);
 
 }
 
@@ -1647,46 +1964,21 @@ async function loadFollowCounts(){
 const {count:followers}=
 await supabaseClient
 .from("follows")
-.select("*",{
-count:"exact",
-head:true
-})
-.eq(
-"following_id",
-currentUser.id
-)
-.eq(
-"status",
-"accepted"
-);
-
+.select("*",{count:"exact",head:true})
+.eq("following_id",currentUser.id)
+.eq("status","accepted");
 
 const {count:following}=
 await supabaseClient
 .from("follows")
-.select("*",{
-count:"exact",
-head:true
-})
-.eq(
-"follower_id",
-currentUser.id
-)
-.eq(
-"status",
-"accepted"
-);
+.select("*",{count:"exact",head:true})
+.eq("follower_id",currentUser.id)
+.eq("status","accepted");
 
-
-document
-.getElementById("followersCount")
-.textContent=
+document.getElementById("followersCount").textContent=
 followers||0;
 
-
-document
-.getElementById("followingCount")
-.textContent=
+document.getElementById("followingCount").textContent=
 following||0;
 
 }
@@ -1704,13 +1996,8 @@ function hideSections(){
 "messagesSection",
 "notificationsSection",
 "requestsSection"
-]
-.forEach(id=>{
-
-document
-.getElementById(id)
-.classList.add("hidden");
-
+].forEach(id=>{
+document.getElementById(id).classList.add("hidden");
 });
 
 }
@@ -1720,11 +2007,11 @@ function showHome(){
 
 hideSections();
 
-document
-.getElementById("homeSection")
-.classList.remove("hidden");
+document.getElementById("homeSection").classList.remove("hidden");
 
 loadPosts();
+
+setActiveNav(0);
 
 }
 
@@ -1733,9 +2020,9 @@ function showSearch(){
 
 hideSections();
 
-document
-.getElementById("searchSection")
-.classList.remove("hidden");
+document.getElementById("searchSection").classList.remove("hidden");
+
+setActiveNav(1);
 
 }
 
@@ -1744,11 +2031,11 @@ function showMessages(){
 
 hideSections();
 
-document
-.getElementById("messagesSection")
-.classList.remove("hidden");
+document.getElementById("messagesSection").classList.remove("hidden");
 
 loadConversations();
+
+setActiveNav(2);
 
 }
 
@@ -1757,11 +2044,11 @@ function showNotifications(){
 
 hideSections();
 
-document
-.getElementById("notificationsSection")
-.classList.remove("hidden");
+document.getElementById("notificationsSection").classList.remove("hidden");
 
 loadNotifications();
+
+setActiveNav(3);
 
 }
 
@@ -1770,11 +2057,34 @@ function showRequests(){
 
 hideSections();
 
-document
-.getElementById("requestsSection")
-.classList.remove("hidden");
+document.getElementById("requestsSection").classList.remove("hidden");
 
 loadRequests();
+
+setActiveNav(4);
+
+}
+
+
+function setActiveNav(index){
+
+document.querySelectorAll(".bottom-nav button")
+.forEach((button,i)=>{
+button.classList.toggle("active",i===index);
+});
+
+}
+
+
+function closeMobileChat(){
+
+const layout=document.getElementById("messagesLayout");
+
+if(layout){
+layout.classList.remove("chat-open");
+}
+
+activeChatUser=null;
 
 }
 
@@ -1787,8 +2097,7 @@ function searchUsers(){
 
 clearTimeout(searchTimer);
 
-searchTimer=
-setTimeout(
+searchTimer=setTimeout(
 performUserSearch,
 300
 );
@@ -1798,15 +2107,12 @@ performUserSearch,
 
 async function performUserSearch(){
 
-const input=
-document.getElementById("userSearch");
-
 const term=
-input.value.trim();
+document.getElementById("userSearch")
+.value.trim();
 
 const results=
 document.getElementById("searchResults");
-
 
 if(term.length<2){
 
@@ -1819,18 +2125,14 @@ return;
 
 }
 
-
 const {data,error}=
 await supabaseClient
 .from("profiles")
-.select(
-"id,username,full_name"
-)
+.select("id,username,full_name")
 .or(
 `username.ilike.%${term}%,full_name.ilike.%${term}%`
 )
 .limit(20);
-
 
 if(error){
 
@@ -1845,13 +2147,8 @@ return;
 
 }
 
-
-const users=
-(data||[])
-.filter(
-user=>user.id!==currentUser.id
-);
-
+const users=(data||[])
+.filter(user=>user.id!==currentUser.id);
 
 if(!users.length){
 
@@ -1864,60 +2161,55 @@ return;
 
 }
 
-
 results.innerHTML="";
-
 
 for(const user of users){
 
-const div=
-document.createElement("div");
+const div=document.createElement("div");
 
-div.className=
-"user-result";
+div.className="user-result";
 
+const name=
+user.full_name||
+user.username||
+"User";
+
+const initial=
+name.charAt(0).toUpperCase();
 
 div.innerHTML=`
+
+<div class="avatar">
+${escapeHTML(initial)}
+</div>
 
 <div class="user-info">
 
 <div class="user-name">
-${escapeHTML(
-user.full_name||
-user.username||
-"User"
-)}
+${escapeHTML(name)}
 </div>
 
 <div class="user-username">
-@${escapeHTML(
-user.username||""
-)}
+@${escapeHTML(user.username||"")}
 </div>
 
 </div>
 
 <div style="display:flex;gap:5px">
 
-<button
-onclick="openChat('${user.id}')">
-💬 Chat
+<button onclick="openChat('${user.id}')">
+💬
 </button>
 
-<div
-id="follow-box-${user.id}">
-</div>
+<div id="follow-box-${user.id}"></div>
 
 </div>
 
 `;
 
-
 results.appendChild(div);
 
-await updateFollowButton(
-user.id
-);
+await updateFollowButton(user.id);
 
 }
 
@@ -1933,17 +2225,9 @@ async function getFollowStatus(userId){
 const {data}=
 await supabaseClient
 .from("follows")
-.select(
-"status,follower_id,following_id"
-)
-.eq(
-"follower_id",
-currentUser.id
-)
-.eq(
-"following_id",
-userId
-)
+.select("status,follower_id,following_id")
+.eq("follower_id",currentUser.id)
+.eq("following_id",userId)
 .maybeSingle();
 
 return data;
@@ -1954,58 +2238,41 @@ return data;
 async function updateFollowButton(userId){
 
 const box=
-document.getElementById(
-"follow-box-"+userId
-);
+document.getElementById("follow-box-"+userId);
 
 if(!box)return;
-
 
 const relation=
 await getFollowStatus(userId);
 
-
 if(!relation){
 
 box.innerHTML=
-`
-<button
-onclick="followUser('${userId}')">
+`<button onclick="followUser('${userId}')">
 Follow
-</button>
-`;
+</button>`;
 
 return;
 
 }
-
 
 if(relation.status==="accepted"){
 
 box.innerHTML=
-`
-<button
-class="following"
-onclick="unfollowUser('${userId}')">
+`<button class="following" onclick="unfollowUser('${userId}')">
 Following
-</button>
-`;
+</button>`;
 
 return;
 
 }
 
-
 if(relation.status==="pending"){
 
 box.innerHTML=
-`
-<button
-class="requested"
-onclick="unfollowUser('${userId}')">
+`<button class="requested" onclick="unfollowUser('${userId}')">
 Requested
-</button>
-`;
+</button>`;
 
 }
 
@@ -2020,47 +2287,26 @@ async function followUser(userId){
 
 if(userId===currentUser.id)return;
 
-
 const {error}=
 await supabaseClient
 .from("follows")
 .insert({
-
 follower_id:currentUser.id,
-
 following_id:userId,
-
 status:"pending"
-
 });
-
 
 if(error){
 
-if(error.code==="23505"){
-
-alert(
-"You already sent a request."
-);
-
-}else{
-
-alert(
-error.message
-);
-
-}
-
+alert(error.message);
 return;
 
 }
-
 
 await createNotification(
 userId,
 "follow_request"
 );
-
 
 await performUserSearch();
 
@@ -2077,29 +2323,17 @@ const {error}=
 await supabaseClient
 .from("follows")
 .delete()
-.eq(
-"follower_id",
-currentUser.id
-)
-.eq(
-"following_id",
-userId
-);
-
+.eq("follower_id",currentUser.id)
+.eq("following_id",userId);
 
 if(error){
 
-alert(
-error.message
-);
-
+alert(error.message);
 return;
 
 }
 
-
 await performUserSearch();
-
 await loadFollowCounts();
 
 }
@@ -2111,13 +2345,9 @@ REQUESTS
 
 async function loadRequests(){
 
-const list=
-document.getElementById(
-"requestsList"
-);
+const list=document.getElementById("requestsList");
 
 list.innerHTML="Loading...";
-
 
 const {data,error}=
 await supabaseClient
@@ -2131,19 +2361,9 @@ username,
 full_name
 )
 `)
-.eq(
-"following_id",
-currentUser.id
-)
-.eq(
-"status",
-"pending"
-)
-.order(
-"created_at",
-{ascending:false}
-);
-
+.eq("following_id",currentUser.id)
+.eq("status","pending")
+.order("created_at",{ascending:false});
 
 if(error){
 
@@ -2158,7 +2378,6 @@ return;
 
 }
 
-
 if(!data||!data.length){
 
 list.innerHTML=
@@ -2170,27 +2389,20 @@ return;
 
 }
 
-
 list.innerHTML="";
-
 
 data.forEach(request=>{
 
-const profile=
-request.profiles||{};
+const profile=request.profiles||{};
 
 const name=
 profile.full_name||
 profile.username||
 "User";
 
+const div=document.createElement("div");
 
-const div=
-document.createElement("div");
-
-div.className=
-"notification";
-
+div.className="notification";
 
 div.innerHTML=`
 
@@ -2218,7 +2430,6 @@ Reject
 
 `;
 
-
 list.appendChild(div);
 
 });
@@ -2231,33 +2442,17 @@ async function acceptRequest(followerId){
 const {error}=
 await supabaseClient
 .from("follows")
-.update({
-status:"accepted"
-})
-.eq(
-"follower_id",
-followerId
-)
-.eq(
-"following_id",
-currentUser.id
-)
-.eq(
-"status",
-"pending"
-);
-
+.update({status:"accepted"})
+.eq("follower_id",followerId)
+.eq("following_id",currentUser.id)
+.eq("status","pending");
 
 if(error){
 
-alert(
-error.message
-);
-
+alert(error.message);
 return;
 
 }
-
 
 await createNotification(
 followerId,
@@ -2265,7 +2460,6 @@ followerId,
 );
 
 await loadRequests();
-
 await loadFollowCounts();
 
 }
@@ -2277,30 +2471,16 @@ const {error}=
 await supabaseClient
 .from("follows")
 .delete()
-.eq(
-"follower_id",
-followerId
-)
-.eq(
-"following_id",
-currentUser.id
-)
-.eq(
-"status",
-"pending"
-);
-
+.eq("follower_id",followerId)
+.eq("following_id",currentUser.id)
+.eq("status","pending");
 
 if(error){
 
-alert(
-error.message
-);
-
+alert(error.message);
 return;
 
 }
-
 
 await loadRequests();
 
@@ -2319,30 +2499,18 @@ postId=null
 
 if(userId===currentUser.id)return;
 
-
 const {error}=
 await supabaseClient
 .from("notifications")
 .insert({
-
 user_id:userId,
-
 actor_id:currentUser.id,
-
 type:type,
-
 post_id:postId
-
 });
 
-
 if(error){
-
-console.error(
-"Notification:",
-error
-);
-
+console.error("Notification:",error);
 }
 
 }
@@ -2350,13 +2518,9 @@ error
 
 async function loadNotifications(){
 
-const list=
-document.getElementById(
-"notificationsList"
-);
+const list=document.getElementById("notificationsList");
 
 list.innerHTML="Loading...";
-
 
 const {data,error}=
 await supabaseClient
@@ -2372,16 +2536,9 @@ username,
 full_name
 )
 `)
-.eq(
-"user_id",
-currentUser.id
-)
-.order(
-"created_at",
-{ascending:false}
-)
+.eq("user_id",currentUser.id)
+.order("created_at",{ascending:false})
 .limit(50);
-
 
 if(error){
 
@@ -2396,7 +2553,6 @@ return;
 
 }
 
-
 if(!data||!data.length){
 
 list.innerHTML=
@@ -2408,54 +2564,32 @@ return;
 
 }
 
-
 list.innerHTML="";
-
 
 data.forEach(notification=>{
 
-const profile=
-notification.profiles||{};
+const profile=notification.profiles||{};
 
 const name=
 profile.full_name||
 profile.username||
 "Someone";
 
+let message="sent you a notification.";
 
-let message=
-"sent you a notification.";
-
-
-if(notification.type===
-"follow_request"){
-
-message=
-"sent you a follow request.";
-
+if(notification.type==="follow_request"){
+message="sent you a follow request.";
 }
 
-
-if(notification.type===
-"follow_accepted"){
-
-message=
-"accepted your follow request.";
-
+if(notification.type==="follow_accepted"){
+message="accepted your follow request.";
 }
 
-
-const div=
-document.createElement("div");
+const div=document.createElement("div");
 
 div.className=
 "notification "+
-(
-notification.read
-?""
-:"unread"
-);
-
+(notification.read?"":"unread");
 
 div.innerHTML=`
 
@@ -2466,32 +2600,20 @@ ${escapeHTML(name)}
 ${message}
 
 <small>
-${new Date(
-notification.created_at
-).toLocaleString()}
+${new Date(notification.created_at).toLocaleString()}
 </small>
 
 `;
-
 
 list.appendChild(div);
 
 });
 
-
 await supabaseClient
 .from("notifications")
-.update({
-read:true
-})
-.eq(
-"user_id",
-currentUser.id
-)
-.eq(
-"read",
-false
-);
+.update({read:true})
+.eq("user_id",currentUser.id)
+.eq("read",false);
 
 }
 
@@ -2521,12 +2643,9 @@ realtimeChannel
 
 }
 
-
 realtimeChannel=
 supabaseClient
-.channel(
-"dayoff-messages-"+currentUser.id
-)
+.channel("dayoff-messages-"+currentUser.id)
 .on(
 "postgres_changes",
 {
@@ -2536,30 +2655,22 @@ table:"messages"
 },
 payload=>{
 
-const message=
-payload.new;
-
+const message=payload.new;
 
 if(
-message.sender_id===
-currentUser.id||
-message.receiver_id===
-currentUser.id
+message.sender_id===currentUser.id||
+message.receiver_id===currentUser.id
 ){
 
 if(
 activeChatUser&&
 (
-message.sender_id===
-activeChatUser||
-message.receiver_id===
-activeChatUser
+message.sender_id===activeChatUser||
+message.receiver_id===activeChatUser
 )
 ){
 
-loadChatMessages(
-activeChatUser
-);
+loadChatMessages(activeChatUser);
 
 }else{
 
@@ -2571,14 +2682,9 @@ loadConversations();
 
 }
 )
-.subscribe(
-status=>{
-console.log(
-"Messages realtime:",
-status
-);
-}
-);
+.subscribe(status=>{
+console.log("Messages realtime:",status);
+});
 
 }
 
@@ -2589,13 +2695,9 @@ CONVERSATIONS
 
 async function loadConversations(){
 
-const list=
-document.getElementById(
-"conversationList"
-);
+const list=document.getElementById("conversationList");
 
 if(!list)return;
-
 
 const {data,error}=
 await supabaseClient
@@ -2611,11 +2713,7 @@ read
 .or(
 `sender_id.eq.${currentUser.id},receiver_id.eq.${currentUser.id}`
 )
-.order(
-"created_at",
-{ascending:false}
-);
-
+.order("created_at",{ascending:false});
 
 if(error){
 
@@ -2630,7 +2728,6 @@ return;
 
 }
 
-
 if(!data||!data.length){
 
 list.innerHTML=
@@ -2642,39 +2739,28 @@ return;
 
 }
 
-
 const users={};
-
 
 data.forEach(message=>{
 
 const otherId=
-message.sender_id===
-currentUser.id
+message.sender_id===currentUser.id
 ?message.receiver_id
 :message.sender_id;
-
 
 if(!users[otherId]){
 
 users[otherId]={
-
 id:otherId,
-
 lastMessage:message.content,
-
 created_at:message.created_at,
-
 unread:0
-
 };
 
 }
 
-
 if(
-message.receiver_id===
-currentUser.id&&
+message.receiver_id===currentUser.id&&
 message.read===false
 ){
 
@@ -2684,90 +2770,51 @@ users[otherId].unread++;
 
 });
 
-
-const ids=
-Object.keys(users);
-
+const ids=Object.keys(users);
 
 const {data:profiles,error:profileError}=
 await supabaseClient
 .from("profiles")
-.select(
-"id,username,full_name,last_seen"
-)
-.in(
-"id",
-ids
-);
-
+.select("id,username,full_name,last_seen")
+.in("id",ids);
 
 if(profileError){
 
-console.error(
-profileError
-);
-
+console.error(profileError);
 return;
 
 }
 
-
 const profileMap={};
 
-
-(profiles||[])
-.forEach(profile=>{
-
+(profiles||[]).forEach(profile=>{
 profileMap[profile.id]=profile;
-
 });
-
 
 list.innerHTML="";
 
-
 ids.forEach(id=>{
 
-const item=
-users[id];
-
-const profile=
-profileMap[id]||{};
-
+const item=users[id];
+const profile=profileMap[id]||{};
 
 const name=
 profile.full_name||
 profile.username||
 "User";
 
-
-const div=
-document.createElement("div");
-
+const div=document.createElement("div");
 
 div.className=
 "conversation "+
-(
-activeChatUser===id
-?"active"
-:""
-);
+(activeChatUser===id?"active":"");
 
+div.dataset.name=name.toLowerCase();
 
-div.dataset.name=
-name.toLowerCase();
-
-
-div.onclick=
-()=>openChat(id);
-
+div.onclick=()=>openChat(id);
 
 const initial=
-(
-name.charAt(0)||
-"U"
-).toUpperCase();
-
+name.charAt(0).toUpperCase();
 
 div.innerHTML=`
 
@@ -2799,7 +2846,6 @@ ${item.unread}
 
 `;
 
-
 list.appendChild(div);
 
 });
@@ -2808,7 +2854,7 @@ list.appendChild(div);
 
 
 /* =====================================================
-CHAT USER SEARCH
+CHAT SEARCH
 ===================================================== */
 
 function searchChatUsers(){
@@ -2826,78 +2872,52 @@ performChatUserSearch,
 
 async function performChatUserSearch(){
 
-const input=
-document.getElementById(
-"messageUserSearch"
-);
-
 const term=
-input.value.trim();
-
+document
+.getElementById("messageUserSearch")
+.value.trim();
 
 const results=
-document.getElementById(
-"chatSearchResults"
-);
-
+document.getElementById("chatSearchResults");
 
 if(term.length<2){
 
 results.innerHTML="";
-
 return;
 
 }
 
-
 const {data,error}=
 await supabaseClient
 .from("profiles")
-.select(
-"id,username,full_name"
-)
+.select("id,username,full_name")
 .or(
 `username.ilike.%${term}%,full_name.ilike.%${term}%`
 )
 .limit(10);
 
-
 if(error){
 
-console.error(error);
-
-results.innerHTML=
-"<small>Search failed.</small>";
-
+results.innerHTML="<small>Search failed.</small>";
 return;
 
 }
 
-
-const users=
-(data||[])
-.filter(
-user=>user.id!==currentUser.id
-);
-
+const users=(data||[])
+.filter(user=>user.id!==currentUser.id);
 
 results.innerHTML="";
 
-
 users.forEach(user=>{
 
-const div=
-document.createElement("div");
+const div=document.createElement("div");
 
-div.className=
-"chat-search-result";
-
+div.className="chat-search-result";
 
 const name=
 user.full_name||
 user.username||
 "User";
-
 
 div.innerHTML=`
 
@@ -2905,13 +2925,11 @@ div.innerHTML=`
 ${escapeHTML(name)}
 </span>
 
-<button
-onclick="openChat('${user.id}')">
+<button onclick="openChat('${user.id}')">
 Chat
 </button>
 
 `;
-
 
 results.appendChild(div);
 
@@ -2928,68 +2946,50 @@ async function openChat(userId){
 
 activeChatUser=userId;
 
-
 showMessages();
 
-
 const layout=
-document.getElementById(
-"messagesLayout"
-);
+document.getElementById("messagesLayout");
 
 if(layout&&window.innerWidth<=850){
 
-layout.classList.add(
-"chat-open"
-);
+layout.classList.add("chat-open");
 
 }
-
 
 const {data:user,error}=
 await supabaseClient
 .from("profiles")
-.select(
-"id,username,full_name,last_seen"
-)
-.eq(
-"id",
-userId
-)
+.select("id,username,full_name,last_seen")
+.eq("id",userId)
 .maybeSingle();
-
 
 if(error||!user){
 
 console.error(error);
-
 return;
 
 }
-
 
 const name=
 user.full_name||
 user.username||
 "User";
 
-
 const initial=
-(
-name.charAt(0)||
-"U"
-).toUpperCase();
-
+name.charAt(0).toUpperCase();
 
 const online=
-isUserOnline(
-user.last_seen
-);
+isUserOnline(user.last_seen);
 
+document.getElementById("chatHeader").innerHTML=`
 
-document
-.getElementById("chatHeader")
-.innerHTML=`
+<button
+class="chat-back"
+onclick="closeMobileChat()"
+style="background:transparent;font-size:25px;padding:4px">
+‹
+</button>
 
 <div class="avatar">
 ${escapeHTML(initial)}
@@ -3001,56 +3001,22 @@ ${escapeHTML(initial)}
 ${escapeHTML(name)}
 </div>
 
-<div class="chat-status ${
-online?"online":""
-}">
-${
-online
-?"● Online"
-:"Offline"
-}
+<div class="chat-status ${online?"online":""}">
+${online?"● Online":"Offline"}
 </div>
 
 </div>
 
 `;
 
+document.getElementById("messageInput").disabled=false;
+document.getElementById("sendMessageButton").disabled=false;
 
-document
-.getElementById("messageInput")
-.disabled=false;
-
-
-document
-.getElementById("sendMessageButton")
-.disabled=false;
-
-
-await loadChatMessages(
-userId
-);
-
+await loadChatMessages(userId);
 await loadConversations();
 
-
-const searchInput=
-document.getElementById(
-"messageUserSearch"
-);
-
-
-if(searchInput){
-
-searchInput.value="";
-
-}
-
-
-document
-.getElementById(
-"chatSearchResults"
-)
-.innerHTML="";
+document.getElementById("messageUserSearch").value="";
+document.getElementById("chatSearchResults").innerHTML="";
 
 }
 
@@ -3063,77 +3029,44 @@ function isUserOnline(lastSeen){
 
 if(!lastSeen)return false;
 
-
 const difference=
 Date.now()-
 new Date(lastSeen).getTime();
 
-
-return difference<
-2*60*1000;
+return difference<2*60*1000;
 
 }
 
 
 /* =====================================================
-LOAD CHAT MESSAGES
+LOAD CHAT
 ===================================================== */
 
 async function loadChatMessages(userId){
 
-const list=
-document.getElementById(
-"messagesList"
-);
+const list=document.getElementById("messagesList");
 
 if(!list)return;
-
 
 const {data:sent,error:sentError}=
 await supabaseClient
 .from("messages")
-.select(
-"id,sender_id,receiver_id,content,created_at,read"
-)
-.eq(
-"sender_id",
-currentUser.id
-)
-.eq(
-"receiver_id",
-userId
-)
-.order(
-"created_at",
-{ascending:true}
-);
-
+.select("id,sender_id,receiver_id,content,created_at,read")
+.eq("sender_id",currentUser.id)
+.eq("receiver_id",userId)
+.order("created_at",{ascending:true});
 
 const {data:received,error:receivedError}=
 await supabaseClient
 .from("messages")
-.select(
-"id,sender_id,receiver_id,content,created_at,read"
-)
-.eq(
-"sender_id",
-userId
-)
-.eq(
-"receiver_id",
-currentUser.id
-)
-.order(
-"created_at",
-{ascending:true}
-);
-
+.select("id,sender_id,receiver_id,content,created_at,read")
+.eq("sender_id",userId)
+.eq("receiver_id",currentUser.id)
+.order("created_at",{ascending:true});
 
 if(sentError||receivedError){
 
-console.error(
-sentError||receivedError
-);
+console.error(sentError||receivedError);
 
 list.innerHTML=
 `<div class="empty">
@@ -3144,58 +3077,40 @@ return;
 
 }
 
-
 const messages=[
 ...(sent||[]),
 ...(received||[])
-]
-.sort(
+].sort(
 (a,b)=>
 new Date(a.created_at)-
 new Date(b.created_at)
 );
 
-
 if(!messages.length){
 
 list.innerHTML=
 `<div class="empty">
-No messages yet.<br>
-Say hello 👋
+No messages yet.<br>Say hello 👋
 </div>`;
 
 }else{
 
 list.innerHTML="";
 
-
 messages.forEach(message=>{
 
 const mine=
-message.sender_id===
-currentUser.id;
+message.sender_id===currentUser.id;
 
-
-const row=
-document.createElement("div");
-
+const row=document.createElement("div");
 
 row.className=
 "message-row "+
-(
-mine
-?"mine"
-:""
-);
+(mine?"mine":"");
 
+const bubble=document.createElement("div");
 
-const bubble=
-document.createElement("div");
-
-
-bubble.className=
-"message-bubble";
-
+bubble.className="message-bubble";
 
 bubble.innerHTML=`
 
@@ -3205,67 +3120,33 @@ ${escapeHTML(message.content)}
 
 <div class="message-time">
 
-${new Date(
-message.created_at
-).toLocaleTimeString(
-[],
-{
+${new Date(message.created_at)
+.toLocaleTimeString([],{
 hour:"2-digit",
 minute:"2-digit"
-}
-)}
+})}
 
-${
-mine
-?(
-message.read
-?" ✓✓"
-:" ✓"
-)
-:""
-}
+${mine?(message.read?" ✓✓":" ✓"):""}
 
 </div>
 
 `;
 
-
-row.appendChild(
-bubble
-);
-
-list.appendChild(
-row
-);
+row.appendChild(bubble);
+list.appendChild(row);
 
 });
 
-
-list.scrollTop=
-list.scrollHeight;
+list.scrollTop=list.scrollHeight;
 
 }
 
-
-/* Mark received messages as read */
-
 await supabaseClient
 .from("messages")
-.update({
-read:true
-})
-.eq(
-"sender_id",
-userId
-)
-.eq(
-"receiver_id",
-currentUser.id
-)
-.eq(
-"read",
-false
-);
+.update({read:true})
+.eq("sender_id",userId)
+.eq("receiver_id",currentUser.id)
+.eq("read",false);
 
 }
 
@@ -3278,64 +3159,57 @@ async function sendMessage(){
 
 if(!activeChatUser)return;
 
+const input=document.getElementById("messageInput");
 
-const input=
-document.getElementById(
-"messageInput"
-);
-
-
-const content=
-input.value.trim();
-
+const content=input.value.trim();
 
 if(!content)return;
 
+/*
+Get the authenticated user directly from Supabase.
+This avoids using an outdated user object.
+*/
+
+const {
+data:{
+user
+},
+error:userError
+}=
+await supabaseClient.auth.getUser();
+
+if(userError||!user){
+
+alert("Your session has expired. Please log in again.");
+return;
+
+}
 
 const {error}=
 await supabaseClient
 .from("messages")
 .insert({
-
-sender_id:currentUser.id,
-
+sender_id:user.id,
 receiver_id:activeChatUser,
-
-content:content,
-
+content,
 read:false
-
 });
-
 
 if(error){
 
-alert(
-error.message
-);
-
+alert(error.message);
 console.error(error);
-
 return;
 
 }
 
-
 input.value="";
 
-
-await loadChatMessages(
-activeChatUser
-);
-
+await loadChatMessages(activeChatUser);
 await loadConversations();
 
 }
 
-
-/* =====================================================
-ENTER TO SEND
-===================================================== */
 
 function handleMessageKey(event){
 
@@ -3353,21 +3227,14 @@ sendMessage();
 }
 
 
-/* =====================================================
-FILTER CONVERSATIONS
-===================================================== */
-
 function filterConversations(){
 
 const term=
 document
-.getElementById(
-"conversationSearch"
-)
+.getElementById("conversationSearch")
 .value
 .toLowerCase()
 .trim();
-
 
 document
 .querySelectorAll(".conversation")
@@ -3375,7 +3242,6 @@ document
 
 const name=
 item.dataset.name||"";
-
 
 item.style.display=
 name.includes(term)
@@ -3388,35 +3254,22 @@ name.includes(term)
 
 
 /* =====================================================
-POST MEDIA
+MEDIA
 ===================================================== */
 
 function choosePhoto(){
-
-document
-.getElementById("photoInput")
-.click();
-
+document.getElementById("photoInput").click();
 }
-
 
 function chooseVideo(){
-
-document
-.getElementById("videoInput")
-.click();
-
+document.getElementById("videoInput").click();
 }
-
 
 function showSelectedFile(input){
 
 if(!input.files.length)return;
 
-
-selectedFile=
-input.files[0];
-
+selectedFile=input.files[0];
 
 selectedFileType=
 selectedFile.type.startsWith("image/")
@@ -3425,12 +3278,8 @@ selectedFile.type.startsWith("image/")
 ?"video"
 :null;
 
-
-document
-.getElementById("selectedFile")
-.textContent=
-"Selected: "+
-selectedFile.name;
+document.getElementById("selectedFile").textContent=
+"Selected: "+selectedFile.name;
 
 }
 
@@ -3441,27 +3290,42 @@ CREATE POST
 
 async function createPost(){
 
+/*
+Always get the authenticated Supabase user.
+*/
+
+const {
+data:{
+user
+},
+error:authError
+}=
+await supabaseClient.auth.getUser();
+
+if(authError||!user){
+
+alert("Please log in again before posting.");
+return;
+
+}
+
+currentUser=user;
+
 const content=
 document
 .getElementById("postContent")
 .value
 .trim();
 
-
 if(!content&&!selectedFile){
 
-alert(
-"Write something or select a photo/video."
-);
-
+alert("Write something or select a photo/video.");
 return;
 
 }
 
-
 let mediaUrl=null;
 let mediaType=null;
-
 
 if(selectedFile){
 
@@ -3471,9 +3335,8 @@ selectedFile.name
 .pop()
 .toLowerCase();
 
-
 const fileName=
-currentUser.id+
+user.id+
 "/"+
 Date.now()+
 "-"+
@@ -3482,7 +3345,6 @@ Math.random()
 .substring(2)+
 "."+
 extension;
-
 
 const {error:uploadError}=
 await supabaseClient
@@ -3497,55 +3359,45 @@ upsert:false
 }
 );
 
-
 if(uploadError){
 
-alert(
-uploadError.message
-);
-
+alert(uploadError.message);
 return;
 
 }
-
 
 const {data:publicData}=
 supabaseClient
 .storage
 .from("post-media")
-.getPublicUrl(
-fileName
-);
+.getPublicUrl(fileName);
 
-
-mediaUrl=
-publicData.publicUrl;
-
-mediaType=
-selectedFileType;
+mediaUrl=publicData.publicUrl;
+mediaType=selectedFileType;
 
 }
 
+/*
+The important part:
+user_id is taken directly from auth.getUser().
+*/
 
 const {error}=
 await supabaseClient
 .from("posts")
 .insert({
-
-user_id:currentUser.id,
-
+user_id:user.id,
 content:content||null,
-
 media_url:mediaUrl,
-
 media_type:mediaType
-
 });
-
 
 if(error){
 
+console.error("CREATE POST ERROR:",error);
+
 alert(
+"Unable to publish post: "+
 error.message
 );
 
@@ -3553,30 +3405,14 @@ return;
 
 }
 
-
-document
-.getElementById("postContent")
-.value="";
-
-
-document
-.getElementById("selectedFile")
-.textContent="";
-
+document.getElementById("postContent").value="";
+document.getElementById("selectedFile").textContent="";
 
 selectedFile=null;
 selectedFileType=null;
 
-
-document
-.getElementById("photoInput")
-.value="";
-
-
-document
-.getElementById("videoInput")
-.value="";
-
+document.getElementById("photoInput").value="";
+document.getElementById("videoInput").value="";
 
 await loadPosts();
 
@@ -3590,10 +3426,7 @@ LOAD POSTS
 async function loadPosts(){
 
 const container=
-document.getElementById(
-"postsContainer"
-);
-
+document.getElementById("postsContainer");
 
 const {data,error}=
 await supabaseClient
@@ -3610,86 +3443,74 @@ username,
 full_name
 )
 `)
-.order(
-"created_at",
-{ascending:false}
-);
-
+.order("created_at",{ascending:false});
 
 if(error){
 
-console.error(
-"Posts:",
-error
-);
+console.error("Posts:",error);
 
 container.innerHTML=
 `<div class="empty">
-Unable to load posts.
+Unable to load your feed.
 </div>`;
 
 return;
 
 }
-
 
 if(!data||!data.length){
 
 container.innerHTML=
 `<div class="empty">
-No posts yet. Be the first to post!
+No posts yet.<br>
+Be the first person to post on Dayoff.
 </div>`;
 
 return;
 
 }
 
-
 container.innerHTML="";
-
 
 for(const post of data){
 
-const profile=
-post.profiles||{};
-
+const profile=post.profiles||{};
 
 const name=
 profile.full_name||
 profile.username||
 "Dayoff User";
 
+const initial=
+name.charAt(0).toUpperCase();
 
 let mediaHTML="";
-
 
 if(
 post.media_url&&
 post.media_type==="image"
 ){
 
-mediaHTML=
-`
+mediaHTML=`
 <img
 class="post-media"
 src="${escapeAttribute(post.media_url)}"
-alt="Post image">
+alt="Dayoff post image">
 `;
 
 }
-
 
 if(
 post.media_url&&
 post.media_type==="video"
 ){
 
-mediaHTML=
-`
+mediaHTML=`
 <video
 class="post-media"
 controls
-playsinline>
+playsinline
+preload="metadata">
 
 <source
 src="${escapeAttribute(post.media_url)}">
@@ -3699,18 +3520,20 @@ src="${escapeAttribute(post.media_url)}">
 
 }
 
-
 const article=
 document.createElement("article");
 
-
-article.className=
-"card post";
-
+article.className="post";
 
 article.innerHTML=`
 
 <div class="post-header">
+
+<div class="author-wrap">
+
+<div class="author-avatar">
+${escapeHTML(initial)}
+</div>
 
 <div>
 
@@ -3719,15 +3542,31 @@ ${escapeHTML(name)}
 </div>
 
 <div class="date">
-${new Date(
-post.created_at
-).toLocaleString()}
+${new Date(post.created_at).toLocaleString()}
 </div>
 
 </div>
 
 </div>
 
+${
+post.user_id===currentUser.id
+?
+`
+<button
+class="delete-btn"
+onclick="deletePost(${post.id})"
+style="
+background:transparent;
+padding:8px;
+font-size:17px">
+⋯
+</button>
+`
+:""
+}
+
+</div>
 
 ${
 post.content
@@ -3740,9 +3579,7 @@ ${escapeHTML(post.content)}
 :""
 }
 
-
 ${mediaHTML}
-
 
 <div class="actions">
 
@@ -3752,41 +3589,21 @@ onclick="toggleLike(${post.id})">
 ❤️ Like
 </button>
 
-<button
-onclick="toggleComments(${post.id})">
+<button onclick="toggleComments(${post.id})">
 💬 Comment
 </button>
 
-<button
-onclick="sharePost(${post.id})">
-🔗 Share
+<button onclick="sharePost(${post.id})">
+↗ Share
 </button>
-
-
-${
-post.user_id===currentUser.id
-?
-`
-<button
-class="delete-btn"
-onclick="deletePost(${post.id})">
-🗑️
-</button>
-`
-:""
-}
 
 </div>
-
 
 <div
 id="comments-${post.id}"
 class="comments">
 
-<div
-id="comment-list-${post.id}">
-</div>
-
+<div id="comment-list-${post.id}"></div>
 
 <div class="comment-form">
 
@@ -3794,8 +3611,7 @@ id="comment-list-${post.id}">
 id="comment-input-${post.id}"
 placeholder="Write a comment...">
 
-<button
-onclick="addComment(${post.id})">
+<button onclick="addComment(${post.id})">
 Send
 </button>
 
@@ -3805,15 +3621,9 @@ Send
 
 `;
 
+container.appendChild(article);
 
-container.appendChild(
-article
-);
-
-
-await loadLikeStatus(
-post.id
-);
+await loadLikeStatus(post.id);
 
 }
 
@@ -3830,46 +3640,25 @@ const {data}=
 await supabaseClient
 .from("post_likes")
 .select("user_id")
-.eq(
-"post_id",
-postId
-);
-
+.eq("post_id",postId);
 
 const button=
-document.getElementById(
-"like-"+postId
-);
-
+document.getElementById("like-"+postId);
 
 if(!button)return;
 
-
-const liked=
-(data||[])
-.some(
-row=>row.user_id===
-currentUser.id
-);
-
+const liked=(data||[])
+.some(row=>row.user_id===currentUser.id);
 
 if(liked){
 
-button.classList.add(
-"liked"
-);
-
-button.textContent=
-"❤️ Liked";
+button.classList.add("liked");
+button.textContent="❤️ Liked";
 
 }else{
 
-button.classList.remove(
-"liked"
-);
-
-button.textContent=
-"❤️ Like";
+button.classList.remove("liked");
+button.textContent="♡ Like";
 
 }
 
@@ -3882,49 +3671,30 @@ const {data}=
 await supabaseClient
 .from("post_likes")
 .select("post_id")
-.eq(
-"post_id",
-postId
-)
-.eq(
-"user_id",
-currentUser.id
-)
+.eq("post_id",postId)
+.eq("user_id",currentUser.id)
 .maybeSingle();
-
 
 if(data){
 
 await supabaseClient
 .from("post_likes")
 .delete()
-.eq(
-"post_id",
-postId
-)
-.eq(
-"user_id",
-currentUser.id
-);
+.eq("post_id",postId)
+.eq("user_id",currentUser.id);
 
 }else{
 
 await supabaseClient
 .from("post_likes")
 .insert({
-
 post_id:postId,
-
 user_id:currentUser.id
-
 });
 
 }
 
-
-await loadLikeStatus(
-postId
-);
+await loadLikeStatus(postId);
 
 }
 
@@ -3936,26 +3706,18 @@ COMMENTS
 async function toggleComments(postId){
 
 const box=
-document.getElementById(
-"comments-"+postId
-);
-
+document.getElementById("comments-"+postId);
 
 if(box.style.display==="block"){
 
 box.style.display="none";
-
 return;
 
 }
 
-
 box.style.display="block";
 
-
-await loadComments(
-postId
-);
+await loadComments(postId);
 
 }
 
@@ -3963,10 +3725,7 @@ postId
 async function loadComments(postId){
 
 const list=
-document.getElementById(
-"comment-list-"+postId
-);
-
+document.getElementById("comment-list-"+postId);
 
 const {data,error}=
 await supabaseClient
@@ -3980,25 +3739,15 @@ username,
 full_name
 )
 `)
-.eq(
-"post_id",
-postId
-)
-.order(
-"created_at",
-{ascending:true}
-);
-
+.eq("post_id",postId)
+.order("created_at",{ascending:true});
 
 if(error){
 
-list.innerHTML=
-"<p>Unable to load comments.</p>";
-
+list.innerHTML="<p>Unable to load comments.</p>";
 return;
 
 }
-
 
 if(!data||!data.length){
 
@@ -4009,41 +3758,29 @@ return;
 
 }
 
-
 list.innerHTML="";
-
 
 data.forEach(comment=>{
 
-const profile=
-comment.profiles||{};
-
+const profile=comment.profiles||{};
 
 const name=
 profile.full_name||
 profile.username||
 "User";
 
-
-const div=
-document.createElement("div");
-
+const div=document.createElement("div");
 
 div.className="comment";
 
-
-div.innerHTML=
-`
+div.innerHTML=`
 <strong>
 ${escapeHTML(name)}
 </strong>
 ${escapeHTML(comment.content)}
 `;
 
-
-list.appendChild(
-div
-);
+list.appendChild(div);
 
 });
 
@@ -4053,49 +3790,31 @@ div
 async function addComment(postId){
 
 const input=
-document.getElementById(
-"comment-input-"+postId
-);
+document.getElementById("comment-input-"+postId);
 
-
-const content=
-input.value.trim();
-
+const content=input.value.trim();
 
 if(!content)return;
-
 
 const {error}=
 await supabaseClient
 .from("comments")
 .insert({
-
 post_id:postId,
-
 user_id:currentUser.id,
-
-content:content
-
+content
 });
-
 
 if(error){
 
-alert(
-error.message
-);
-
+alert(error.message);
 return;
 
 }
 
-
 input.value="";
 
-
-await loadComments(
-postId
-);
+await loadComments(postId);
 
 }
 
@@ -4106,37 +3825,21 @@ DELETE POST
 
 async function deletePost(postId){
 
-if(
-!confirm(
-"Delete this post?"
-)
-)return;
-
+if(!confirm("Delete this post?"))return;
 
 const {error}=
 await supabaseClient
 .from("posts")
 .delete()
-.eq(
-"id",
-postId
-)
-.eq(
-"user_id",
-currentUser.id
-);
-
+.eq("id",postId)
+.eq("user_id",currentUser.id);
 
 if(error){
 
-alert(
-error.message
-);
-
+alert(error.message);
 return;
 
 }
-
 
 await loadPosts();
 
@@ -4144,7 +3847,7 @@ await loadPosts();
 
 
 /* =====================================================
-SHARE POST
+SHARE
 ===================================================== */
 
 async function sharePost(postId){
@@ -4152,22 +3855,16 @@ async function sharePost(postId){
 const url=
 window.location.origin+
 window.location.pathname+
-"?post="+
-postId;
-
+"?post="+postId;
 
 if(navigator.share){
 
 try{
 
 await navigator.share({
-
 title:"Dayoff Post",
-
 text:"Check out this post on Dayoff.",
-
 url:url
-
 });
 
 }catch(e){}
@@ -4176,13 +3873,9 @@ url:url
 
 try{
 
-await navigator.clipboard.writeText(
-url
-);
+await navigator.clipboard.writeText(url);
 
-alert(
-"Post link copied!"
-);
+alert("Post link copied!");
 
 }catch(e){
 
@@ -4202,14 +3895,9 @@ LIVE
 function openLiveModal(){
 
 const modal=
-document.getElementById(
-"liveModal"
-);
+document.getElementById("liveModal");
 
-modal.classList.remove(
-"hidden"
-);
-
+modal.classList.remove("hidden");
 modal.style.display="flex";
 
 }
@@ -4218,14 +3906,9 @@ modal.style.display="flex";
 function closeLiveModal(){
 
 const modal=
-document.getElementById(
-"liveModal"
-);
+document.getElementById("liveModal");
 
-modal.classList.add(
-"hidden"
-);
-
+modal.classList.add("hidden");
 modal.style.display="none";
 
 }
@@ -4234,7 +3917,7 @@ modal.style.display="none";
 function startLive(){
 
 alert(
-"Real camera live streaming will be connected in the Dayoff Live Streaming stage."
+"Live camera broadcasting will be connected in the Dayoff Live Streaming stage."
 );
 
 closeLiveModal();
@@ -4248,9 +3931,7 @@ SECURITY
 
 function escapeHTML(value){
 
-return String(
-value??""
-)
+return String(value??"")
 .replace(/&/g,"&amp;")
 .replace(/</g,"&lt;")
 .replace(/>/g,"&gt;")
@@ -4258,7 +3939,6 @@ value??""
 .replace(/'/g,"&#039;");
 
 }
-
 
 function escapeAttribute(value){
 
@@ -4268,7 +3948,7 @@ return escapeHTML(value);
 
 
 /* =====================================================
-START DAYOFF
+START
 ===================================================== */
 
 checkSession();
