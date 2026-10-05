@@ -1,0 +1,1426 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Dayoff</title>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+<style>
+*{
+    box-sizing:border-box;
+    margin:0;
+    padding:0;
+}
+
+body{
+    font-family:Arial,Helvetica,sans-serif;
+    background:#f5f6f8;
+    color:#111827;
+}
+
+button,input{
+    font-family:inherit;
+}
+
+button{
+    cursor:pointer;
+    border:0;
+}
+
+.hidden{
+    display:none!important;
+}
+
+/* =========================
+   AUTH
+========================= */
+
+.auth-page{
+    min-height:100vh;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    padding:20px;
+    background:linear-gradient(135deg,#fff,#fff1f3);
+}
+
+.auth-box{
+    width:100%;
+    max-width:420px;
+    background:white;
+    border-radius:22px;
+    padding:30px;
+    box-shadow:0 15px 50px rgba(0,0,0,.08);
+}
+
+.auth-logo{
+    text-align:center;
+    font-size:34px;
+    font-weight:800;
+    margin-bottom:8px;
+}
+
+.auth-logo span{
+    color:#ff304f;
+}
+
+.auth-subtitle{
+    text-align:center;
+    color:#777;
+    margin-bottom:25px;
+}
+
+.auth-box input{
+    width:100%;
+    padding:14px;
+    border:1px solid #ddd;
+    border-radius:10px;
+    margin-bottom:12px;
+    outline:none;
+}
+
+.auth-box input:focus{
+    border-color:#ff304f;
+}
+
+.primary-btn{
+    width:100%;
+    padding:14px;
+    border-radius:10px;
+    background:#ff304f;
+    color:white;
+    font-weight:700;
+    font-size:15px;
+}
+
+.auth-switch{
+    text-align:center;
+    margin-top:18px;
+    color:#777;
+    font-size:14px;
+}
+
+.auth-switch button{
+    background:none;
+    color:#ff304f;
+    font-weight:bold;
+}
+
+.message{
+    padding:11px;
+    background:#fff1f2;
+    color:#be123c;
+    border-radius:9px;
+    margin-bottom:12px;
+    font-size:14px;
+}
+
+/* =========================
+   TOP BAR
+========================= */
+
+.topbar{
+    height:64px;
+    background:white;
+    border-bottom:1px solid #e5e7eb;
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    padding:0 6%;
+    position:sticky;
+    top:0;
+    z-index:100;
+}
+
+.logo{
+    font-size:26px;
+    font-weight:800;
+}
+
+.logo span{
+    color:#ff304f;
+}
+
+.search{
+    width:300px;
+    background:#f1f3f5;
+    border:0;
+    border-radius:25px;
+    padding:11px 18px;
+    outline:none;
+}
+
+.top-actions{
+    display:flex;
+    align-items:center;
+    gap:10px;
+}
+
+.icon-btn{
+    width:40px;
+    height:40px;
+    border-radius:50%;
+    background:#f1f3f5;
+    font-size:17px;
+}
+
+.avatar{
+    width:40px;
+    height:40px;
+    border-radius:50%;
+    background:linear-gradient(135deg,#ff304f,#7c3aed);
+    color:white;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    font-weight:bold;
+}
+
+/* =========================
+   LAYOUT
+========================= */
+
+.layout{
+    max-width:1200px;
+    margin:auto;
+    display:grid;
+    grid-template-columns:230px 1fr 260px;
+    gap:24px;
+    padding:25px 15px 100px;
+}
+
+.sidebar{
+    position:sticky;
+    top:90px;
+    height:fit-content;
+}
+
+.menu-item{
+    display:flex;
+    align-items:center;
+    gap:14px;
+    padding:13px 15px;
+    border-radius:12px;
+    margin-bottom:5px;
+    font-weight:600;
+    cursor:pointer;
+}
+
+.menu-item:hover,
+.menu-item.active{
+    background:#ffecef;
+    color:#ff304f;
+}
+
+.live-menu{
+    background:#ff304f!important;
+    color:white!important;
+    margin-top:15px;
+}
+
+.feed{
+    min-width:0;
+}
+
+/* =========================
+   STORIES
+========================= */
+
+.stories{
+    background:white;
+    padding:15px;
+    border-radius:15px;
+    display:flex;
+    gap:14px;
+    overflow-x:auto;
+    margin-bottom:18px;
+}
+
+.story{
+    min-width:70px;
+    text-align:center;
+    font-size:12px;
+}
+
+.story-ring{
+    width:58px;
+    height:58px;
+    margin:auto auto 6px;
+    border-radius:50%;
+    padding:3px;
+    background:linear-gradient(45deg,#ff304f,#7c3aed,#ff9f1c);
+}
+
+.story-img{
+    width:100%;
+    height:100%;
+    border-radius:50%;
+    background:#ddd;
+    border:3px solid white;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    font-weight:bold;
+}
+
+/* =========================
+   CREATE POST
+========================= */
+
+.create-box{
+    background:white;
+    padding:17px;
+    border-radius:15px;
+    margin-bottom:18px;
+}
+
+.create-top{
+    display:flex;
+    gap:12px;
+    align-items:center;
+}
+
+.create-input{
+    flex:1;
+    background:#f1f3f5;
+    border-radius:25px;
+    padding:12px 18px;
+    color:#777;
+}
+
+.create-actions{
+    display:flex;
+    gap:8px;
+    margin-top:14px;
+}
+
+.create-action{
+    flex:1;
+    padding:10px;
+    border-radius:9px;
+    background:white;
+    font-weight:600;
+}
+
+/* =========================
+   POSTS
+========================= */
+
+.post{
+    background:white;
+    border-radius:15px;
+    margin-bottom:18px;
+    overflow:hidden;
+}
+
+.post-header{
+    display:flex;
+    align-items:center;
+    padding:15px;
+    gap:10px;
+}
+
+.post-user{
+    flex:1;
+}
+
+.post-user strong{
+    display:block;
+}
+
+.post-user small{
+    color:#777;
+}
+
+.post-text{
+    padding:0 15px 15px;
+    line-height:1.5;
+}
+
+.post-image{
+    width:100%;
+    height:300px;
+    background:linear-gradient(135deg,#111827,#4f46e5);
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    color:white;
+    font-size:45px;
+}
+
+.post-stats{
+    display:flex;
+    justify-content:space-between;
+    padding:10px 15px;
+    color:#777;
+    font-size:14px;
+}
+
+.post-actions{
+    display:grid;
+    grid-template-columns:repeat(3,1fr);
+    border-top:1px solid #eee;
+}
+
+.post-action{
+    padding:13px;
+    background:white;
+    font-weight:600;
+    color:#555;
+}
+
+/* =========================
+   RIGHT PANEL
+========================= */
+
+.right-panel{
+    position:sticky;
+    top:90px;
+    height:fit-content;
+}
+
+.panel{
+    background:white;
+    border-radius:15px;
+    padding:18px;
+    margin-bottom:18px;
+}
+
+.panel h3{
+    margin-bottom:15px;
+}
+
+.live-card{
+    background:linear-gradient(135deg,#ff304f,#7c3aed);
+    color:white;
+    border-radius:15px;
+    padding:18px;
+    margin-bottom:18px;
+}
+
+.live-card p{
+    font-size:13px;
+    margin:8px 0 14px;
+}
+
+.go-live{
+    width:100%;
+    padding:12px;
+    border-radius:10px;
+    background:white;
+    color:#ff304f;
+    font-weight:800;
+}
+
+/* =========================
+   LIVE MODAL
+========================= */
+
+.live-modal{
+    position:fixed;
+    inset:0;
+    background:rgba(0,0,0,.85);
+    display:none;
+    align-items:center;
+    justify-content:center;
+    z-index:1000;
+    padding:20px;
+}
+
+.live-modal.show{
+    display:flex;
+}
+
+.live-window{
+    width:100%;
+    max-width:650px;
+    background:#111;
+    border-radius:18px;
+    overflow:hidden;
+    color:white;
+}
+
+.live-header{
+    padding:15px;
+    display:flex;
+    justify-content:space-between;
+}
+
+.live-screen{
+    height:430px;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    text-align:center;
+    background:linear-gradient(135deg,#161616,#302060);
+}
+
+.live-footer{
+    padding:15px;
+    display:flex;
+    gap:10px;
+}
+
+.live-footer button{
+    flex:1;
+    padding:13px;
+    border-radius:10px;
+}
+
+.start-live{
+    background:#ff304f;
+    color:white;
+}
+
+.close-live{
+    background:#333;
+    color:white;
+}
+
+/* =========================
+   MOBILE
+========================= */
+
+.mobile-nav{
+    display:none;
+}
+
+@media(max-width:900px){
+
+    .layout{
+        grid-template-columns:1fr;
+        padding-bottom:80px;
+    }
+
+    .sidebar,
+    .right-panel{
+        display:none;
+    }
+
+    .search{
+        display:none;
+    }
+
+    .topbar{
+        padding:0 15px;
+    }
+
+    .mobile-nav{
+        position:fixed;
+        bottom:0;
+        left:0;
+        right:0;
+        height:64px;
+        background:white;
+        border-top:1px solid #ddd;
+        display:grid;
+        grid-template-columns:repeat(5,1fr);
+        z-index:200;
+    }
+
+    .mobile-nav button{
+        background:white;
+        font-size:20px;
+    }
+
+    .mobile-nav span{
+        display:block;
+        font-size:10px;
+        margin-top:3px;
+    }
+}
+
+@media(max-width:500px){
+
+    .logo{
+        font-size:23px;
+    }
+
+    .layout{
+        padding:12px 8px 80px;
+    }
+
+    .post-image{
+        height:250px;
+    }
+}
+</style>
+</head>
+
+<body>
+
+<!-- =========================
+     LOGIN / SIGNUP
+========================= -->
+
+<section id="authPage" class="auth-page">
+
+    <div class="auth-box">
+
+        <div class="auth-logo">
+            Day<span>off</span>
+        </div>
+
+        <p id="authSubtitle" class="auth-subtitle">
+            Connect. Share. Go Live.
+        </p>
+
+        <div id="authMessage" class="message hidden"></div>
+
+        <!-- SIGN UP -->
+
+        <div id="signupForm">
+
+            <input
+                id="signupName"
+                type="text"
+                placeholder="Full name"
+            >
+
+            <input
+                id="signupUsername"
+                type="text"
+                placeholder="Username"
+            >
+
+            <input
+                id="signupEmail"
+                type="email"
+                placeholder="Email"
+            >
+
+            <input
+                id="signupPassword"
+                type="password"
+                placeholder="Password"
+            >
+
+            <button
+                class="primary-btn"
+                onclick="signUp()"
+            >
+                Create Dayoff Account
+            </button>
+
+            <div class="auth-switch">
+                Already have an account?
+                <button onclick="showLogin()">
+                    Login
+                </button>
+            </div>
+
+        </div>
+
+
+        <!-- LOGIN -->
+
+        <div id="loginForm" class="hidden">
+
+            <input
+                id="loginEmail"
+                type="email"
+                placeholder="Email"
+            >
+
+            <input
+                id="loginPassword"
+                type="password"
+                placeholder="Password"
+            >
+
+            <button
+                class="primary-btn"
+                onclick="login()"
+            >
+                Login to Dayoff
+            </button>
+
+            <div class="auth-switch">
+                Don't have an account?
+                <button onclick="showSignup()">
+                    Create account
+                </button>
+            </div>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+<!-- =========================
+     DAYOFF APP
+========================= -->
+
+<div id="app" class="hidden">
+
+<header class="topbar">
+
+    <div class="logo">
+        Day<span>off</span>
+    </div>
+
+    <input
+        class="search"
+        placeholder="Search Dayoff..."
+    >
+
+    <div class="top-actions">
+
+        <button class="icon-btn">🔍</button>
+
+        <button class="icon-btn">🔔</button>
+
+        <div
+            id="userAvatar"
+            class="avatar"
+        >
+            D
+        </div>
+
+    </div>
+
+</header>
+
+
+<main class="layout">
+
+<!-- LEFT -->
+
+<aside class="sidebar">
+
+    <div class="menu-item active">
+        🏠 Home
+    </div>
+
+    <div class="menu-item">
+        🎬 Videos
+    </div>
+
+    <div class="menu-item">
+        👥 Friends
+    </div>
+
+    <div class="menu-item">
+        💬 Messages
+    </div>
+
+    <div class="menu-item">
+        🔔 Notifications
+    </div>
+
+    <div class="menu-item">
+        👤 Profile
+    </div>
+
+    <button
+        class="menu-item live-menu"
+        onclick="openLive()"
+    >
+        🔴 Go Live
+    </button>
+
+    <div
+        class="menu-item"
+        onclick="logout()"
+    >
+        🚪 Logout
+    </div>
+
+</aside>
+
+
+<!-- FEED -->
+
+<section class="feed">
+
+    <div class="stories">
+
+        <div class="story">
+            <div class="story-ring">
+                <div class="story-img">+</div>
+            </div>
+            Add Story
+        </div>
+
+        <div class="story">
+            <div class="story-ring">
+                <div class="story-img">JD</div>
+            </div>
+            James
+        </div>
+
+        <div class="story">
+            <div class="story-ring">
+                <div class="story-img">AM</div>
+            </div>
+            Amanda
+        </div>
+
+        <div class="story">
+            <div class="story-ring">
+                <div class="story-img">MK</div>
+            </div>
+            Michael
+        </div>
+
+    </div>
+
+
+    <div class="create-box">
+
+        <div class="create-top">
+
+            <div
+                id="feedAvatar"
+                class="avatar"
+            >
+                D
+            </div>
+
+            <div class="create-input">
+                What's happening?
+            </div>
+
+        </div>
+
+        <div class="create-actions">
+
+            <button class="create-action">
+                📷 Photo
+            </button>
+
+            <button class="create-action">
+                🎥 Video
+            </button>
+
+            <button
+                class="create-action"
+                onclick="openLive()"
+            >
+                🔴 Live
+            </button>
+
+        </div>
+
+    </div>
+
+
+    <article class="post">
+
+        <div class="post-header">
+
+            <div class="avatar">JD</div>
+
+            <div class="post-user">
+
+                <strong>James Davis</strong>
+
+                <small>
+                    2h · 🌎
+                </small>
+
+            </div>
+
+            <button>
+                •••
+            </button>
+
+        </div>
+
+        <div class="post-text">
+
+            Enjoying the day and connecting with amazing
+            people on Dayoff! 🌎
+
+            <br><br>
+
+            What are you doing today?
+
+        </div>
+
+        <div class="post-image">
+            🌅
+        </div>
+
+        <div class="post-stats">
+
+            <span>❤️ 248 likes</span>
+
+            <span>
+                36 comments · 12 shares
+            </span>
+
+        </div>
+
+        <div class="post-actions">
+
+            <button class="post-action">
+                ❤️ Like
+            </button>
+
+            <button class="post-action">
+                💬 Comment
+            </button>
+
+            <button class="post-action">
+                ↗ Share
+            </button>
+
+        </div>
+
+    </article>
+
+</section>
+
+
+<!-- RIGHT -->
+
+<aside class="right-panel">
+
+    <div class="live-card">
+
+        <h3>
+            🔴 Go Live
+        </h3>
+
+        <p>
+            Share your moment with people around the world.
+        </p>
+
+        <button
+            class="go-live"
+            onclick="openLive()"
+        >
+            Start Live Stream
+        </button>
+
+    </div>
+
+
+    <div class="panel">
+
+        <h3>
+            Your Dayoff account
+        </h3>
+
+        <p id="profileName">
+            Welcome to Dayoff
+        </p>
+
+        <br>
+
+        <p id="profileUsername">
+            @username
+        </p>
+
+    </div>
+
+</aside>
+
+</main>
+
+
+<!-- MOBILE NAV -->
+
+<nav class="mobile-nav">
+
+    <button>
+        🏠
+        <span>Home</span>
+    </button>
+
+    <button>
+        🔎
+        <span>Search</span>
+    </button>
+
+    <button onclick="openLive()">
+        🔴
+        <span>Live</span>
+    </button>
+
+    <button>
+        💬
+        <span>Chat</span>
+    </button>
+
+    <button>
+        👤
+        <span>Profile</span>
+    </button>
+
+</nav>
+
+</div>
+
+
+<!-- =========================
+     LIVE WINDOW
+========================= -->
+
+<div
+    id="liveModal"
+    class="live-modal"
+>
+
+    <div class="live-window">
+
+        <div class="live-header">
+
+            <strong>
+                🔴 Dayoff Live
+            </strong>
+
+            <button
+                onclick="closeLive()"
+                style="background:none;color:white;font-size:22px;"
+            >
+                ✕
+            </button>
+
+        </div>
+
+        <div class="live-screen">
+
+            <div>
+
+                <div style="font-size:60px;">
+                    📹
+                </div>
+
+                <p>
+                    Camera streaming will be connected next.
+                </p>
+
+            </div>
+
+        </div>
+
+        <div class="live-footer">
+
+            <button
+                class="start-live"
+                onclick="startLive()"
+            >
+                🔴 Start Live
+            </button>
+
+            <button
+                class="close-live"
+                onclick="closeLive()"
+            >
+                Cancel
+            </button>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+<script>
+
+/* =================================
+   SUPABASE CONNECTION
+================================= */
+
+const SUPABASE_URL =
+"https://zifjtcwvfwpkzavztlgc.supabase.co";
+
+const SUPABASE_KEY =
+"sb_publishable_QJyKmhkfGiOn3w-q37phAQ_iY-1J4AG";
+
+const supabaseClient =
+supabase.createClient(
+    SUPABASE_URL,
+    SUPABASE_KEY
+);
+
+
+/* =================================
+   AUTH UI
+================================= */
+
+function showLogin(){
+
+    document
+        .getElementById("signupForm")
+        .classList.add("hidden");
+
+    document
+        .getElementById("loginForm")
+        .classList.remove("hidden");
+
+    document
+        .getElementById("authMessage")
+        .classList.add("hidden");
+}
+
+
+function showSignup(){
+
+    document
+        .getElementById("loginForm")
+        .classList.add("hidden");
+
+    document
+        .getElementById("signupForm")
+        .classList.remove("hidden");
+
+    document
+        .getElementById("authMessage")
+        .classList.add("hidden");
+}
+
+
+function showMessage(message){
+
+    const box =
+        document.getElementById("authMessage");
+
+    box.textContent = message;
+
+    box.classList.remove("hidden");
+}
+
+
+/* =================================
+   SIGN UP
+================================= */
+
+async function signUp(){
+
+    const name =
+        document
+        .getElementById("signupName")
+        .value
+        .trim();
+
+    const username =
+        document
+        .getElementById("signupUsername")
+        .value
+        .trim()
+        .toLowerCase();
+
+    const email =
+        document
+        .getElementById("signupEmail")
+        .value
+        .trim();
+
+    const password =
+        document
+        .getElementById("signupPassword")
+        .value;
+
+
+    if(!name || !username || !email || !password){
+
+        showMessage(
+            "Please fill in all fields."
+        );
+
+        return;
+    }
+
+
+    if(password.length < 6){
+
+        showMessage(
+            "Password must contain at least 6 characters."
+        );
+
+        return;
+    }
+
+
+    const {
+        data,
+        error
+    } = await supabaseClient.auth.signUp({
+
+        email: email,
+
+        password: password,
+
+        options: {
+
+            data: {
+
+                username: username,
+
+                full_name: name
+
+            }
+
+        }
+
+    });
+
+
+    if(error){
+
+        showMessage(error.message);
+
+        return;
+    }
+
+
+    if(data.session){
+
+        await loadApp();
+
+    }else{
+
+        showMessage(
+            "Account created. Check your email to confirm your Dayoff account."
+        );
+
+    }
+
+}
+
+
+/* =================================
+   LOGIN
+================================= */
+
+async function login(){
+
+    const email =
+        document
+        .getElementById("loginEmail")
+        .value
+        .trim();
+
+    const password =
+        document
+        .getElementById("loginPassword")
+        .value;
+
+
+    if(!email || !password){
+
+        showMessage(
+            "Enter your email and password."
+        );
+
+        return;
+    }
+
+
+    const {
+        error
+    } = await supabaseClient.auth.signInWithPassword({
+
+        email: email,
+
+        password: password
+
+    });
+
+
+    if(error){
+
+        showMessage(error.message);
+
+        return;
+    }
+
+
+    await loadApp();
+
+}
+
+
+/* =================================
+   LOAD PROFILE
+================================= */
+
+async function loadApp(){
+
+    const {
+        data: {
+            user
+        }
+    } = await supabaseClient.auth.getUser();
+
+
+    if(!user){
+
+        return;
+    }
+
+
+    document
+        .getElementById("authPage")
+        .classList.add("hidden");
+
+
+    document
+        .getElementById("app")
+        .classList.remove("hidden");
+
+
+    const {
+        data: profile
+    } = await supabaseClient
+
+        .from("profiles")
+
+        .select("*")
+
+        .eq("id", user.id)
+
+        .maybeSingle();
+
+
+    if(profile){
+
+        document
+            .getElementById("profileName")
+            .textContent =
+            profile.full_name || "Dayoff User";
+
+
+        document
+            .getElementById("profileUsername")
+            .textContent =
+            "@" + profile.username;
+
+
+        const firstLetter =
+            (
+                profile.full_name ||
+                profile.username ||
+                "D"
+            )
+            .charAt(0)
+            .toUpperCase();
+
+
+        document
+            .getElementById("userAvatar")
+            .textContent = firstLetter;
+
+
+        document
+            .getElementById("feedAvatar")
+            .textContent = firstLetter;
+
+    }
+
+}
+
+
+/* =================================
+   LOGOUT
+================================= */
+
+async function logout(){
+
+    await supabaseClient.auth.signOut();
+
+    document
+        .getElementById("app")
+        .classList.add("hidden");
+
+    document
+        .getElementById("authPage")
+        .classList.remove("hidden");
+
+    showSignup();
+
+}
+
+
+/* =================================
+   SESSION CHECK
+================================= */
+
+async function checkSession(){
+
+    const {
+        data: {
+            session
+        }
+    } = await supabaseClient.auth.getSession();
+
+
+    if(session){
+
+        await loadApp();
+
+    }
+
+}
+
+
+/* =================================
+   AUTH STATE
+================================= */
+
+supabaseClient.auth.onAuthStateChange(
+
+    async function(event, session){
+
+        if(session){
+
+            await loadApp();
+
+        }
+
+    }
+
+);
+
+
+/* =================================
+   LIVE
+================================= */
+
+function openLive(){
+
+    document
+        .getElementById("liveModal")
+        .classList.add("show");
+
+}
+
+
+function closeLive(){
+
+    document
+        .getElementById("liveModal")
+        .classList.remove("show");
+
+}
+
+
+function startLive(){
+
+    alert(
+        "Dayoff Live is ready. " +
+        "Real camera broadcasting will be connected in the Live Streaming stage."
+    );
+
+}
+
+
+/* =================================
+   START
+================================= */
+
+checkSession();
+
+</script>
+
+</body>
+</html>
