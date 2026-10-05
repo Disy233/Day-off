@@ -1,1426 +1,1520 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-<title>Dayoff</title>
-
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-
-<style>
-*{
-    box-sizing:border-box;
-    margin:0;
-    padding:0;
-}
-
-body{
-    font-family:Arial,Helvetica,sans-serif;
-    background:#f5f6f8;
-    color:#111827;
-}
-
-button,input{
-    font-family:inherit;
-}
-
-button{
-    cursor:pointer;
-    border:0;
-}
-
-.hidden{
-    display:none!important;
-}
-
-/* =========================
-   AUTH
-========================= */
-
-.auth-page{
-    min-height:100vh;
-    display:flex;
-    justify-content:center;
-    align-items:center;
-    padding:20px;
-    background:linear-gradient(135deg,#fff,#fff1f3);
-}
-
-.auth-box{
-    width:100%;
-    max-width:420px;
-    background:white;
-    border-radius:22px;
-    padding:30px;
-    box-shadow:0 15px 50px rgba(0,0,0,.08);
-}
-
-.auth-logo{
-    text-align:center;
-    font-size:34px;
-    font-weight:800;
-    margin-bottom:8px;
-}
-
-.auth-logo span{
-    color:#ff304f;
-}
-
-.auth-subtitle{
-    text-align:center;
-    color:#777;
-    margin-bottom:25px;
-}
-
-.auth-box input{
-    width:100%;
-    padding:14px;
-    border:1px solid #ddd;
-    border-radius:10px;
-    margin-bottom:12px;
-    outline:none;
-}
-
-.auth-box input:focus{
-    border-color:#ff304f;
-}
-
-.primary-btn{
-    width:100%;
-    padding:14px;
-    border-radius:10px;
-    background:#ff304f;
-    color:white;
-    font-weight:700;
-    font-size:15px;
-}
-
-.auth-switch{
-    text-align:center;
-    margin-top:18px;
-    color:#777;
-    font-size:14px;
-}
-
-.auth-switch button{
-    background:none;
-    color:#ff304f;
-    font-weight:bold;
-}
-
-.message{
-    padding:11px;
-    background:#fff1f2;
-    color:#be123c;
-    border-radius:9px;
-    margin-bottom:12px;
-    font-size:14px;
-}
-
-/* =========================
-   TOP BAR
-========================= */
-
-.topbar{
-    height:64px;
-    background:white;
-    border-bottom:1px solid #e5e7eb;
-    display:flex;
-    align-items:center;
-    justify-content:space-between;
-    padding:0 6%;
-    position:sticky;
-    top:0;
-    z-index:100;
-}
-
-.logo{
-    font-size:26px;
-    font-weight:800;
-}
-
-.logo span{
-    color:#ff304f;
-}
-
-.search{
-    width:300px;
-    background:#f1f3f5;
-    border:0;
-    border-radius:25px;
-    padding:11px 18px;
-    outline:none;
-}
-
-.top-actions{
-    display:flex;
-    align-items:center;
-    gap:10px;
-}
-
-.icon-btn{
-    width:40px;
-    height:40px;
-    border-radius:50%;
-    background:#f1f3f5;
-    font-size:17px;
-}
-
-.avatar{
-    width:40px;
-    height:40px;
-    border-radius:50%;
-    background:linear-gradient(135deg,#ff304f,#7c3aed);
-    color:white;
-    display:flex;
-    align-items:center;
-    justify-content:center;
-    font-weight:bold;
-}
-
-/* =========================
-   LAYOUT
-========================= */
-
-.layout{
-    max-width:1200px;
-    margin:auto;
-    display:grid;
-    grid-template-columns:230px 1fr 260px;
-    gap:24px;
-    padding:25px 15px 100px;
-}
-
-.sidebar{
-    position:sticky;
-    top:90px;
-    height:fit-content;
-}
-
-.menu-item{
-    display:flex;
-    align-items:center;
-    gap:14px;
-    padding:13px 15px;
-    border-radius:12px;
-    margin-bottom:5px;
-    font-weight:600;
-    cursor:pointer;
-}
-
-.menu-item:hover,
-.menu-item.active{
-    background:#ffecef;
-    color:#ff304f;
-}
-
-.live-menu{
-    background:#ff304f!important;
-    color:white!important;
-    margin-top:15px;
-}
-
-.feed{
-    min-width:0;
-}
-
-/* =========================
-   STORIES
-========================= */
-
-.stories{
-    background:white;
-    padding:15px;
-    border-radius:15px;
-    display:flex;
-    gap:14px;
-    overflow-x:auto;
-    margin-bottom:18px;
-}
-
-.story{
-    min-width:70px;
-    text-align:center;
-    font-size:12px;
-}
-
-.story-ring{
-    width:58px;
-    height:58px;
-    margin:auto auto 6px;
-    border-radius:50%;
-    padding:3px;
-    background:linear-gradient(45deg,#ff304f,#7c3aed,#ff9f1c);
-}
-
-.story-img{
-    width:100%;
-    height:100%;
-    border-radius:50%;
-    background:#ddd;
-    border:3px solid white;
-    display:flex;
-    align-items:center;
-    justify-content:center;
-    font-weight:bold;
-}
-
-/* =========================
-   CREATE POST
-========================= */
-
-.create-box{
-    background:white;
-    padding:17px;
-    border-radius:15px;
-    margin-bottom:18px;
-}
-
-.create-top{
-    display:flex;
-    gap:12px;
-    align-items:center;
-}
-
-.create-input{
-    flex:1;
-    background:#f1f3f5;
-    border-radius:25px;
-    padding:12px 18px;
-    color:#777;
-}
-
-.create-actions{
-    display:flex;
-    gap:8px;
-    margin-top:14px;
-}
-
-.create-action{
-    flex:1;
-    padding:10px;
-    border-radius:9px;
-    background:white;
-    font-weight:600;
-}
-
-/* =========================
-   POSTS
-========================= */
-
-.post{
-    background:white;
-    border-radius:15px;
-    margin-bottom:18px;
-    overflow:hidden;
-}
-
-.post-header{
-    display:flex;
-    align-items:center;
-    padding:15px;
-    gap:10px;
-}
-
-.post-user{
-    flex:1;
-}
-
-.post-user strong{
-    display:block;
-}
-
-.post-user small{
-    color:#777;
-}
-
-.post-text{
-    padding:0 15px 15px;
-    line-height:1.5;
-}
-
-.post-image{
-    width:100%;
-    height:300px;
-    background:linear-gradient(135deg,#111827,#4f46e5);
-    display:flex;
-    align-items:center;
-    justify-content:center;
-    color:white;
-    font-size:45px;
-}
-
-.post-stats{
-    display:flex;
-    justify-content:space-between;
-    padding:10px 15px;
-    color:#777;
-    font-size:14px;
-}
-
-.post-actions{
-    display:grid;
-    grid-template-columns:repeat(3,1fr);
-    border-top:1px solid #eee;
-}
-
-.post-action{
-    padding:13px;
-    background:white;
-    font-weight:600;
-    color:#555;
-}
-
-/* =========================
-   RIGHT PANEL
-========================= */
-
-.right-panel{
-    position:sticky;
-    top:90px;
-    height:fit-content;
-}
-
-.panel{
-    background:white;
-    border-radius:15px;
-    padding:18px;
-    margin-bottom:18px;
-}
-
-.panel h3{
-    margin-bottom:15px;
-}
-
-.live-card{
-    background:linear-gradient(135deg,#ff304f,#7c3aed);
-    color:white;
-    border-radius:15px;
-    padding:18px;
-    margin-bottom:18px;
-}
-
-.live-card p{
-    font-size:13px;
-    margin:8px 0 14px;
-}
-
-.go-live{
-    width:100%;
-    padding:12px;
-    border-radius:10px;
-    background:white;
-    color:#ff304f;
-    font-weight:800;
-}
-
-/* =========================
-   LIVE MODAL
-========================= */
-
-.live-modal{
-    position:fixed;
-    inset:0;
-    background:rgba(0,0,0,.85);
-    display:none;
-    align-items:center;
-    justify-content:center;
-    z-index:1000;
-    padding:20px;
-}
-
-.live-modal.show{
-    display:flex;
-}
-
-.live-window{
-    width:100%;
-    max-width:650px;
-    background:#111;
-    border-radius:18px;
-    overflow:hidden;
-    color:white;
-}
-
-.live-header{
-    padding:15px;
-    display:flex;
-    justify-content:space-between;
-}
-
-.live-screen{
-    height:430px;
-    display:flex;
-    justify-content:center;
-    align-items:center;
-    text-align:center;
-    background:linear-gradient(135deg,#161616,#302060);
-}
-
-.live-footer{
-    padding:15px;
-    display:flex;
-    gap:10px;
-}
-
-.live-footer button{
-    flex:1;
-    padding:13px;
-    border-radius:10px;
-}
-
-.start-live{
-    background:#ff304f;
-    color:white;
-}
-
-.close-live{
-    background:#333;
-    color:white;
-}
-
-/* =========================
-   MOBILE
-========================= */
-
-.mobile-nav{
-    display:none;
-}
-
-@media(max-width:900px){
-
-    .layout{
-        grid-template-columns:1fr;
-        padding-bottom:80px;
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>Dayoff</title>
+
+  <!-- Supabase -->
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: Arial, sans-serif;
+    }
+
+    body {
+      background: #f5f6f8;
+      color: #111827;
+    }
+
+    button {
+      cursor: pointer;
+      border: none;
+    }
+
+    .topbar {
+      height: 64px;
+      background: white;
+      border-bottom: 1px solid #ddd;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 25px;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+
+    .logo {
+      font-size: 28px;
+      font-weight: bold;
+      color: #2563eb;
+    }
+
+    .search {
+      width: 35%;
+      background: #f1f3f5;
+      border-radius: 25px;
+      padding: 12px 18px;
+      border: none;
+      outline: none;
+    }
+
+    .top-actions {
+      display: flex;
+      gap: 10px;
+      align-items: center;
+    }
+
+    .top-btn {
+      background: #f1f5f9;
+      padding: 10px 15px;
+      border-radius: 20px;
+    }
+
+    .live-btn {
+      background: #ef4444;
+      color: white;
+      padding: 10px 18px;
+      border-radius: 20px;
+      font-weight: bold;
+    }
+
+    .layout {
+      display: grid;
+      grid-template-columns: 230px 1fr 280px;
+      gap: 20px;
+      max-width: 1400px;
+      margin: auto;
+      padding: 20px;
     }
 
     .sidebar,
-    .right-panel{
-        display:none;
+    .rightbar {
+      background: white;
+      border-radius: 15px;
+      padding: 18px;
+      height: fit-content;
     }
 
-    .search{
-        display:none;
+    .menu-item {
+      padding: 13px;
+      margin-bottom: 5px;
+      border-radius: 10px;
+      cursor: pointer;
     }
 
-    .topbar{
-        padding:0 15px;
+    .menu-item:hover {
+      background: #f1f5f9;
     }
 
-    .mobile-nav{
-        position:fixed;
-        bottom:0;
-        left:0;
-        right:0;
-        height:64px;
-        background:white;
-        border-top:1px solid #ddd;
-        display:grid;
-        grid-template-columns:repeat(5,1fr);
-        z-index:200;
+    .stories {
+      background: white;
+      padding: 15px;
+      border-radius: 15px;
+      display: flex;
+      gap: 12px;
+      overflow-x: auto;
+      margin-bottom: 20px;
     }
 
-    .mobile-nav button{
-        background:white;
-        font-size:20px;
+    .story {
+      min-width: 80px;
+      height: 110px;
+      border-radius: 12px;
+      background: linear-gradient(135deg, #2563eb, #9333ea);
+      color: white;
+      display: flex;
+      align-items: flex-end;
+      justify-content: center;
+      padding: 8px;
+      font-size: 12px;
+      font-weight: bold;
     }
 
-    .mobile-nav span{
-        display:block;
-        font-size:10px;
-        margin-top:3px;
-    }
-}
-
-@media(max-width:500px){
-
-    .logo{
-        font-size:23px;
+    .composer {
+      background: white;
+      border-radius: 15px;
+      padding: 18px;
+      margin-bottom: 20px;
     }
 
-    .layout{
-        padding:12px 8px 80px;
+    .composer textarea {
+      width: 100%;
+      min-height: 80px;
+      border: 1px solid #ddd;
+      border-radius: 12px;
+      padding: 12px;
+      resize: vertical;
+      outline: none;
     }
 
-    .post-image{
-        height:250px;
+    .composer-bottom {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-top: 12px;
     }
-}
-</style>
+
+    .post-btn {
+      background: #2563eb;
+      color: white;
+      padding: 10px 22px;
+      border-radius: 20px;
+      font-weight: bold;
+    }
+
+    .post {
+      background: white;
+      border-radius: 15px;
+      padding: 18px;
+      margin-bottom: 20px;
+    }
+
+    .post-header {
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: 12px;
+    }
+
+    .author {
+      font-weight: bold;
+    }
+
+    .post-time {
+      color: #777;
+      font-size: 12px;
+    }
+
+    .post-content {
+      line-height: 1.6;
+      margin-bottom: 15px;
+      white-space: pre-wrap;
+    }
+
+    .post-actions {
+      display: flex;
+      gap: 10px;
+      border-top: 1px solid #eee;
+      padding-top: 12px;
+    }
+
+    .action-btn {
+      background: #f3f4f6;
+      padding: 8px 15px;
+      border-radius: 20px;
+    }
+
+    .delete-btn {
+      color: #dc2626;
+      background: #fee2e2;
+      padding: 6px 10px;
+      border-radius: 10px;
+    }
+
+    .right-title {
+      font-weight: bold;
+      margin-bottom: 15px;
+    }
+
+    .online-user {
+      padding: 10px 0;
+      border-bottom: 1px solid #eee;
+    }
+
+    .status {
+      color: #16a34a;
+      font-size: 12px;
+    }
+
+    .auth-box {
+      background: white;
+      padding: 20px;
+      border-radius: 15px;
+      margin-bottom: 20px;
+    }
+
+    .auth-box input {
+      width: 100%;
+      padding: 12px;
+      margin-bottom: 10px;
+      border: 1px solid #ddd;
+      border-radius: 10px;
+      outline: none;
+    }
+
+    .auth-btn {
+      width: 100%;
+      padding: 12px;
+      background: #2563eb;
+      color: white;
+      border-radius: 10px;
+      margin-top: 5px;
+    }
+
+    .logout-btn {
+      width: 100%;
+      padding: 10px;
+      background: #ef4444;
+      color: white;
+      border-radius: 10px;
+      margin-top: 10px;
+    }
+
+    .user-info {
+      background: #eff6ff;
+      padding: 12px;
+      border-radius: 10px;
+      margin-bottom: 15px;
+      font-size: 14px;
+    }
+
+    .message {
+      margin-top: 10px;
+      font-size: 13px;
+    }
+
+    .success {
+      color: #16a34a;
+    }
+
+    .error {
+      color: #dc2626;
+    }
+
+    /* LIVE MODAL */
+
+    .modal {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,.7);
+      align-items: center;
+      justify-content: center;
+      z-index: 1000;
+      padding: 20px;
+    }
+
+    .modal-content {
+      background: white;
+      width: 100%;
+      max-width: 500px;
+      border-radius: 18px;
+      padding: 25px;
+    }
+
+    .modal-content h2 {
+      margin-bottom: 15px;
+    }
+
+    .modal-content input {
+      width: 100%;
+      padding: 12px;
+      border: 1px solid #ddd;
+      border-radius: 10px;
+      margin-bottom: 12px;
+    }
+
+    .start-live {
+      width: 100%;
+      background: #ef4444;
+      color: white;
+      padding: 13px;
+      border-radius: 10px;
+      font-weight: bold;
+    }
+
+    .close-modal {
+      margin-top: 10px;
+      width: 100%;
+      background: #e5e7eb;
+      padding: 12px;
+      border-radius: 10px;
+    }
+
+    .mobile-nav {
+      display: none;
+    }
+
+    @media(max-width: 900px) {
+      .layout {
+        grid-template-columns: 1fr;
+      }
+
+      .sidebar,
+      .rightbar {
+        display: none;
+      }
+
+      .search {
+        width: 45%;
+      }
+
+      .mobile-nav {
+        display: flex;
+        position: fixed;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        height: 60px;
+        background: white;
+        border-top: 1px solid #ddd;
+        justify-content: space-around;
+        align-items: center;
+        z-index: 100;
+      }
+
+      body {
+        padding-bottom: 65px;
+      }
+    }
+
+    @media(max-width: 500px) {
+      .topbar {
+        padding: 0 12px;
+      }
+
+      .logo {
+        font-size: 23px;
+      }
+
+      .search {
+        width: 35%;
+      }
+
+      .top-btn {
+        display: none;
+      }
+
+      .layout {
+        padding: 10px;
+      }
+    }
+  </style>
 </head>
 
 <body>
 
-<!-- =========================
-     LOGIN / SIGNUP
-========================= -->
+  <!-- TOP BAR -->
+  <header class="topbar">
 
-<section id="authPage" class="auth-page">
-
-    <div class="auth-box">
-
-        <div class="auth-logo">
-            Day<span>off</span>
-        </div>
-
-        <p id="authSubtitle" class="auth-subtitle">
-            Connect. Share. Go Live.
-        </p>
-
-        <div id="authMessage" class="message hidden"></div>
-
-        <!-- SIGN UP -->
-
-        <div id="signupForm">
-
-            <input
-                id="signupName"
-                type="text"
-                placeholder="Full name"
-            >
-
-            <input
-                id="signupUsername"
-                type="text"
-                placeholder="Username"
-            >
-
-            <input
-                id="signupEmail"
-                type="email"
-                placeholder="Email"
-            >
-
-            <input
-                id="signupPassword"
-                type="password"
-                placeholder="Password"
-            >
-
-            <button
-                class="primary-btn"
-                onclick="signUp()"
-            >
-                Create Dayoff Account
-            </button>
-
-            <div class="auth-switch">
-                Already have an account?
-                <button onclick="showLogin()">
-                    Login
-                </button>
-            </div>
-
-        </div>
-
-
-        <!-- LOGIN -->
-
-        <div id="loginForm" class="hidden">
-
-            <input
-                id="loginEmail"
-                type="email"
-                placeholder="Email"
-            >
-
-            <input
-                id="loginPassword"
-                type="password"
-                placeholder="Password"
-            >
-
-            <button
-                class="primary-btn"
-                onclick="login()"
-            >
-                Login to Dayoff
-            </button>
-
-            <div class="auth-switch">
-                Don't have an account?
-                <button onclick="showSignup()">
-                    Create account
-                </button>
-            </div>
-
-        </div>
-
-    </div>
-
-</section>
-
-
-<!-- =========================
-     DAYOFF APP
-========================= -->
-
-<div id="app" class="hidden">
-
-<header class="topbar">
-
-    <div class="logo">
-        Day<span>off</span>
-    </div>
+    <div class="logo">Dayoff</div>
 
     <input
-        class="search"
-        placeholder="Search Dayoff..."
+      class="search"
+      type="text"
+      placeholder="Search Dayoff..."
+      id="searchInput"
     >
 
     <div class="top-actions">
 
-        <button class="icon-btn">🔍</button>
+      <button class="top-btn">🔔</button>
 
-        <button class="icon-btn">🔔</button>
-
-        <div
-            id="userAvatar"
-            class="avatar"
-        >
-            D
-        </div>
-
-    </div>
-
-</header>
-
-
-<main class="layout">
-
-<!-- LEFT -->
-
-<aside class="sidebar">
-
-    <div class="menu-item active">
-        🏠 Home
-    </div>
-
-    <div class="menu-item">
-        🎬 Videos
-    </div>
-
-    <div class="menu-item">
-        👥 Friends
-    </div>
-
-    <div class="menu-item">
-        💬 Messages
-    </div>
-
-    <div class="menu-item">
-        🔔 Notifications
-    </div>
-
-    <div class="menu-item">
-        👤 Profile
-    </div>
-
-    <button
-        class="menu-item live-menu"
-        onclick="openLive()"
-    >
+      <button class="live-btn" onclick="openLiveModal()">
         🔴 Go Live
-    </button>
-
-    <div
-        class="menu-item"
-        onclick="logout()"
-    >
-        🚪 Logout
-    </div>
-
-</aside>
-
-
-<!-- FEED -->
-
-<section class="feed">
-
-    <div class="stories">
-
-        <div class="story">
-            <div class="story-ring">
-                <div class="story-img">+</div>
-            </div>
-            Add Story
-        </div>
-
-        <div class="story">
-            <div class="story-ring">
-                <div class="story-img">JD</div>
-            </div>
-            James
-        </div>
-
-        <div class="story">
-            <div class="story-ring">
-                <div class="story-img">AM</div>
-            </div>
-            Amanda
-        </div>
-
-        <div class="story">
-            <div class="story-ring">
-                <div class="story-img">MK</div>
-            </div>
-            Michael
-        </div>
+      </button>
 
     </div>
 
-
-    <div class="create-box">
-
-        <div class="create-top">
-
-            <div
-                id="feedAvatar"
-                class="avatar"
-            >
-                D
-            </div>
-
-            <div class="create-input">
-                What's happening?
-            </div>
-
-        </div>
-
-        <div class="create-actions">
-
-            <button class="create-action">
-                📷 Photo
-            </button>
-
-            <button class="create-action">
-                🎥 Video
-            </button>
-
-            <button
-                class="create-action"
-                onclick="openLive()"
-            >
-                🔴 Live
-            </button>
-
-        </div>
-
-    </div>
+  </header>
 
 
-    <article class="post">
+  <!-- MAIN LAYOUT -->
 
-        <div class="post-header">
+  <div class="layout">
 
-            <div class="avatar">JD</div>
+    <!-- LEFT SIDEBAR -->
 
-            <div class="post-user">
+    <aside class="sidebar">
 
-                <strong>James Davis</strong>
+      <div class="menu-item">🏠 Home</div>
+      <div class="menu-item">👤 Profile</div>
+      <div class="menu-item">👥 Friends</div>
+      <div class="menu-item">💬 Messages</div>
+      <div class="menu-item">🔔 Notifications</div>
+      <div class="menu-item">🎥 Live</div>
+      <div class="menu-item">⚙️ Settings</div>
 
-                <small>
-                    2h · 🌎
-                </small>
+    </aside>
 
-            </div>
 
-            <button>
-                •••
-            </button>
+    <!-- CENTER -->
 
-        </div>
+    <main>
 
-        <div class="post-text">
+      <!-- AUTH -->
 
-            Enjoying the day and connecting with amazing
-            people on Dayoff! 🌎
+      <section class="auth-box">
 
-            <br><br>
+        <div id="loggedOut">
 
-            What are you doing today?
+          <h3>Welcome to Dayoff</h3>
 
-        </div>
+          <p style="margin:8px 0 15px;color:#666;">
+            Create an account or login to post.
+          </p>
 
-        <div class="post-image">
-            🌅
-        </div>
+          <input
+            type="email"
+            id="email"
+            placeholder="Email"
+          >
 
-        <div class="post-stats">
+          <input
+            type="password"
+            id="password"
+            placeholder="Password"
+          >
 
-            <span>❤️ 248 likes</span>
+          <input
+            type="text"
+            id="username"
+            placeholder="Username (for signup)"
+          >
 
-            <span>
-                36 comments · 12 shares
-            </span>
+          <input
+            type="text"
+            id="fullName"
+            placeholder="Full name (for signup)"
+          >
+
+          <button
+            class="auth-btn"
+            onclick="signup()"
+          >
+            Create Account
+          </button>
+
+          <button
+            class="auth-btn"
+            onclick="login()"
+            style="background:#111827;"
+          >
+            Login
+          </button>
 
         </div>
 
-        <div class="post-actions">
 
-            <button class="post-action">
-                ❤️ Like
-            </button>
+        <div id="loggedIn" style="display:none;">
 
-            <button class="post-action">
-                💬 Comment
-            </button>
+          <div class="user-info">
 
-            <button class="post-action">
-                ↗ Share
-            </button>
-
-        </div>
-
-    </article>
-
-</section>
-
-
-<!-- RIGHT -->
-
-<aside class="right-panel">
-
-    <div class="live-card">
-
-        <h3>
-            🔴 Go Live
-        </h3>
-
-        <p>
-            Share your moment with people around the world.
-        </p>
-
-        <button
-            class="go-live"
-            onclick="openLive()"
-        >
-            Start Live Stream
-        </button>
-
-    </div>
-
-
-    <div class="panel">
-
-        <h3>
-            Your Dayoff account
-        </h3>
-
-        <p id="profileName">
-            Welcome to Dayoff
-        </p>
-
-        <br>
-
-        <p id="profileUsername">
-            @username
-        </p>
-
-    </div>
-
-</aside>
-
-</main>
-
-
-<!-- MOBILE NAV -->
-
-<nav class="mobile-nav">
-
-    <button>
-        🏠
-        <span>Home</span>
-    </button>
-
-    <button>
-        🔎
-        <span>Search</span>
-    </button>
-
-    <button onclick="openLive()">
-        🔴
-        <span>Live</span>
-    </button>
-
-    <button>
-        💬
-        <span>Chat</span>
-    </button>
-
-    <button>
-        👤
-        <span>Profile</span>
-    </button>
-
-</nav>
-
-</div>
-
-
-<!-- =========================
-     LIVE WINDOW
-========================= -->
-
-<div
-    id="liveModal"
-    class="live-modal"
->
-
-    <div class="live-window">
-
-        <div class="live-header">
-
-            <strong>
-                🔴 Dayoff Live
+            <strong id="userNameDisplay">
+              User
             </strong>
 
-            <button
-                onclick="closeLive()"
-                style="background:none;color:white;font-size:22px;"
-            >
-                ✕
-            </button>
+            <br>
+
+            <span id="userEmailDisplay"></span>
+
+          </div>
+
+          <button
+            class="logout-btn"
+            onclick="logout()"
+          >
+            Logout
+          </button>
 
         </div>
 
-        <div class="live-screen">
 
-            <div>
+        <div id="authMessage" class="message"></div>
 
-                <div style="font-size:60px;">
-                    📹
-                </div>
+      </section>
 
-                <p>
-                    Camera streaming will be connected next.
-                </p>
 
-            </div>
+      <!-- STORIES -->
+
+      <section class="stories">
+
+        <div class="story">Your Story</div>
+        <div class="story">Friends</div>
+        <div class="story">Music</div>
+        <div class="story">Travel</div>
+        <div class="story">Sports</div>
+
+      </section>
+
+
+      <!-- CREATE POST -->
+
+      <section class="composer">
+
+        <h3 style="margin-bottom:12px;">
+          Create a post
+        </h3>
+
+        <textarea
+          id="postContent"
+          placeholder="What's happening on Dayoff?"
+        ></textarea>
+
+        <div class="composer-bottom">
+
+          <div>
+            📷 Photo &nbsp;
+            🎥 Video
+          </div>
+
+          <button
+            class="post-btn"
+            onclick="createPost()"
+          >
+            Post
+          </button>
 
         </div>
 
-        <div class="live-footer">
+        <div
+          id="postMessage"
+          class="message"
+        ></div>
 
-            <button
-                class="start-live"
-                onclick="startLive()"
-            >
-                🔴 Start Live
-            </button>
+      </section>
 
-            <button
-                class="close-live"
-                onclick="closeLive()"
-            >
-                Cancel
-            </button>
 
-        </div>
+      <!-- POSTS -->
+
+      <section id="postsContainer">
+
+        <p style="text-align:center;color:#777;">
+          Loading posts...
+        </p>
+
+      </section>
+
+    </main>
+
+
+    <!-- RIGHT SIDEBAR -->
+
+    <aside class="rightbar">
+
+      <div class="right-title">
+        Online Friends
+      </div>
+
+      <div class="online-user">
+        John
+        <div class="status">● Online</div>
+      </div>
+
+      <div class="online-user">
+        Sarah
+        <div class="status">● Online</div>
+      </div>
+
+      <div class="online-user">
+        Mike
+        <div class="status">● Online</div>
+      </div>
+
+      <br>
+
+      <button
+        class="live-btn"
+        style="width:100%;"
+        onclick="openLiveModal()"
+      >
+        🔴 Start Live
+      </button>
+
+    </aside>
+
+  </div>
+
+
+  <!-- MOBILE NAV -->
+
+  <nav class="mobile-nav">
+
+    <div>🏠</div>
+    <div>🔍</div>
+    <div onclick="openLiveModal()">🔴</div>
+    <div>💬</div>
+    <div>👤</div>
+
+  </nav>
+
+
+  <!-- LIVE MODAL -->
+
+  <div
+    class="modal"
+    id="liveModal"
+  >
+
+    <div class="modal-content">
+
+      <h2>🔴 Go Live on Dayoff</h2>
+
+      <p style="color:#666;margin-bottom:15px;">
+        Start your live broadcast and connect with your audience.
+      </p>
+
+      <input
+        type="text"
+        id="liveTitle"
+        placeholder="Live title"
+      >
+
+      <button
+        class="start-live"
+        onclick="startLive()"
+      >
+        Start Live
+      </button>
+
+      <button
+        class="close-modal"
+        onclick="closeLiveModal()"
+      >
+        Cancel
+      </button>
+
+      <div
+        id="liveMessage"
+        class="message"
+      ></div>
 
     </div>
 
-</div>
+  </div>
 
 
-<script>
+  <script>
 
-/* =================================
-   SUPABASE CONNECTION
-================================= */
+    /* =========================================
+       SUPABASE CONNECTION
+    ========================================= */
 
-const SUPABASE_URL =
-"https://zifjtcwvfwpkzavztlgc.supabase.co";
+    const SUPABASE_URL =
+      "https://zifjtcwvfwpkzavztlgc.supabase.co";
 
-const SUPABASE_KEY =
-"sb_publishable_QJyKmhkfGiOn3w-q37phAQ_iY-1J4AG";
+    /*
+      PASTE YOUR SUPABASE PUBLISHABLE KEY
+      BETWEEN THE QUOTES BELOW.
+    */
 
-const supabaseClient =
-supabase.createClient(
-    SUPABASE_URL,
-    SUPABASE_KEY
-);
+    const SUPABASE_KEY =
+      "PASTE_YOUR_PUBLISHABLE_KEY_HERE";
 
-
-/* =================================
-   AUTH UI
-================================= */
-
-function showLogin(){
-
-    document
-        .getElementById("signupForm")
-        .classList.add("hidden");
-
-    document
-        .getElementById("loginForm")
-        .classList.remove("hidden");
-
-    document
-        .getElementById("authMessage")
-        .classList.add("hidden");
-}
+    const supabaseClient =
+      supabase.createClient(
+        SUPABASE_URL,
+        SUPABASE_KEY
+      );
 
 
-function showSignup(){
+    /* =========================================
+       GLOBAL USER
+    ========================================= */
 
-    document
-        .getElementById("loginForm")
-        .classList.add("hidden");
-
-    document
-        .getElementById("signupForm")
-        .classList.remove("hidden");
-
-    document
-        .getElementById("authMessage")
-        .classList.add("hidden");
-}
+    let currentUser = null;
 
 
-function showMessage(message){
+    /* =========================================
+       AUTH MESSAGE
+    ========================================= */
 
-    const box =
+    function showAuthMessage(message, type = "") {
+
+      const box =
         document.getElementById("authMessage");
 
-    box.textContent = message;
+      box.textContent = message;
 
-    box.classList.remove("hidden");
-}
+      box.className =
+        "message " + type;
 
-
-/* =================================
-   SIGN UP
-================================= */
-
-async function signUp(){
-
-    const name =
-        document
-        .getElementById("signupName")
-        .value
-        .trim();
-
-    const username =
-        document
-        .getElementById("signupUsername")
-        .value
-        .trim()
-        .toLowerCase();
-
-    const email =
-        document
-        .getElementById("signupEmail")
-        .value
-        .trim();
-
-    const password =
-        document
-        .getElementById("signupPassword")
-        .value;
-
-
-    if(!name || !username || !email || !password){
-
-        showMessage(
-            "Please fill in all fields."
-        );
-
-        return;
     }
 
 
-    if(password.length < 6){
+    /* =========================================
+       SIGN UP
+    ========================================= */
 
-        showMessage(
-            "Password must contain at least 6 characters."
+    async function signup() {
+
+      const email =
+        document.getElementById("email").value.trim();
+
+      const password =
+        document.getElementById("password").value;
+
+      const username =
+        document.getElementById("username").value.trim();
+
+      const fullName =
+        document.getElementById("fullName").value.trim();
+
+
+      if (!email || !password || !username) {
+
+        showAuthMessage(
+          "Please enter email, password and username.",
+          "error"
         );
 
         return;
-    }
+      }
 
 
-    const {
-        data,
-        error
-    } = await supabaseClient.auth.signUp({
+      showAuthMessage("Creating account...");
 
-        email: email,
 
-        password: password,
+      const { data, error } =
+        await supabaseClient.auth.signUp({
 
-        options: {
+          email: email,
+
+          password: password,
+
+          options: {
 
             data: {
 
-                username: username,
+              username: username,
 
-                full_name: name
+              full_name: fullName
 
             }
 
-        }
+          }
 
-    });
-
-
-    if(error){
-
-        showMessage(error.message);
-
-        return;
-    }
+        });
 
 
-    if(data.session){
+      if (error) {
 
-        await loadApp();
-
-    }else{
-
-        showMessage(
-            "Account created. Check your email to confirm your Dayoff account."
-        );
-
-    }
-
-}
-
-
-/* =================================
-   LOGIN
-================================= */
-
-async function login(){
-
-    const email =
-        document
-        .getElementById("loginEmail")
-        .value
-        .trim();
-
-    const password =
-        document
-        .getElementById("loginPassword")
-        .value;
-
-
-    if(!email || !password){
-
-        showMessage(
-            "Enter your email and password."
+        showAuthMessage(
+          error.message,
+          "error"
         );
 
         return;
+      }
+
+
+      if (data.user) {
+
+        showAuthMessage(
+          "Account created successfully. Check your email if confirmation is required.",
+          "success"
+        );
+
+      }
+
     }
 
 
-    const {
-        error
-    } = await supabaseClient.auth.signInWithPassword({
+    /* =========================================
+       LOGIN
+    ========================================= */
 
-        email: email,
+    async function login() {
 
-        password: password
+      const email =
+        document.getElementById("email").value.trim();
 
-    });
+      const password =
+        document.getElementById("password").value;
 
 
-    if(error){
+      if (!email || !password) {
 
-        showMessage(error.message);
+        showAuthMessage(
+          "Enter your email and password.",
+          "error"
+        );
 
         return;
-    }
+      }
 
 
-    await loadApp();
-
-}
+      showAuthMessage("Logging in...");
 
 
-/* =================================
-   LOAD PROFILE
-================================= */
+      const { data, error } =
+        await supabaseClient.auth.signInWithPassword({
 
-async function loadApp(){
+          email: email,
 
-    const {
-        data: {
-            user
-        }
-    } = await supabaseClient.auth.getUser();
+          password: password
+
+        });
 
 
-    if(!user){
+      if (error) {
+
+        showAuthMessage(
+          error.message,
+          "error"
+        );
 
         return;
+      }
+
+
+      currentUser = data.user;
+
+      showAuthMessage(
+        "Login successful.",
+        "success"
+      );
+
+      updateAuthUI();
+
+      loadPosts();
+
     }
 
 
-    document
-        .getElementById("authPage")
-        .classList.add("hidden");
+    /* =========================================
+       LOGOUT
+    ========================================= */
+
+    async function logout() {
+
+      await supabaseClient.auth.signOut();
+
+      currentUser = null;
+
+      updateAuthUI();
+
+      showAuthMessage(
+        "You have logged out.",
+        "success"
+      );
+
+      loadPosts();
+
+    }
 
 
-    document
-        .getElementById("app")
-        .classList.remove("hidden");
+    /* =========================================
+       UPDATE AUTH UI
+    ========================================= */
+
+    async function updateAuthUI() {
+
+      const loggedOut =
+        document.getElementById("loggedOut");
+
+      const loggedIn =
+        document.getElementById("loggedIn");
+
+      if (!currentUser) {
+
+        loggedOut.style.display = "block";
+
+        loggedIn.style.display = "none";
+
+        return;
+
+      }
 
 
-    const {
-        data: profile
-    } = await supabaseClient
+      loggedOut.style.display = "none";
 
-        .from("profiles")
-
-        .select("*")
-
-        .eq("id", user.id)
-
-        .maybeSingle();
+      loggedIn.style.display = "block";
 
 
-    if(profile){
-
-        document
-            .getElementById("profileName")
-            .textContent =
-            profile.full_name || "Dayoff User";
+      document.getElementById(
+        "userEmailDisplay"
+      ).textContent =
+        currentUser.email || "";
 
 
-        document
-            .getElementById("profileUsername")
-            .textContent =
-            "@" + profile.username;
+      const { data: profile } =
+        await supabaseClient
+          .from("profiles")
+          .select("username, full_name")
+          .eq("id", currentUser.id)
+          .maybeSingle();
 
 
-        const firstLetter =
-            (
-                profile.full_name ||
-                profile.username ||
-                "D"
+      if (profile) {
+
+        document.getElementById(
+          "userNameDisplay"
+        ).textContent =
+          profile.full_name ||
+          profile.username ||
+          "User";
+
+      }
+
+    }
+
+
+    /* =========================================
+       CREATE POST
+    ========================================= */
+
+    async function createPost() {
+
+      const message =
+        document.getElementById("postMessage");
+
+      const content =
+        document.getElementById("postContent")
+          .value
+          .trim();
+
+
+      if (!currentUser) {
+
+        message.textContent =
+          "Please login before creating a post.";
+
+        message.className =
+          "message error";
+
+        return;
+
+      }
+
+
+      if (!content) {
+
+        message.textContent =
+          "Write something before posting.";
+
+        message.className =
+          "message error";
+
+        return;
+
+      }
+
+
+      message.textContent =
+        "Publishing...";
+
+      message.className =
+        "message";
+
+
+      const { error } =
+        await supabaseClient
+          .from("posts")
+          .insert({
+
+            user_id: currentUser.id,
+
+            content: content
+
+          });
+
+
+      if (error) {
+
+        message.textContent =
+          error.message;
+
+        message.className =
+          "message error";
+
+        return;
+
+      }
+
+
+      document.getElementById(
+        "postContent"
+      ).value = "";
+
+
+      message.textContent =
+        "Post published successfully.";
+
+      message.className =
+        "message success";
+
+
+      loadPosts();
+
+    }
+
+
+    /* =========================================
+       LOAD POSTS
+    ========================================= */
+
+    async function loadPosts() {
+
+      const container =
+        document.getElementById(
+          "postsContainer"
+        );
+
+
+      const { data, error } =
+        await supabaseClient
+          .from("posts")
+          .select(`
+            id,
+            user_id,
+            content,
+            created_at
+          `)
+          .order(
+            "created_at",
+            {
+              ascending: false
+            }
+          );
+
+
+      if (error) {
+
+        container.innerHTML =
+          `<p class="error">
+            ${escapeHTML(error.message)}
+          </p>`;
+
+        return;
+
+      }
+
+
+      if (!data || data.length === 0) {
+
+        container.innerHTML = `
+          <div class="post">
+            <p style="text-align:center;color:#777;">
+              No posts yet. Be the first to post!
+            </p>
+          </div>
+        `;
+
+        return;
+
+      }
+
+
+      container.innerHTML = "";
+
+
+      for (const post of data) {
+
+        let username =
+          "Dayoff User";
+
+
+        const { data: profile } =
+          await supabaseClient
+            .from("profiles")
+            .select(
+              "username, full_name"
             )
-            .charAt(0)
-            .toUpperCase();
+            .eq(
+              "id",
+              post.user_id
+            )
+            .maybeSingle();
 
 
-        document
-            .getElementById("userAvatar")
-            .textContent = firstLetter;
+        if (profile) {
 
-
-        document
-            .getElementById("feedAvatar")
-            .textContent = firstLetter;
-
-    }
-
-}
-
-
-/* =================================
-   LOGOUT
-================================= */
-
-async function logout(){
-
-    await supabaseClient.auth.signOut();
-
-    document
-        .getElementById("app")
-        .classList.add("hidden");
-
-    document
-        .getElementById("authPage")
-        .classList.remove("hidden");
-
-    showSignup();
-
-}
-
-
-/* =================================
-   SESSION CHECK
-================================= */
-
-async function checkSession(){
-
-    const {
-        data: {
-            session
-        }
-    } = await supabaseClient.auth.getSession();
-
-
-    if(session){
-
-        await loadApp();
-
-    }
-
-}
-
-
-/* =================================
-   AUTH STATE
-================================= */
-
-supabaseClient.auth.onAuthStateChange(
-
-    async function(event, session){
-
-        if(session){
-
-            await loadApp();
+          username =
+            profile.full_name ||
+            profile.username ||
+            "Dayoff User";
 
         }
 
+
+        const postElement =
+          document.createElement("article");
+
+
+        postElement.className =
+          "post";
+
+
+        const date =
+          new Date(
+            post.created_at
+          ).toLocaleString();
+
+
+        let deleteButton = "";
+
+
+        if (
+          currentUser &&
+          currentUser.id === post.user_id
+        ) {
+
+          deleteButton = `
+            <button
+              class="delete-btn"
+              onclick="deletePost(${post.id})"
+            >
+              Delete
+            </button>
+          `;
+
+        }
+
+
+        postElement.innerHTML = `
+
+          <div class="post-header">
+
+            <div>
+
+              <div class="author">
+                ${escapeHTML(username)}
+              </div>
+
+              <div class="post-time">
+                ${escapeHTML(date)}
+              </div>
+
+            </div>
+
+            ${deleteButton}
+
+          </div>
+
+
+          <div class="post-content">
+            ${escapeHTML(post.content)}
+          </div>
+
+
+          <div class="post-actions">
+
+            <button
+              class="action-btn"
+              onclick="likePost(${post.id})"
+            >
+              👍 Like
+            </button>
+
+            <button
+              class="action-btn"
+              onclick="commentPost(${post.id})"
+            >
+              💬 Comment
+            </button>
+
+            <button
+              class="action-btn"
+              onclick="sharePost(${post.id})"
+            >
+              ↗ Share
+            </button>
+
+          </div>
+
+        `;
+
+
+        container.appendChild(
+          postElement
+        );
+
+      }
+
     }
 
-);
+
+    /* =========================================
+       DELETE POST
+    ========================================= */
+
+    async function deletePost(postId) {
+
+      if (!currentUser) {
+
+        alert(
+          "Please login first."
+        );
+
+        return;
+
+      }
 
 
-/* =================================
-   LIVE
-================================= */
-
-function openLive(){
-
-    document
-        .getElementById("liveModal")
-        .classList.add("show");
-
-}
+      const confirmed =
+        confirm(
+          "Delete this post?"
+        );
 
 
-function closeLive(){
-
-    document
-        .getElementById("liveModal")
-        .classList.remove("show");
-
-}
+      if (!confirmed) return;
 
 
-function startLive(){
+      const { error } =
+        await supabaseClient
+          .from("posts")
+          .delete()
+          .eq(
+            "id",
+            postId
+          )
+          .eq(
+            "user_id",
+            currentUser.id
+          );
 
-    alert(
-        "Dayoff Live is ready. " +
-        "Real camera broadcasting will be connected in the Live Streaming stage."
+
+      if (error) {
+
+        alert(
+          error.message
+        );
+
+        return;
+
+      }
+
+
+      loadPosts();
+
+    }
+
+
+    /* =========================================
+       LIKE
+    ========================================= */
+
+    function likePost(postId) {
+
+      if (!currentUser) {
+
+        alert(
+          "Login to like posts."
+        );
+
+        return;
+
+      }
+
+      alert(
+        "Like system will be connected in the next step."
+      );
+
+    }
+
+
+    /* =========================================
+       COMMENT
+    ========================================= */
+
+    function commentPost(postId) {
+
+      if (!currentUser) {
+
+        alert(
+          "Login to comment."
+        );
+
+        return;
+
+      }
+
+      alert(
+        "Comment system will be connected in the next step."
+      );
+
+    }
+
+
+    /* =========================================
+       SHARE
+    ========================================= */
+
+    async function sharePost(postId) {
+
+      const url =
+        window.location.href +
+        "?post=" +
+        postId;
+
+
+      if (
+        navigator.share
+      ) {
+
+        try {
+
+          await navigator.share({
+
+            title: "Dayoff",
+
+            text: "Check out this post on Dayoff.",
+
+            url: url
+
+          });
+
+        } catch (error) {
+
+          // User cancelled share.
+
+        }
+
+      } else {
+
+        await navigator.clipboard.writeText(
+          url
+        );
+
+        alert(
+          "Post link copied."
+        );
+
+      }
+
+    }
+
+
+    /* =========================================
+       LIVE MODAL
+    ========================================= */
+
+    function openLiveModal() {
+
+      document.getElementById(
+        "liveModal"
+      ).style.display = "flex";
+
+    }
+
+
+    function closeLiveModal() {
+
+      document.getElementById(
+        "liveModal"
+      ).style.display = "none";
+
+    }
+
+
+    /* =========================================
+       START LIVE
+    ========================================= */
+
+    function startLive() {
+
+      const title =
+        document.getElementById(
+          "liveTitle"
+        ).value.trim();
+
+
+      const message =
+        document.getElementById(
+          "liveMessage"
+        );
+
+
+      if (!currentUser) {
+
+        message.textContent =
+          "Please login before starting a live stream.";
+
+        message.className =
+          "message error";
+
+        return;
+
+      }
+
+
+      if (!title) {
+
+        message.textContent =
+          "Enter a title for your live stream.";
+
+        message.className =
+          "message error";
+
+        return;
+
+      }
+
+
+      message.textContent =
+        "Live streaming will be connected in the Live Streaming step.";
+
+      message.className =
+        "message success";
+
+    }
+
+
+    /* =========================================
+       HTML SECURITY
+    ========================================= */
+
+    function escapeHTML(value) {
+
+      return String(value)
+        .replaceAll("&", "&amp;")
+        .replaceAll("<", "&lt;")
+        .replaceAll(">", "&gt;")
+        .replaceAll('"', "&quot;")
+        .replaceAll("'", "&#039;");
+
+    }
+
+
+    /* =========================================
+       CHECK CURRENT SESSION
+    ========================================= */
+
+    async function checkSession() {
+
+      const {
+        data
+      } =
+        await supabaseClient.auth.getSession();
+
+
+      currentUser =
+        data.session
+          ? data.session.user
+          : null;
+
+
+      await updateAuthUI();
+
+      loadPosts();
+
+    }
+
+
+    /* =========================================
+       AUTH STATE LISTENER
+    ========================================= */
+
+    supabaseClient.auth.onAuthStateChange(
+      async (event, session) => {
+
+        currentUser =
+          session
+            ? session.user
+            : null;
+
+        await updateAuthUI();
+
+        loadPosts();
+
+      }
     );
 
-}
 
+    /* =========================================
+       START DAYOFF
+    ========================================= */
 
-/* =================================
-   START
-================================= */
+    checkSession();
 
-checkSession();
-
-</script>
+  </script>
 
 </body>
 </html>
