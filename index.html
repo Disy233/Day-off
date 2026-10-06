@@ -91,9 +91,17 @@ main{min-width:0;height:calc(100vh - 76px)}#home{height:100%;min-width:0}.home-h
 <div id="createModal" class="modal"><div class="modalbox"><h2 id="captureTitle">📷 Create on Dayoff</h2><p style="color:#888">Take a photo or record a short video, then publish it to your feed.</p><div id="capturePreview" class="previewbox">Camera preview</div><div class="modalbuttons"><button class="primary" onclick="startCapture('photo')">📷 Photo</button><button class="primary" onclick="startCapture('video')">🎥 Video</button><button class="secondary" onclick="closeCreateCamera()">Close</button></div><div id="captureActions" class="modalbuttons hidden" style="margin-top:8px"><button class="primary" onclick="takePhoto()">Take photo</button><button class="primary" onclick="toggleRecording()">Start video</button></div></div></div>
 
 <script>
-const URL="https://bdqjpwyalsuxyiczyeui.supabase.co";
-const KEY="PASTE_YOUR_SUPABASE_PUBLISHABLE_KEY_HERE";
-const db=supabase.createClient(URL,KEY);
+const SUPABASE_URL =
+"https://bdqjpwyalsuxyiczyeui.supabase.co";
+
+const SUPABASE_KEY =
+"sb_publishable_SoowSke5se9LiXf1oAJBxg_Tkfw82E8";
+
+const supabaseClient =
+supabase.createClient(
+SUPABASE_URL,
+SUPABASE_KEY
+);;
 let me=null,file=null,type=null,chatUser=null,channel=null,lastSeenTimer=null,stream=null;
 
 const $=id=>document.getElementById(id);
